@@ -52,7 +52,7 @@ if ($id) {
 <wpt-header>
     <header>
         <a class="wptheader_logo" href="/">
-            <img src="/images/wpt-logo.svg"  alt="WebPageTest, by Catchpoint" />
+            <img src="/images/niteco-logo.svg"  alt="WebPageTest, by Catchpoint" />
         </a>
         <details class="wptheader_menu">
             <summary class="wptheader_menubtn">Menu:</summary>
