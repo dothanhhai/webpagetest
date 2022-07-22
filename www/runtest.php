@@ -1602,8 +1602,10 @@ function ValidateKey(&$test, &$error, $key = null)
                 ) {
                     $test['location'] = $keys[$key]['default location'];
                 }
-                $api_priority = intval(GetSetting('api_priority', 5));
-                $test['priority'] = $api_priority;
+                $api_priority = intval(GetSetting('api_priority', 0));
+                if(!empty($api_priority)) {
+                    $test['priority'] = $api_priority;
+                }
                 if (isset($keys[$key]['priority'])) {
                     $test['priority'] = intval($keys[$key]['priority']);
                 }
