@@ -12,7 +12,7 @@
 
 
     <footer>
-        <a class="logo" href="/"><img src="/images/wpt-logo.svg" alt="WebPageTest, by Catchpoint"></a>
+        <a class="logo" href="/"><img src="/images/niteco-logo.svg" alt="Niteco"></a>
 
         <ul>
         <li class="footer_social"><span>Find us on: </span>

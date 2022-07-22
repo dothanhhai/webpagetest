@@ -290,7 +290,11 @@ function LoadLocations($isPaid = false)
 function GetBacklog($dir, $locationId)
 {
     global $request_context;
-    $ui_priority = $request_context->getUser()->getUserPriority();
+    if($ui_priority = $request_context->getUser()) {
+        $ui_priority = $request_context->getUser()->getUserPriority();
+    } else {
+        $ui_priority = intval(GetSetting('user_priority', 0));
+    }
 
     $backlog = array();
 
