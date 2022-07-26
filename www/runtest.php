@@ -3296,7 +3296,8 @@ function RelayTest()
     $ret = array();
     $ret['statusCode'] = 200;
 
-    $rkey = $_POST['rkey'];
+    $rkey = filter_var($_POST['rkey'], FILTER_SANITIZE_ENCODED);
+
     $test = json_decode($_POST['testinfo'], true);
     $test['vd'] = '';
     $test['vh'] = '';
