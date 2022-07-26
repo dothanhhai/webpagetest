@@ -3,11 +3,17 @@
 include 'common.inc';
 
 $ids = [];
-if (isset($_REQUEST['tests'])) {
+if (!empty($_REQUEST['tests'])) {
     $ids = $_REQUEST['tests'];
+} else {
+    $json = file_get_contents('php://input');
+    $data = json_decode($json);
+    if (!empty($data['tests'])) {
+        $ids = $data['tests'];
+    }
 }
 $api_keys = null;
-if (isset($_REQUEST['k']) && strlen($_REQUEST['k'])) {
+if (!empty($_REQUEST['k']) && strlen($_REQUEST['k'])) {
     $keys_file = __DIR__ . '/settings/keys.ini';
     if (file_exists(__DIR__ . '/settings/common/keys.ini')) {
         $keys_file = __DIR__ . '/settings/common/keys.ini';
