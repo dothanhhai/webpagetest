@@ -8,8 +8,8 @@ if (!empty($_REQUEST['tests'])) {
 } else {
     $json = file_get_contents('php://input');
     $data = json_decode($json);
-    if (!empty($data['tests'])) {
-        $ids = $data['tests'];
+    if (!empty($data->tests)) {
+        $ids = $data->tests;
     }
 }
 $api_keys = null;
