@@ -63,7 +63,9 @@ if ($id) {
 <?php if (!Util::getSetting('disableTestlog')) : ?>
     <?= addTab('Test History', FRIENDLY_URLS ? '/testlog/7/' : '/testlog.php?days=7'); ?>
 <?php endif; //if (!Util::getSetting('disableTestlog')): ?>
-
+<?php
+/*
+?>
         <li class="wptheader_nav_menu">
                 <details>
                     <summary><span>Products</span></summary>
@@ -164,6 +166,7 @@ if ($id) {
                         echo '<li><a href="/oauth/login.php">Login with Google</a></li>';
                     }
                 }
+                */
                 ?>
 
                 </ul>
