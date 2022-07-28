@@ -261,26 +261,26 @@ if (!strcasecmp('Test Result', $tab) && (!isset($nosubheader) || !@$nosubheader)
                     //$show_sensitive = false;
                     echo '<details class="test_presets_more"><summary><span class="test_presets_tag">More</span></summary><div class="details_contain">';
                     echo GetTestInfoHtml();
-                    if ($experiment) {
-                        $experimentData = $metaInfo['experiment'];
-                        echo "<p class=\"meta_exp_applied_hed\">Experiment Info:</p>";
-                        echo '<ul class="meta_exp_applied_list">';
-                        include __DIR__ . '/experiments/list_applied.inc';
-                        echo '</ul>';
-                        echo "<p>Related Links: <a href=\"" . $controlTestHref . "\">Original (Control Run)</a>, <a href=\"" . $experimentOriginalTestHref . "\">Original Test</a></p><ul>";
-                    }
-                    echo '</div></details>';
+                    // if ($experiment) {
+                    //     $experimentData = $metaInfo['experiment'];
+                    //     echo "<p class=\"meta_exp_applied_hed\">Experiment Info:</p>";
+                    //     echo '<ul class="meta_exp_applied_list">';
+                    //     include __DIR__ . '/experiments/list_applied.inc';
+                    //     echo '</ul>';
+                    //     echo "<p>Related Links: <a href=\"" . $controlTestHref . "\">Original (Control Run)</a>, <a href=\"" . $experimentOriginalTestHref . "\">Original Test</a></p><ul>";
+                    // }
+                    // echo '</div></details>';
 
-                    if (isset($socialImage)) {
-                        echo "<details class=\"test_presets_more test_presets_more-share\"><summary><span class=\"test_presets_tag\">Share</span></summary>
-                        <div class=\"details_contain\">
-                            <ul>
-                            <li><a href=\"" . $emailURI . "\">Share via Email</a></li>"
-                            . (isset($tweetURI) ? "<li><a href=\"" . $tweetURI . "\">Share on Twitter</a></li>" : "")
-                            . "<li><a href=\"" . $socialImage . "\" download=\"WebPageTest Pro Experiment Results\">View Formatted Screenshot Image</a></li>"
-                            . "</ul>
-                        </div></details>";
-                    }
+                    // if (isset($socialImage)) {
+                    //     echo "<details class=\"test_presets_more test_presets_more-share\"><summary><span class=\"test_presets_tag\">Share</span></summary>
+                    //     <div class=\"details_contain\">
+                    //         <ul>
+                    //         <li><a href=\"" . $emailURI . "\">Share via Email</a></li>"
+                    //         . (isset($tweetURI) ? "<li><a href=\"" . $tweetURI . "\">Share on Twitter</a></li>" : "")
+                    //         . "<li><a href=\"" . $socialImage . "\" download=\"WebPageTest Pro Experiment Results\">View Formatted Screenshot Image</a></li>"
+                    //         . "</ul>
+                    //     </div></details>";
+                    // }
 
                     ?>
                     </li>
@@ -468,7 +468,7 @@ if (!strcasecmp('Test Result', $tab) && (!isset($nosubheader) || !@$nosubheader)
             }
 
             // one dollar sign for every 500KB
-            $dollars = "";
+            /*$dollars = "";
             $dollarcount = max(1, min(5, ceil($gradeRunResults->getStepResult(1)->getMetric("bytesIn") / (500 * 1024))));
             for ($i = 1; $i <= 5; $i++) {
                 $dollars .= $i <= $dollarcount ? '$' : '-';
@@ -498,7 +498,7 @@ if (!strcasecmp('Test Result', $tab) && (!isset($nosubheader) || !@$nosubheader)
                 $snykUrl = "https://snyk.io/test/website-scanner/?test={$id}&utm_medium=referral&utm_source=webpagetest&utm_campaign=website-scanner";
                 echo "<li><a href=\"$snykUrl\" onclick=\"$onclick\" title=\"(external) - Opens Snyk in a new window.\">Security Score: <span class=\"lh-flag\">" . $securityGrade['grade'] . "</span><img src=\"/images/icon-external.svg\" alt=\"\"></a></li>";
             }
-
+            */
 
 
             echo '</ul></nav></div>';

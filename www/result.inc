@@ -121,6 +121,9 @@ $page_description = "Website performance test result$testLabel.";
 
            <div class="results_header">
                 <h2>Performance Summary</h2>
+                <p>Performance Results (Median Run - SpeedIndex)</p>
+<?php
+/*                
                 <div class="summary_opps">
                 <p>Opportunities &amp; Experiments <em class="flag">New</em>
             <?php
@@ -134,13 +137,11 @@ $page_description = "Website performance test result$testLabel.";
                 <?php
                 include __DIR__ . '/experiments/common.inc';
                 include __DIR__ . '/experiments/summary.inc';
-
                 ?>
                 </div>
-
-
-
-
+<?php
+*/
+?>
               </div>
 
             </div>

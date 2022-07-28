@@ -54,6 +54,9 @@ if ($id) {
         <a class="wptheader_logo" href="/">
             <img src="/images/niteco-logo.svg"  alt="WebPageTest, by Catchpoint" />
         </a>
+        <?php
+/*
+?>        
         <details class="wptheader_menu">
             <summary class="wptheader_menubtn">Menu:</summary>
             <nav>
@@ -62,9 +65,6 @@ if ($id) {
 <?php if (!Util::getSetting('disableTestlog')) : ?>
     <?= addTab('Test History', FRIENDLY_URLS ? '/testlog/7/' : '/testlog.php?days=7'); ?>
 <?php endif; //if (!Util::getSetting('disableTestlog')): ?>
-<?php
-/*
-?>
         <li class="wptheader_nav_menu">
                 <details>
                     <summary><span>Products</span></summary>
@@ -169,11 +169,13 @@ if ($id) {
                         }
                     }
                 }
-                */
                 ?>
 
                 </ul>
             </nav>
         </details>
+<?php
+*/
+?>        
     </header>
 </wpt-header>
