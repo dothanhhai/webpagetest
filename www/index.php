@@ -1,6 +1,6 @@
 <?php
 if(empty($_GET['niteco']) || $_GET['niteco'] != 'wpt') {
-    header("HTTP/1.0 404 Not Found");
+    include("index.html");
     die;
 }
 // Copyright 2020 Catchpoint Systems Inc.
