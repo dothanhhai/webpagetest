@@ -18,7 +18,7 @@ function header_link($url, $title)
     <head>
         <title><?php echo $title; ?></title>
         <link rel="stylesheet" href="/css/vendor/bootstrap-3.1.1.min.css">
-
+        <link rel="icon" href="https://niteco.com/pwa/icons/icon-96x96.png" type="image/png" />
         <?php
         if (!empty($refresh)) { ?>
             <noscript>

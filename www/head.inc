@@ -19,7 +19,7 @@ if (strlen($page_description)) {
 <meta name="author" content="Patrick Meenan">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge"> 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="shortcut icon" href="https://niteco.com/favicon.ico" type="image/x-icon" />
+<link rel="icon" href="https://niteco.com/pwa/icons/icon-96x96.png" type="image/png" />
 
 <style>
 @font-face {
