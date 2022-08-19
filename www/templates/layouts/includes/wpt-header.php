@@ -54,10 +54,10 @@ if ($id) {
         <a class="wptheader_logo" href="/">
             <img src="/images/niteco-logo.svg"  alt="WebPageTest, by Catchpoint" />
         </a>
+        <details class="wptheader_menu">
         <?php
 /*
 ?>        
-        <details class="wptheader_menu">
             <summary class="wptheader_menubtn">Menu:</summary>
             <nav>
                 <ul class="wptheader_nav">
@@ -177,9 +177,9 @@ if ($id) {
 
                 </ul>
             </nav>
-        </details>
 <?php
 */
 ?>        
+</details>
     </header>
 </wpt-header>
