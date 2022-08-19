@@ -186,7 +186,14 @@ if (!strcasecmp('Test Result', $tab) && (!isset($nosubheader) || !@$nosubheader)
                     'NewYork_M1MacMini' => 'US',
                     'LosAngeles_M1MacMini' => 'US',
                     'NYC_Android' => 'US',
-                    'Dulles_Android' => 'US'
+                    'Dulles_Android' => 'US',
+                    'US-Virginia' => 'US',
+                    'Australia' => 'AU',
+                    'Sweden' => 'SE',
+                    'London' => 'GB',
+                    'Ireland' => 'IE',
+                    'Hongkong' => 'HK',
+                    'Hanoi' => 'VN'
                 );
 
             $locationSimple = explode("-", $test['testinfo']['locationLabel'])[ 0 ];
