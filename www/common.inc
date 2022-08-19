@@ -4,7 +4,6 @@
 // Use of this source code is governed by the Polyform Shield 1.0.0 license that can be
 // found in the LICENSE.md file.
 
-
 // Load app and composer-based dependencies
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -103,6 +102,12 @@ date_default_timezone_set('UTC');
 extract($_POST, EXTR_SKIP | EXTR_PREFIX_ALL | EXTR_REFS, 'req');
 extract($_GET, EXTR_SKIP | EXTR_PREFIX_ALL | EXTR_REFS, 'req');
 
+// load dev settings
+$dev_settings = __DIR__ . '/dev.php';
+if (file_exists($dev_settings)) {
+    require_once $dev_settings;
+}
+
 // Prevent embedding except for pages that were explicitly designed to be embedded (video)
 if (!isset($ALLOW_IFRAME) || !$ALLOW_IFRAME) {
     header('X-Frames-Options: sameorigin');
@@ -192,9 +197,9 @@ define('VER_ACCOUNT_CSS', @md5_file(__DIR__ . '/css/account.css')); // version o
 define('VER_PRICE_CHANGER_JS', @md5_file(__DIR__ . '/js/signup-price-changer.js'));
 define('VER_FAQ_JS', @md5_file(__DIR__ . '/js/accessible-faq.js'));
 define('VER_BUTTON_CSS', @md5_file(__DIR__ . '/css/button.css'));   // version of the button css file
-define('VER_JS', 41);                 // version of the sitewide javascript file
-define('VER_JS_TEST', 48);            // version of the javascript specific to the test pages
-define('VER_JS_RUNNING', 1);          // version of the javascript specific to the test running status page
+define('VER_JS', @md5_file(__DIR__ . '/js/site.js'));                 // version of the sitewide javascript file
+define('VER_JS_TEST', @md5_file(__DIR__ . '/js/test.js'));            // version of the javascript specific to the test pages
+define('VER_JS_RUNNING', @md5_file(__DIR__ . '/js/running.js'));          // version of the javascript specific to the test running status page
 define('VER_JS_ACCOUNT', @md5_file(__DIR__ . '/js/account.js'));          // version of the javascript specific to the test running status page
 define('UNKNOWN_TIME', -1);           // Value used as a flag for an unknown time.
 // To find code that fails to check that a time

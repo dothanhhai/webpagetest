@@ -62,37 +62,41 @@ if ($id) {
             <nav>
                 <ul class="wptheader_nav">
 
-<?php if (!Util::getSetting('disableTestlog')) : ?>
-    <?= addTab('Test History', FRIENDLY_URLS ? '/testlog/7/' : '/testlog.php?days=7'); ?>
-<?php endif; //if (!Util::getSetting('disableTestlog')): ?>
-        <li class="wptheader_nav_menu">
-                <details>
-                    <summary><span>Products</span></summary>
-                    <div class="wptheader_nav_menu_content">
-                        <div class="wptheader_nav_menu_section">
-                            <img src="/images/wpt-logo-pro-dark.svg" width="143" height="17" alt="WebPageTest Pro">
-                        </div>
-                        <div class="wptheader_nav_menu_section">
-                            <ul>
-                                <li class="wptheader_nav_menu_link"><a href="https://product.webpagetest.org/experiments">Opportunities & Experiments</a></li>
-                                <li class="wptheader_nav_menu_link"><a href="https://product.webpagetest.org/api">API</a></li>
-                            </ul>
-                        </div>
-                        <div class="wptheader_nav_menu_section">
-                            <?php
-                            if (!$experiments_paid) {
-                                ?>
-                            <p class="wptheader_nav_cta">
-                                <span>Ready to go <strong>Pro?</strong></span>
-                                <a href="/signup">Compare Plans</a>
-                            </p>
-                                <?php
-                            }
-                            ?>
-                        </div>
-                    </div>
-                </details>
-            </li>
+                    <?= addTab('Start Test', '/'); ?>
+
+                    <?php if (!Util::getSetting('disableTestlog')) : ?>
+                        <?= addTab('Test History', FRIENDLY_URLS ? '/testlog/7/' : '/testlog.php?days=7'); ?>
+                    <?php endif; //if (!Util::getSetting('disableTestlog')): 
+                    ?>
+
+                    <li class="wptheader_nav_menu">
+                        <details>
+                            <summary><span>Products</span></summary>
+                            <div class="wptheader_nav_menu_content">
+                                <div class="wptheader_nav_menu_section">
+                                    <img src="/images/wpt-logo-pro-dark.svg" width="143" height="17" alt="WebPageTest Pro">
+                                </div>
+                                <div class="wptheader_nav_menu_section">
+                                    <ul>
+                                        <li class="wptheader_nav_menu_link"><a href="https://product.webpagetest.org/experiments">Opportunities & Experiments</a></li>
+                                        <li class="wptheader_nav_menu_link"><a href="https://product.webpagetest.org/api">API</a></li>
+                                    </ul>
+                                </div>
+                                <div class="wptheader_nav_menu_section">
+                                    <?php
+                                    if (!$experiments_paid) {
+                                    ?>
+                                        <p class="wptheader_nav_cta">
+                                            <span>Ready to go <strong>Pro?</strong></span>
+                                            <a href="/signup">Compare Plans</a>
+                                        </p>
+                                    <?php
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </details>
+                    </li>
 
 
 
@@ -110,7 +114,7 @@ if ($id) {
                                         <li class="wptheader_nav_menu_link"><a href="https://product.webpagetest.org/events/">Events</a></li>
                                         <?php if (Util::getSetting('forums_url')) : ?>
                                             <li class="wptheader_nav_menu_link"><a href="<?= Util::getSetting('forums_url') ?>">Forums</a></li>
-                                        <?php endif; //(Util::getSetting('forums_url')): 
+                                        <?php endif; //(Util::getSetting('forums_url')):
                                         ?>
                                     </ul>
                                 </div>
@@ -136,7 +140,7 @@ if ($id) {
                     if ($supportsAuth && !defined('EMBED')) {
                         if ($supportsCPAuth) {
                             $is_logged_in = isset($request_context) && !is_null($request_context->getUser()) && !is_null($request_context->getUser()->getAccessToken());
-                    ?>
+                            ?>
                             <?php if ($is_logged_in) : ?>
                                 <li><a href='/account'>
                                         <?php
@@ -156,7 +160,7 @@ if ($id) {
                                 <li><a href='/signup'>Sign-up</a></li>
                             <?php endif; //$is_logged_in
                             ?>
-                    <?php
+                            <?php
                         } elseif (isset($user)) {
                             $logoutUrl = 'https://www.webpagetest.org/forums/member.php?action=logout';
                             echo "<li>Welcome, " . htmlspecialchars($user) . "</li><li><a href=\"$logoutUrl\">Logout</a></li>";
