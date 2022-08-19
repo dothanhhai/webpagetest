@@ -5663,7 +5663,7 @@ label.test_preset_profile {
 
 .test_results-content .pretty {
   width: 100%;
-  font-size: 1em;
+  font-size: 0.9em;
   line-height: 1;
   overflow-x: auto;
   vertical-align: top;
