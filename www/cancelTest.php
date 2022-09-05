@@ -58,7 +58,7 @@ function CancelTest($id)
     $lock = LockTest($id);
     if ($lock) {
         $testInfo = GetTestInfo($id);
-        if ($testInfo && !array_key_exists('started', $testInfo)) {
+        if ($testInfo && !array_key_exists('started', $testInfo)  && !array_key_exists('completed', $testInfo)) {
             $testInfo['cancelled'] = time();
             SaveTestInfo($id, $testInfo);
 
