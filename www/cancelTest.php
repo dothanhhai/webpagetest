@@ -70,12 +70,12 @@ function CancelTest($id)
                 }
                 $file_to_search = $testInfo['workdir'] . "/*.$id.$ext";
                 $found_files = glob($file_to_search);
-                if (1 === count($found_files)) {
-                    $cancelled = @unlink($found_files[0]);
+                foreach($found_files as $file) {
+                    $cancelled = @unlink($file);
                 }
             }
             $testInfo['id'] = $id;
-            SendCallback($testInfo);
+            //SendCallback($testInfo);
         }
         UnlockTest($lock);
     }

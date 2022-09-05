@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use WebPageTest\CPClient;
 use WebPageTest\AuthToken;
 use WebPageTest\Exception\ClientException;
+use WebPageTest\Exception\UnauthorizedException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -191,7 +192,7 @@ final class CPClientTest extends TestCase
             ]
         ));
 
-        $this->expectException(ClientException::class);
+        $this->expectException(UnauthorizedException::class);
         $client->refreshAuthToken($refresh_token);
     }
 
@@ -260,17 +261,23 @@ final class CPClientTest extends TestCase
         $client->revokeToken($token);
     }
 
-    public function testGetUserDetails(): void
+    public function testGetUser(): void
     {
         $handler = $this->createMockResponse(200, '{
     "data": {
       "userIdentity": {
         "activeContact": {
           "id": 263425,
-          "name": "Alice Bob",
+          "firstName": "Alice",
+          "lastName": "Bob",
           "email": "alicebob@catchpoint.com",
           "isWptPaidUser": true,
-          "isWptAccountVerified": true
+          "isWptAccountVerified": true,
+          "companyName": null
+        },
+        "levelSummary": {
+          "levelId": 3,
+          "isWptEnterpriseClient": false
         }
       },
       "braintreeCustomerDetails": {
@@ -289,11 +296,18 @@ final class CPClientTest extends TestCase
             ]
         ));
 
-        $data = $client->getUserDetails();
-        $this->assertEquals('263425', $data['userIdentity']['activeContact']['id']);
+        $user = $client->getUser();
+        $this->assertEquals('263425', $user->getUserId());
+        $this->assertEquals('Alice', $user->getFirstName());
+        $this->assertEquals('Bob', $user->getLastName());
+        $this->assertEquals('', $user->getCompanyName());
+        $this->assertEquals('alicebob@catchpoint.com', $user->getEmail());
+        $this->assertTrue($user->isPaid());
+        $this->assertTrue($user->isVerified());
+        $this->assertFalse($user->isWptEnterpriseClient());
     }
 
-    public function testGetUserDetailsWithError(): void
+    public function testGetUserWithError(): void
     {
         $handler = $this->createMockResponse(200, '{
       "errors":[
@@ -327,7 +341,7 @@ final class CPClientTest extends TestCase
         ));
 
         $this->expectException(ClientException::class);
-        $client->getUserDetails();
+        $client->getUser();
     }
 
     public function testGetUserContactInfo(): void

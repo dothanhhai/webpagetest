@@ -127,7 +127,7 @@ class CPClient
         try {
             $response = $this->auth_client->request('POST', '/auth/connect/token', $body);
         } catch (GuzzleException $e) {
-            if ($e->getCode() == 401) {
+            if ($e->getCode() == 400 || $e->getCode() == 401) {
                 throw new UnauthorizedException();
             }
             throw new ClientException($e->getMessage());
@@ -160,7 +160,7 @@ class CPClient
         }
     }
 
-    public function getUserDetails(): array
+    public function getUser(): User
     {
         $gql = (new Query())
             ->setSelectionSet([
@@ -169,7 +169,9 @@ class CPClient
                         (new Query('activeContact'))
                             ->setSelectionSet([
                                 'id',
-                                'name',
+                                'firstName',
+                                'lastName',
+                                'companyName',
                                 'email',
                                 'isWptPaidUser',
                                 'isWptAccountVerified'
@@ -192,7 +194,24 @@ class CPClient
 
         try {
             $account_details = $this->graphql_client->runQuery($gql, true);
-            return $account_details->getData();
+            $data = $account_details->getData();
+
+            $user = new User();
+            $remaining_runs = (int)$data['braintreeCustomerDetails']['remainingRuns'];
+            $user->setRemainingRuns($remaining_runs);
+            $monthly_runs = (int)$data['braintreeCustomerDetails']['monthlyRuns'];
+            $user->setMonthlyRuns($monthly_runs);
+            $user->setUserId($data['userIdentity']['activeContact']['id']);
+            $user->setEmail($data['userIdentity']['activeContact']['email']);
+            $user->setPaid($data['userIdentity']['activeContact']['isWptPaidUser']);
+            $user->setVerified($data['userIdentity']['activeContact']['isWptAccountVerified']);
+            $user->setFirstName($data['userIdentity']['activeContact']['firstName']);
+            $user->setLastName($data['userIdentity']['activeContact']['lastName']);
+            $user->setCompanyName($data['userIdentity']['activeContact']['companyName']);
+            $user->setOwnerId($data['userIdentity']['levelSummary']['levelId']);
+            $user->setEnterpriseClient(!!$data['userIdentity']['levelSummary']['isWptEnterpriseClient']);
+
+            return $user;
         } catch (GuzzleException $e) {
             if ($e->getCode() == 401) {
                 throw new UnauthorizedException();
@@ -315,7 +334,6 @@ class CPClient
     {
         $gql = (new Query())
             ->setSelectionSet([
-                'braintreeClientToken',
                 (new Query('wptApiKey'))
                     ->setSelectionSet([
                         'id',
@@ -323,32 +341,6 @@ class CPClient
                         'apiKey',
                         'createDate',
                         'changeDate'
-                    ]),
-                (new Query('braintreeCustomerDetails'))
-                    ->setSelectionSet([
-                        'customerId',
-                        'wptPlanId',
-                        'subscriptionId',
-                        'ccLastFour',
-                        'daysPastDue',
-                        'subscriptionPrice',
-                        'maskedCreditCard',
-                        'nextBillingDate',
-                        'billingPeriodEndDate',
-                        'numberOfBillingCycles',
-                        'ccExpirationDate',
-                        'ccImageUrl',
-                        'status',
-                        (new Query('discount'))
-                            ->setSelectionSet([
-                                'amount',
-                                'numberOfBillingCycles'
-                            ]),
-                        'remainingRuns',
-                        'monthlyRuns',
-                        'planRenewalDate',
-                        'billingFrequency',
-                        'wptPlanName'
                     ])
             ]);
         try {
