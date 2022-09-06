@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)/docs/scripting/#setvalue -->
+<html lang="en" class="has-js">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="theme-color" content="#092141">
+    <title> Custom Scripting | Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="https://niteco.com/pwa/icons/icon-96x96.png" type="image/png" />
+    <meta name="description" content="Documentation">
+    <style type="text/css">
+        :root{--wpt-navy:#0d1e38;--navy-light:#183157;--light-blue:#2f80ed;--light-grey:#dddddd;--highlight:#F9D856;--blue-grey:rgb(52,64,84);--lightest-grey:#f5f5f5;--attention-bg:rgb(255,248,216);--attention-border:rgb(255,229,100);--note-bg:#f1f8ff;--note-border:#0366d6;--warning-bg:#ffe4e2;--warning-border:#eb0f00;--key-term:#074dad}body{color:#222;font:100%/1.5em Helvetica,Arial,sans-serif;padding:0;margin:0 auto}@media (min-width:44em){body{grid-template-columns:1fr 3fr;gap:20px;display:grid}header{grid-row:1;grid-column:1/3}.primaryNav{grid-row:2/3;grid-column:1}main{grid-row:2;grid-column:2}main.wide{grid-column:2/3}.pageNav{grid-row:2;grid-column:2}footer{grid-row:4;grid-column:1/3}.home .hero-callout{grid-row:2;grid-column:1/3}.home main{grid-row:3}.home footer{grid-row:4}.home .primaryNav{grid-row:3/5}}@media (min-width:55em){.g-two-up{display:grid;grid-template-columns:1fr 1fr;grid-row-gap:2em}.g-two-up div:first-child{border-right:1px solid var(--light-grey);padding-right:2em}.g-two-up div:nth-child(2n){padding-left:2em}.g-two-up .hero{border-radius:5px;margin-bottom:-1.5em}}@media (min-width:68em){body{grid-template-columns:calc(50vw - 40rem) 1fr 3fr calc(50vw - 40rem)}header{grid-column:1/6}.pageNav{grid-column:2}main{grid-row:2;grid-column:3}main.wide{grid-column:3/5}footer{grid-column:3/4}.home .hero-callout{grid-column:1/6}}h1{font-size:2.8em;line-height:1.2em;margin-bottom:.6em}h2{font-size:2.125em;line-height:1.2em;margin-top:1em;margin-bottom:.7em}h3{font-size:1.3125em;margin-top:1em;margin-bottom:1em;line-height:1.4em}h4{font-size:1em;margin:1.5em 0 1em}p{margin:1.5em 0}img{max-width:100%}img[width]{width:auto}img[width][height]{height:auto}h1 .direct-link{display:none}h2 .direct-link{opacity:0;transition:opacity .2 ease-in-out}h2:hover .direct-link{opacity:1;text-decoration:none}img[src$=".svg"]{width:100%;height:auto;max-width:none}pre{overflow-x:scroll}.vis-hidden{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;white-space:nowrap;width:1px}.btn{background:var(--wpt-navy);color:#fff;padding:.4em .8em;font-size:1.1em;border-radius:4px}a{color:#0243a9;text-decoration:none}a:hover{text-decoration:underline}header{padding:1.5em;background:var(--wpt-navy);border-bottom:1px solid var(--blue-grey);text-align:center}header .logo-wrap img{max-width:12em;width:100%}header a{color:#fff;font-size:1.5em;font-weight:700;margin-bottom:1em;display:block}header a+a{margin-bottom:0}header a:hover{text-decoration:none}@media (min-width:50em){header{text-align:left;display:grid;grid-template-columns:calc(50vw - 45rem) 3fr 2fr calc(50vw - 45rem);align-items:center}header .logo-wrap{grid-column:2;align-items:center;align-self:center}header a{display:table-cell;margin-bottom:0;vertical-align:middle}header a:first-child{border-right:1px solid rgba(255,255,255,.5);padding-right:1em}header a:nth-child(2n){padding-left:1em}header .logo-wrap img{width:12rem}}main{overflow:auto;padding:1em}main h1+p{font-size:1.3em;line-height:1.5em}main li{margin-bottom:.5em}@media (min-width:44em){main{padding-top:0}}.hero-callout{margin-bottom:4em;overflow:auto;padding:1em 1em 0 1em;background:var(--lightest-grey);border-bottom:1px solid var(--light-grey)}.hero-callout img{width:80%;max-width:35em;margin:auto;display:block}@media (min-width:44em){.hero-callout{margin-top:-20px;display:grid;grid-template-columns:calc(50vw - 80rem) 1fr calc(50vw - 80rem)}.hero-callout img{grid-column:2}.hero-callout div{grid-column:2}}@media (min-width:56em){.hero-callout{align-items:end;padding-top:0;grid-template-columns:calc(50vw - 45rem) 1.3fr 1fr calc(50vw - 45rem)}.hero-callout div{padding-right:1.5em;align-self:center;grid-column:2;grid-row:1}.hero-callout img{width:100%;max-width:34.375em;margin:1em 0 0;grid-column:3;justify-self:end}}nav{padding:0}.pageNav{display:none}@media (min-width:68em){nav{padding:0 .5em}.pageNav{display:block}}.pageNav ol{list-style-type:none;padding-left:0;border-left:1px solid var(--light-grey);font-size:.9em;margin:0}.pageNav a{padding-left:1em;border-left:3px solid transparent;display:inline-block}nav ul{list-style-type:none;padding:0 1em}nav a{color:#555b5e;text-decoration:none}nav a:hover{text-decoration:underline}nav li{margin-bottom:1em}.primaryNav .is-active>a{font-weight:700;color:#000}nav li ul{padding-left:1em;margin-top:1em}.toc .is-active{border-left-color:var(--wpt-navy);color:var(--wpt-navy)}@media (min-width:68em){.toc{--top-offset:1em;position:sticky;top:var(--top-offset);margin-top:1.5em;max-height:calc(100vh - 2 * var(--top-offset));overflow-y:auto}}.toc li{font-size:1em}.toc li ol{margin-left:1em;border-left:0;margin-top:.8em}.toc li li{margin-bottom:1em;line-height:1.2em}.primaryNav details{--details-force-closed:(min-width: 44em)}.primaryNav summary{background:var(--wpt-navy);color:#fff;font-size:1.2em;margin:auto;padding:.5em;list-style:none;border:1px solid #234b80;border-width:1px 0;text-align:center}.primaryNav summary::marker,.primaryNav summary::webkit-details-marker{color:transparent;opacity:0;content:"";display:none}.primaryNav ul{padding:0;margin-top:0}.primaryNav li{margin-bottom:0}.primaryNav a{padding:.5em;display:block;border-bottom:1px solid var(--light-grey)}.primaryNav a:hover{text-decoration:none;background:var(--light-grey)}.primaryNav li li a{padding-left:1em}@media (min-width:44em){.primaryNav{padding-top:1em}.primaryNav summary{background:0 0;border:0;font-size:1em}.primaryNav details[open] summary{display:none}.primaryNav a{border-bottom:0}}.has-js .primaryNav .is-closed ul{display:none}.has-js .primaryNav .is-active ul,.has-js .primaryNav .is-open ul{display:block}.has-js .is-closed a,.has-js .is-open a{position:relative}.has-js .is-closed>a::after{content:"";border-style:solid;border-color:inherit;border-width:0 2px 2px 0;height:auto;width:auto;position:absolute;padding:3px;top:.9em;margin-left:6px;transform:rotate(45deg)}.has-js .is-open>a::after{content:"";border-style:solid;border-color:inherit;border-width:0 2px 2px 0;height:auto;width:auto;position:absolute;padding:3px;top:1em;margin-left:3px;transform:rotate(-45deg)}footer{border-top:1px solid var(--light-grey);padding:1em 1em}.api-list li,.api-list ul{list-style-type:none;padding-left:0;margin-left:0}.api-list code{font-size:1.2em;font-weight:700}.api-list strong{padding-top:1em;display:inline-block}.api-list{margin-bottom:2.5em}.api-list li{padding:.5em .5em 1em;margin-bottom:1em;border-bottom:1px solid var(--light-grey)}.api-list ul ul{margin-top:1.5em}.api-list li li{border-bottom:0;padding:0 .5em;margin-left:1em}.caution{background:var(--attention-bg);padding:1px 1em;border:1px solid var(--attention-border);border-radius:4px;border-width:0 0 0 5px}.note{background:var(--note-bg);padding:1px 1em;border:1px solid var(--note-border);border-radius:4px;border-width:0 0 0 5px}.warning{background:var(--warning-bg);padding:1px 1em;border:1px solid var(--warning-border);border-radius:4px;border-width:0 0 0 5px}.key-term{padding:1px 1em;border:1px solid var(--key-term);color:var(--key-term);border-width:2px 0}.key-term p::before{content:"Key Term to Know: ";padding-top:1em;font-weight:700;display:inline}table{border-collapse:collapse;width:100%}table thead{overflow:hidden}table thead th:first-child{border-top-left-radius:4px}table thead th:last-child{border-top-right-radius:4px}table th{background:var(--wpt-navy);color:#fff;font-weight:400;padding:.5em}table tbody{border:1px solid var(--light-grey)}table td{padding:.5em;border:1px solid var(--light-grey)}table tbody tr:nth-child(2n+2) td{background:var(--lightest-grey)}table td code+small{display:block;margin-top:.5em}.has-js .code-tabs pre{display:none}.has-js .code-tabs pre.is-active{display:block}.code-tabs-nav{background:var(--wpt-navy);display:flex;margin-left:0;padding-left:.5em;list-style-type:none;margin-bottom:0;border-radius:4px 4px 0 0;border-bottom:1px solid rgba(255,255,255,.4)}.code-tabs-nav li{padding-left:0;list-style-type:none;margin:0 .3em}.code-tabs-nav a{color:var(--light-grey);text-transform:uppercase;padding:.3em;display:block;font-size:.9em}.code-tabs-nav li.is-active a{color:#fff;border-bottom:3px solid #f9d856;font-weight:700}.code-tabs-ready pre[class*=language-]{border-radius:0;margin-top:0}.integrations,.integrations li{list-style-type:none;padding-left:0;margin-left:0}.integrations{margin-top:3em}.integrations li{padding-bottom:1.5em;margin-bottom:1.5em;border-bottom:1px solid var(--light-grey)}.integrations h3{margin-bottom:.1em}.integrations h3+p{margin-top:0}.integrations li:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}.code-recipes{grid-column-gap:2em;grid-auto-rows:1fr;grid-row-gap:0}.code-recipes div,.code-recipes div:first-child{border-right:0;padding:1.5em 1em;margin-bottom:2em}.code-recipes .recipe h2{font-size:1.4em;margin-top:0}.code-recipes .recipe{background:#f6f6f6;border-radius:.6em}.callout{padding-bottom:1.5em;margin-top:1.5em}.callout+.callout{border-top:1px solid var(--light-grey);padding-top:1.5em}code,pre{background-color:var(--light-grey);font-size:1.1em}p.contributedBy{margin-top:-1.8em;font-size:.9em}.recipe p.contributedBy{font-size:.8em;margin-top:-1.4em}code[class*=language-],pre[class*=language-]{font-family:monospace,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;background-color:var(--wpt-navy);color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}code[class*=language-] ::-moz-selection,code[class*=language-]::-moz-selection,pre[class*=language-] ::-moz-selection,pre[class*=language-]::-moz-selection{text-shadow:none;background:rgba(29,59,83,.99)}code[class*=language-] ::selection,code[class*=language-]::selection,pre[class*=language-] ::selection,pre[class*=language-]::selection{text-shadow:none;background:rgba(29,59,83,.99)}@media print{code[class*=language-],pre[class*=language-]{text-shadow:none}}code{padding:.25rem}pre{overflow:auto;width:100%;scrollbar-color:var(--light-blue) var(--navy-light)}pre::after{content:"";flex:0 0 1.25rem}pre::-webkit-scrollbar{height:1rem}pre::-webkit-scrollbar-track{background:var(--navy-light)}pre::-webkit-scrollbar-thumb{background-color:var(--light-blue);border-radius:0;border:.125rem solid var(--navy-light)}pre code{display:block;padding:.5rem 1rem;font-size:1rem}code[class*=language-] .token.cdata,code[class*=language-] .token.comment,code[class*=language-] .token.doctype,code[class*=language-] .token.prolog,pre[class*=language-] .token.cdata,pre[class*=language-] .token.comment,pre[class*=language-] .token.doctype,pre[class*=language-] .token.prolog{color:#ccc}code[class*=language-] .token.punctuation,pre[class*=language-] .token.punctuation{color:#68a4f3}code[class*=language-] .token.constant,code[class*=language-] .token.deleted,code[class*=language-] .token.property,code[class*=language-] .token.symbol,code[class*=language-] .token.tag,pre[class*=language-] .token.constant,pre[class*=language-] .token.deleted,pre[class*=language-] .token.property,pre[class*=language-] .token.symbol,pre[class*=language-] .token.tag{color:#c2d8f9}code[class*=language-] .token.boolean,code[class*=language-] .token.number,pre[class*=language-] .token.boolean,pre[class*=language-] .token.number{color:#bd9a00}code[class*=language-] .token.attr-name,code[class*=language-] .token.builtin,code[class*=language-] .token.char,code[class*=language-] .token.inserted,code[class*=language-] .token.selector,code[class*=language-] .token.string,pre[class*=language-] .token.attr-name,pre[class*=language-] .token.builtin,pre[class*=language-] .token.char,pre[class*=language-] .token.inserted,pre[class*=language-] .token.selector,pre[class*=language-] .token.string{color:var(--color-yellow)}code[class*=language-] .language-css .token.string,code[class*=language-] .style .token.string,code[class*=language-] .token.entity,code[class*=language-] .token.operator,code[class*=language-] .token.url,code[class*=language-] .token.variable,pre[class*=language-] .language-css .token.string,pre[class*=language-] .style .token.string,pre[class*=language-] .token.entity,pre[class*=language-] .token.operator,pre[class*=language-] .token.url,pre[class*=language-] .token.variable{color:#00e0e0}code[class*=language-] .token.atrule,code[class*=language-] .token.attr-value,code[class*=language-] .token.function,pre[class*=language-] .token.atrule,pre[class*=language-] .token.attr-value,pre[class*=language-] .token.function{color:var(--color-yellow)}code[class*=language-] .token.keyword,pre[class*=language-] .token.keyword{color:#00e0e0}code[class*=language-] .token.important,code[class*=language-] .token.regex,pre[class*=language-] .token.important,pre[class*=language-] .token.regex{color:var(--color-yellow)}code[class*=language-] .token.bold,code[class*=language-] .token.important,pre[class*=language-] .token.bold,pre[class*=language-] .token.important{font-weight:700}code[class*=language-] .token.italic,pre[class*=language-] .token.italic{font-style:italic}code[class*=language-] .token.entity,pre[class*=language-] .token.entity{cursor:help}@media screen and (-ms-high-contrast:active){code[class*=language-] code[class*=language-],code[class*=language-] pre[class*=language-],pre[class*=language-] code[class*=language-],pre[class*=language-] pre[class*=language-]{color:windowText;background:window}code[class*=language-] :not(pre)>code[class*=language-],code[class*=language-] pre[class*=language-],pre[class*=language-] :not(pre)>code[class*=language-],pre[class*=language-] pre[class*=language-]{background:window}code[class*=language-] .token.important,pre[class*=language-] .token.important{background:highlight;color:window;font-weight:400}code[class*=language-] .token.atrule,code[class*=language-] .token.attr-value,code[class*=language-] .token.function,code[class*=language-] .token.keyword,code[class*=language-] .token.operator,code[class*=language-] .token.selector,pre[class*=language-] .token.atrule,pre[class*=language-] .token.attr-value,pre[class*=language-] .token.function,pre[class*=language-] .token.keyword,pre[class*=language-] .token.operator,pre[class*=language-] .token.selector{font-weight:700}code[class*=language-] .token.attr-value,code[class*=language-] .token.comment,code[class*=language-] .token.doctype,code[class*=language-] .token.function,code[class*=language-] .token.keyword,code[class*=language-] .token.operator,code[class*=language-] .token.property,code[class*=language-] .token.string,pre[class*=language-] .token.attr-value,pre[class*=language-] .token.comment,pre[class*=language-] .token.doctype,pre[class*=language-] .token.function,pre[class*=language-] .token.keyword,pre[class*=language-] .token.operator,pre[class*=language-] .token.property,pre[class*=language-] .token.string{color:highlight}code[class*=language-] .token.attr-value,code[class*=language-] .token.url,pre[class*=language-] .token.attr-value,pre[class*=language-] .token.url{font-weight:400}}#search{display:block;padding:.5em 0;min-height:3.875em}#search .aa-Autocomplete{font-size:.8em;height:auto}/*! @algolia/autocomplete-theme-classic 1.2.1 | MIT License | © Algolia, Inc. and contributors | https://github.com/algolia/autocomplete */:root{--aa-search-input-height:44px;--aa-input-icon-size:20px;--aa-base-unit:16;--aa-spacing-factor:1;--aa-spacing:calc(var(--aa-base-unit)*var(--aa-spacing-factor)*1px);--aa-spacing-half:calc(var(--aa-spacing)/2);--aa-panel-max-height:650px;--aa-base-z-index:9999;--aa-font-size:calc(var(--aa-base-unit)*1px);--aa-font-family:inherit;--aa-font-weight-medium:500;--aa-font-weight-semibold:600;--aa-font-weight-bold:700;--aa-icon-size:20px;--aa-icon-stroke-width:1.6;--aa-icon-color-rgb:119,119,163;--aa-icon-color-alpha:1;--aa-action-icon-size:20px;--aa-text-color-rgb:38,38,39;--aa-text-color-alpha:1;--aa-primary-color-rgb:62,52,211;--aa-primary-color-alpha:0.2;--aa-muted-color-rgb:128,126,163;--aa-muted-color-alpha:0.6;--aa-panel-border-color-rgb:128,126,163;--aa-panel-border-color-alpha:0.3;--aa-input-border-color-rgb:128,126,163;--aa-input-border-color-alpha:0.8;--aa-background-color-rgb:255,255,255;--aa-background-color-alpha:1;--aa-input-background-color-rgb:255,255,255;--aa-input-background-color-alpha:1;--aa-selected-color-rgb:179,173,214;--aa-selected-color-alpha:0.205;--aa-description-highlight-background-color-rgb:245,223,77;--aa-description-highlight-background-color-alpha:0.5;--aa-detached-media-query:(max-width:680px);--aa-detached-modal-media-query:(min-width:680px);--aa-detached-modal-max-width:680px;--aa-detached-modal-max-height:500px;--aa-overlay-color-rgb:115,114,129;--aa-overlay-color-alpha:0.4;--aa-panel-shadow:0 0 0 1px rgba(35,38,59,0.1),0 6px 16px -4px rgba(35,38,59,0.15);--aa-scrollbar-width:13px;--aa-scrollbar-track-background-color-rgb:234,234,234;--aa-scrollbar-track-background-color-alpha:1;--aa-scrollbar-thumb-background-color-rgb:var(--aa-background-color-rgb);--aa-scrollbar-thumb-background-color-alpha:1}@media (hover:none) and (pointer:coarse){:root{--aa-spacing-factor:1.2;--aa-action-icon-size:22px}}body.dark,body[data-theme=dark]{--aa-text-color-rgb:183,192,199;--aa-primary-color-rgb:146,138,255;--aa-muted-color-rgb:146,138,255;--aa-input-background-color-rgb:0,3,9;--aa-background-color-rgb:21,24,42;--aa-selected-color-rgb:146,138,255;--aa-selected-color-alpha:0.25;--aa-description-highlight-background-color-rgb:0 255 255;--aa-description-highlight-background-color-alpha:0.25;--aa-icon-color-rgb:119,119,163;--aa-panel-shadow:inset 1px 1px 0 0 #2c2e40,0 3px 8px 0 #000309;--aa-scrollbar-track-background-color-rgb:44,46,64;--aa-scrollbar-thumb-background-color-rgb:var(--aa-background-color-rgb)}.aa-Autocomplete *,.aa-DetachedFormContainer *,.aa-Panel *{box-sizing:border-box}.aa-Autocomplete,.aa-DetachedFormContainer,.aa-Panel{color:#262627;color:rgba(var(--aa-text-color-rgb),var(--aa-text-color-alpha));font-family:inherit;font-family:var(--aa-font-family);font-size:16px;font-size:var(--aa-font-size);font-weight:400;line-height:1em;margin:0;padding:0;text-align:left}.aa-Form{align-items:center;background-color:#fff;background-color:rgba(var(--aa-input-background-color-rgb),var(--aa-input-background-color-alpha));border:1px solid rgba(128,126,163,.8);border:1px solid rgba(var(--aa-input-border-color-rgb),var(--aa-input-border-color-alpha));border-radius:3px;display:flex;line-height:1em;margin:0;position:relative;width:100%}.aa-Form[focus-within]{border-color:#3e34d3;border-color:rgba(var(--aa-primary-color-rgb),1);box-shadow:0 0 0 2px rgba(62,52,211,.2),inset 0 0 0 2px rgba(62,52,211,.2);box-shadow:rgba(var(--aa-primary-color-rgb),var(--aa-primary-color-alpha)) 0 0 0 2px,inset rgba(var(--aa-primary-color-rgb),var(--aa-primary-color-alpha)) 0 0 0 2px;outline:medium none currentColor}.aa-Form:focus-within{border-color:#3e34d3;border-color:rgba(var(--aa-primary-color-rgb),1);box-shadow:0 0 0 2px rgba(62,52,211,.2),inset 0 0 0 2px rgba(62,52,211,.2);box-shadow:rgba(var(--aa-primary-color-rgb),var(--aa-primary-color-alpha)) 0 0 0 2px,inset rgba(var(--aa-primary-color-rgb),var(--aa-primary-color-alpha)) 0 0 0 2px;outline:medium none currentColor}.aa-InputWrapperPrefix{align-items:center;display:flex;flex-shrink:0;height:44px;height:var(--aa-search-input-height);order:1}.aa-Label,.aa-LoadingIndicator{cursor:auto;flex-shrink:0;height:100%;padding:0;text-align:left}.aa-Label svg,.aa-LoadingIndicator svg{color:#3e34d3;color:rgba(var(--aa-primary-color-rgb),1);height:auto;max-height:20px;max-height:var(--aa-input-icon-size);stroke-width:1.6;stroke-width:var(--aa-icon-stroke-width);width:20px;width:var(--aa-input-icon-size)}.aa-LoadingIndicator,.aa-SubmitButton{height:100%;padding-left:11px;padding-left:calc(var(--aa-spacing)*.75 - 1px);padding-right:8px;padding-right:var(--aa-spacing-half);width:47px;width:calc(var(--aa-spacing)*1.75 + var(--aa-icon-size) - 1px)}@media (hover:none) and (pointer:coarse){.aa-LoadingIndicator,.aa-SubmitButton{padding-left:3px;padding-left:calc(var(--aa-spacing-half)/ 2 - 1px);width:39px;width:calc(var(--aa-icon-size) + var(--aa-spacing)*1.25 - 1px)}}.aa-SubmitButton{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:0 0;border:0;margin:0}.aa-LoadingIndicator{align-items:center;display:flex;justify-content:center}.aa-LoadingIndicator[hidden]{display:none}.aa-InputWrapper{order:3;position:relative;width:100%}.aa-Input{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:0 0;border:0;color:#262627;color:rgba(var(--aa-text-color-rgb),var(--aa-text-color-alpha));font:inherit;height:44px;height:var(--aa-search-input-height);padding:0;width:100%}.aa-Input::-moz-placeholder{color:rgba(128,126,163,.6);color:rgba(var(--aa-muted-color-rgb),var(--aa-muted-color-alpha));opacity:1}.aa-Input:-ms-input-placeholder{color:rgba(128,126,163,.6);color:rgba(var(--aa-muted-color-rgb),var(--aa-muted-color-alpha));opacity:1}.aa-Input::placeholder{color:rgba(128,126,163,.6);color:rgba(var(--aa-muted-color-rgb),var(--aa-muted-color-alpha));opacity:1}.aa-Input:focus{border-color:none;box-shadow:none;outline:0}.aa-Input::-webkit-search-cancel-button,.aa-Input::-webkit-search-decoration,.aa-Input::-webkit-search-results-button,.aa-Input::-webkit-search-results-decoration{-webkit-appearance:none;appearance:none}.aa-InputWrapperSuffix{align-items:center;display:flex;height:44px;height:var(--aa-search-input-height);order:4}.aa-ClearButton{align-items:center;background:0 0;border:0;color:rgba(128,126,163,.6);color:rgba(var(--aa-muted-color-rgb),var(--aa-muted-color-alpha));cursor:pointer;display:flex;height:100%;margin:0;padding:0 12.83333px;padding:0 calc(var(--aa-spacing)*.83333 - .5px)}@media (hover:none) and (pointer:coarse){.aa-ClearButton{padding:0 10.16667px;padding:0 calc(var(--aa-spacing)*.66667 - .5px)}}.aa-ClearButton:focus,.aa-ClearButton:hover{color:#262627;color:rgba(var(--aa-text-color-rgb),var(--aa-text-color-alpha))}.aa-ClearButton[hidden]{display:none}.aa-ClearButton svg{stroke-width:1.6;stroke-width:var(--aa-icon-stroke-width);width:20px;width:var(--aa-icon-size)}.aa-Panel{background-color:#fff;background-color:rgba(var(--aa-background-color-rgb),var(--aa-background-color-alpha));border-radius:4px;border-radius:calc(var(--aa-spacing)/4);box-shadow:0 0 0 1px rgba(35,38,59,.1),0 6px 16px -4px rgba(35,38,59,.15);box-shadow:var(--aa-panel-shadow);margin:8px 0 0;overflow:hidden;position:absolute;transition:opacity .2s ease-in,filter .2s ease-in}@media screen and (prefers-reduced-motion){.aa-Panel{transition:none}}.aa-Panel button{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:0 0;border:0;margin:0;padding:0}.aa-PanelLayout{height:100%;margin:0;max-height:650px;max-height:var(--aa-panel-max-height);overflow-y:auto;padding:0;position:relative;text-align:left}.aa-PanelLayoutColumns--twoGolden{display:grid;grid-template-columns:39.2% auto;overflow:hidden;padding:0}.aa-PanelLayoutColumns--two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:hidden;padding:0}.aa-PanelLayoutColumns--three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:hidden;padding:0}.aa-Panel--stalled .aa-Source{filter:grayscale(1);opacity:.8}.aa-Panel--scrollable{margin:0;max-height:650px;max-height:var(--aa-panel-max-height);overflow-x:hidden;overflow-y:auto;padding:8px;padding:var(--aa-spacing-half);scrollbar-color:#fff #eaeaea;scrollbar-color:rgba(var(--aa-scrollbar-thumb-background-color-rgb),var(--aa-scrollbar-thumb-background-color-alpha)) rgba(var(--aa-scrollbar-track-background-color-rgb),var(--aa-scrollbar-track-background-color-alpha));scrollbar-width:thin}.aa-Panel--scrollable::-webkit-scrollbar{width:13px;width:var(--aa-scrollbar-width)}.aa-Panel--scrollable::-webkit-scrollbar-track{background-color:#eaeaea;background-color:rgba(var(--aa-scrollbar-track-background-color-rgb),var(--aa-scrollbar-track-background-color-alpha))}.aa-Panel--scrollable::-webkit-scrollbar-thumb{background-color:#fff;background-color:rgba(var(--aa-scrollbar-thumb-background-color-rgb),var(--aa-scrollbar-thumb-background-color-alpha));border-radius:9999px;border:3px solid #eaeaea;border-color:rgba(var(--aa-scrollbar-track-background-color-rgb),var(--aa-scrollbar-track-background-color-alpha));border-right:2px solid rgba(var(--aa-scrollbar-track-background-color-rgb),var(--aa-scrollbar-track-background-color-alpha))}.aa-Source{margin:0;padding:0;position:relative;width:100%}.aa-Source:empty{display:none}.aa-SourceNoResults{font-size:1em;margin:0;padding:16px;padding:var(--aa-spacing)}.aa-List{list-style:none;margin:0}.aa-List,.aa-SourceHeader{padding:0;position:relative}.aa-SourceHeader{margin:8px .5em 8px 0;margin:var(--aa-spacing-half) .5em var(--aa-spacing-half) 0}.aa-SourceHeader:empty{display:none}.aa-SourceHeaderTitle{background:#fff;background:rgba(var(--aa-background-color-rgb),var(--aa-background-color-alpha));color:#3e34d3;color:rgba(var(--aa-primary-color-rgb),1);display:inline-block;font-size:.8em;font-weight:600;font-weight:var(--aa-font-weight-semibold);margin:0;padding:0 8px 0 0;padding:0 var(--aa-spacing-half) 0 0;position:relative;z-index:9999;z-index:var(--aa-base-z-index)}.aa-SourceHeaderLine{border-bottom:1px solid #3e34d3;border-bottom:1px solid rgba(var(--aa-primary-color-rgb),1);display:block;height:2px;left:0;margin:0;opacity:.3;padding:0;position:absolute;right:0;top:8px;top:var(--aa-spacing-half);z-index:9998;z-index:calc(var(--aa-base-z-index) - 1)}.aa-SourceFooterSeeAll{background:linear-gradient(180deg,#fff,rgba(128,126,163,.14));background:linear-gradient(180deg,rgba(var(--aa-background-color-rgb),var(--aa-background-color-alpha)),rgba(128,126,163,.14));border:1px solid rgba(128,126,163,.6);border:1px solid rgba(var(--aa-muted-color-rgb),var(--aa-muted-color-alpha));border-radius:5px;box-shadow:inset 0 0 2px #fff,0 2px 2px -1px rgba(76,69,88,.15);color:inherit;font-size:.95em;font-weight:500;font-weight:var(--aa-font-weight-medium);padding:.475em 1em .6em;text-decoration:none}.aa-SourceFooterSeeAll:focus,.aa-SourceFooterSeeAll:hover{border:1px solid #3e34d3;border:1px solid rgba(var(--aa-primary-color-rgb),1);color:#3e34d3;color:rgba(var(--aa-primary-color-rgb),1)}.aa-Item{align-items:center;border-radius:3px;cursor:pointer;display:grid;min-height:40px;min-height:calc(var(--aa-spacing)*2.5);padding:4px;padding:calc(var(--aa-spacing-half)/2)}.aa-Item[aria-selected=true]{background-color:rgba(179,173,214,.205);background-color:rgba(var(--aa-selected-color-rgb),var(--aa-selected-color-alpha))}.aa-Item[aria-selected=true] .aa-ActiveOnly,.aa-Item[aria-selected=true] .aa-ItemActionButton{visibility:visible}.aa-ItemIcon{align-items:center;background:#fff;background:rgba(var(--aa-background-color-rgb),var(--aa-background-color-alpha));border-radius:3px;box-shadow:inset 0 0 0 1px rgba(128,126,163,.3);box-shadow:inset 0 0 0 1px rgba(var(--aa-panel-border-color-rgb),var(--aa-panel-border-color-alpha));color:#7777a3;color:rgba(var(--aa-icon-color-rgb),var(--aa-icon-color-alpha));display:flex;flex-shrink:0;font-size:.7em;height:28px;height:calc(var(--aa-icon-size) + var(--aa-spacing-half));justify-content:center;overflow:hidden;stroke-width:1.6;stroke-width:var(--aa-icon-stroke-width);text-align:center;width:28px;width:calc(var(--aa-icon-size) + var(--aa-spacing-half))}.aa-ItemIcon img{height:auto;max-height:20px;max-height:calc(var(--aa-icon-size) + var(--aa-spacing-half) - 8px);max-width:20px;max-width:calc(var(--aa-icon-size) + var(--aa-spacing-half) - 8px);width:auto}.aa-ItemIcon svg{height:20px;height:var(--aa-icon-size);width:20px;width:var(--aa-icon-size)}.aa-ItemIcon--alignTop{align-self:flex-start}.aa-ItemIcon--noBorder{background:0 0;box-shadow:none}.aa-ItemIcon--picture{height:96px;width:96px}.aa-ItemIcon--picture img{max-height:100%;max-width:100%;padding:8px;padding:var(--aa-spacing-half)}.aa-ItemContent{align-items:center;cursor:pointer;display:grid;grid-gap:8px;gap:8px;grid-gap:var(--aa-spacing-half);gap:var(--aa-spacing-half);grid-auto-flow:column;line-height:1.25em;overflow:hidden}.aa-ItemContent:empty{display:none}.aa-ItemContent mark{background:0 0;color:#262627;color:rgba(var(--aa-text-color-rgb),var(--aa-text-color-alpha));font-style:normal;font-weight:700;font-weight:var(--aa-font-weight-bold)}.aa-ItemContent--dual{display:flex;flex-direction:column;justify-content:space-between;text-align:left}.aa-ItemContent--dual .aa-ItemContentSubtitle,.aa-ItemContent--dual .aa-ItemContentTitle{display:block}.aa-ItemContent--indented{padding-left:36px;padding-left:calc(var(--aa-icon-size) + var(--aa-spacing))}.aa-ItemContentBody{display:grid;grid-gap:4px;gap:4px;grid-gap:calc(var(--aa-spacing-half)/2);gap:calc(var(--aa-spacing-half)/2)}.aa-ItemContentTitle{display:inline-block;margin:0 .5em 0 0;max-width:100%;overflow:hidden;padding:0;text-overflow:ellipsis;white-space:nowrap}.aa-ItemContentSubtitle{font-size:.92em}.aa-ItemContentSubtitleIcon:before{border-color:rgba(128,126,163,.64);border-color:rgba(var(--aa-muted-color-rgb),.64);border-style:solid;content:"";display:inline-block;left:1px;position:relative;top:-3px}.aa-ItemContentSubtitle--inline .aa-ItemContentSubtitleIcon:before{border-width:0 0 1.5px;margin-left:8px;margin-left:var(--aa-spacing-half);margin-right:4px;margin-right:calc(var(--aa-spacing-half)/2);width:10px;width:calc(var(--aa-spacing-half) + 2px)}.aa-ItemContentSubtitle--standalone{align-items:center;color:#262627;color:rgba(var(--aa-text-color-rgb),var(--aa-text-color-alpha));display:grid;grid-gap:8px;gap:8px;grid-gap:var(--aa-spacing-half);gap:var(--aa-spacing-half);grid-auto-flow:column;justify-content:start}.aa-ItemContentSubtitle--standalone .aa-ItemContentSubtitleIcon:before{border-radius:0 0 0 3px;border-width:0 0 1.5px 1.5px;height:8px;height:var(--aa-spacing-half);width:8px;width:var(--aa-spacing-half)}.aa-ItemContentSubtitleCategory{color:#807ea3;color:rgba(var(--aa-muted-color-rgb),1);font-weight:500}.aa-ItemContentDescription{color:#262627;color:rgba(var(--aa-text-color-rgb),var(--aa-text-color-alpha));font-size:.85em;max-width:100%;overflow-x:hidden;text-overflow:ellipsis}.aa-ItemContentDescription:empty{display:none}.aa-ItemContentDescription mark{background:rgba(245,223,77,.5);background:rgba(var(--aa-description-highlight-background-color-rgb),var(--aa-description-highlight-background-color-alpha));color:#262627;color:rgba(var(--aa-text-color-rgb),var(--aa-text-color-alpha));font-style:normal;font-weight:500;font-weight:var(--aa-font-weight-medium)}.aa-ItemContentDash{color:rgba(128,126,163,.6);color:rgba(var(--aa-muted-color-rgb),var(--aa-muted-color-alpha));display:none;opacity:.4}.aa-ItemContentTag{background-color:rgba(62,52,211,.2);background-color:rgba(var(--aa-primary-color-rgb),var(--aa-primary-color-alpha));border-radius:3px;margin:0 .4em 0 0;padding:.08em .3em}.aa-ItemLink,.aa-ItemWrapper{align-items:center;color:inherit;display:grid;grid-gap:4px;gap:4px;grid-gap:calc(var(--aa-spacing-half)/2);gap:calc(var(--aa-spacing-half)/2);grid-auto-flow:column;justify-content:space-between;width:100%}.aa-ItemLink{color:inherit;text-decoration:none}.aa-ItemActions{display:grid;grid-auto-flow:column;height:100%;justify-self:end;margin:0 -5.33333px;margin:0 calc(var(--aa-spacing)/-3);padding:0 2px 0 0}.aa-ItemActionButton{align-items:center;background:0 0;border:0;color:rgba(128,126,163,.6);color:rgba(var(--aa-muted-color-rgb),var(--aa-muted-color-alpha));cursor:pointer;display:flex;flex-shrink:0;padding:0}.aa-ItemActionButton:focus svg,.aa-ItemActionButton:hover svg{color:#262627;color:rgba(var(--aa-text-color-rgb),var(--aa-text-color-alpha))}@media (hover:none) and (pointer:coarse){.aa-ItemActionButton:focus svg,.aa-ItemActionButton:hover svg{color:inherit}}.aa-ItemActionButton svg{color:rgba(128,126,163,.6);color:rgba(var(--aa-muted-color-rgb),var(--aa-muted-color-alpha));margin:5.33333px;margin:calc(var(--aa-spacing)/3);stroke-width:1.6;stroke-width:var(--aa-icon-stroke-width);width:20px;width:var(--aa-action-icon-size)}.aa-ActiveOnly{visibility:hidden}.aa-PanelHeader{align-items:center;background:#3e34d3;background:rgba(var(--aa-primary-color-rgb),1);color:#fff;display:grid;height:var(--aa-modal-header-height);margin:0;padding:8px 16px;padding:var(--aa-spacing-half) var(--aa-spacing);position:relative}.aa-PanelHeader:after{background-image:linear-gradient(#fff,rgba(255,255,255,0));background-image:linear-gradient(rgba(var(--aa-background-color-rgb),1),rgba(var(--aa-background-color-rgb),0));bottom:-8px;bottom:calc(var(--aa-spacing-half)*-1);content:"";height:8px;height:var(--aa-spacing-half);left:0;pointer-events:none;position:absolute;right:0}.aa-PanelFooter,.aa-PanelHeader:after{z-index:9999;z-index:var(--aa-base-z-index)}.aa-PanelFooter{background-color:#fff;background-color:rgba(var(--aa-background-color-rgb),var(--aa-background-color-alpha));box-shadow:inset 0 1px 0 rgba(128,126,163,.3);box-shadow:inset 0 1px 0 rgba(var(--aa-panel-border-color-rgb),var(--aa-panel-border-color-alpha));display:flex;justify-content:space-between;margin:0;padding:16px;padding:var(--aa-spacing);position:relative}.aa-PanelFooter:after{background-image:linear-gradient(rgba(255,255,255,0),rgba(128,126,163,.6));background-image:linear-gradient(rgba(var(--aa-background-color-rgb),0),rgba(var(--aa-muted-color-rgb),var(--aa-muted-color-alpha)));content:"";height:16px;height:var(--aa-spacing);left:0;opacity:.12;pointer-events:none;position:absolute;right:0;top:-16px;top:calc(var(--aa-spacing)*-1);z-index:9998;z-index:calc(var(--aa-base-z-index) - 1)}.aa-DetachedContainer{background:#fff;background:rgba(var(--aa-background-color-rgb),var(--aa-background-color-alpha));bottom:0;box-shadow:0 0 0 1px rgba(35,38,59,.1),0 6px 16px -4px rgba(35,38,59,.15);box-shadow:var(--aa-panel-shadow);display:flex;flex-direction:column;left:0;margin:0;overflow:hidden;padding:0;position:fixed;right:0;top:0;z-index:9999;z-index:var(--aa-base-z-index)}.aa-DetachedContainer:after{height:32px}.aa-DetachedContainer .aa-SourceHeader{margin:8px 0 8px 2px;margin:var(--aa-spacing-half) 0 var(--aa-spacing-half) 2px}.aa-DetachedContainer .aa-Panel{background-color:#fff;background-color:rgba(var(--aa-background-color-rgb),var(--aa-background-color-alpha));border-radius:0;box-shadow:none;flex-grow:1;margin:0;padding:0;position:relative}.aa-DetachedContainer .aa-PanelLayout{bottom:0;box-shadow:none;left:0;margin:0;max-height:none;overflow-y:auto;position:absolute;right:0;top:0;width:100%}.aa-DetachedFormContainer{border-bottom:1px solid rgba(128,126,163,.3);border-bottom:1px solid rgba(var(--aa-panel-border-color-rgb),var(--aa-panel-border-color-alpha));display:flex;flex-direction:row;justify-content:space-between;margin:0;padding:8px;padding:var(--aa-spacing-half)}.aa-DetachedCancelButton{background:0 0;border:0;border-radius:3px;color:inherit;color:#262627;color:rgba(var(--aa-text-color-rgb),var(--aa-text-color-alpha));cursor:pointer;font:inherit;margin:0 0 0 8px;margin:0 0 0 var(--aa-spacing-half);padding:0 8px;padding:0 var(--aa-spacing-half)}.aa-DetachedCancelButton:focus,.aa-DetachedCancelButton:hover{box-shadow:inset 0 0 0 1px rgba(128,126,163,.3);box-shadow:inset 0 0 0 1px rgba(var(--aa-panel-border-color-rgb),var(--aa-panel-border-color-alpha))}.aa-DetachedContainer--modal{border-radius:6px;bottom:inherit;height:auto;margin:0 auto;max-width:680px;max-width:var(--aa-detached-modal-max-width);position:absolute;top:3%}.aa-DetachedContainer--modal .aa-PanelLayout{max-height:500px;max-height:var(--aa-detached-modal-max-height);padding-bottom:8px;padding-bottom:var(--aa-spacing-half);position:static}.aa-DetachedSearchButton{align-items:center;background-color:#fff;background-color:rgba(var(--aa-input-background-color-rgb),var(--aa-input-background-color-alpha));border:1px solid rgba(128,126,163,.8);border:1px solid rgba(var(--aa-input-border-color-rgb),var(--aa-input-border-color-alpha));border-radius:3px;color:rgba(128,126,163,.6);color:rgba(var(--aa-muted-color-rgb),var(--aa-muted-color-alpha));cursor:pointer;display:flex;font:inherit;font-family:inherit;font-family:var(--aa-font-family);font-size:16px;font-size:var(--aa-font-size);height:44px;height:var(--aa-search-input-height);margin:0;padding:0 5.5px;padding:0 calc(var(--aa-search-input-height)/8);position:relative;text-align:left;width:100%}.aa-DetachedSearchButton:focus{border-color:#3e34d3;border-color:rgba(var(--aa-primary-color-rgb),1);box-shadow:0 0 0 3px rgba(62,52,211,.2),inset 0 0 0 2px rgba(62,52,211,.2);box-shadow:rgba(var(--aa-primary-color-rgb),var(--aa-primary-color-alpha)) 0 0 0 3px,inset rgba(var(--aa-primary-color-rgb),var(--aa-primary-color-alpha)) 0 0 0 2px;outline:medium none currentColor}.aa-DetachedSearchButtonIcon{align-items:center;color:#3e34d3;color:rgba(var(--aa-primary-color-rgb),1);cursor:auto;display:flex;height:100%;justify-content:center;width:36px;width:calc(var(--aa-icon-size) + var(--aa-spacing))}.aa-Detached{height:100vh;overflow:hidden}.aa-DetachedOverlay{background-color:rgba(115,114,129,.4);background-color:rgba(var(--aa-overlay-color-rgb),var(--aa-overlay-color-alpha));height:100vh;left:0;margin:0;padding:0;position:fixed;right:0;top:0;z-index:9998;z-index:calc(var(--aa-base-z-index) - 1)}.aa-GradientBottom,.aa-GradientTop{height:8px;height:var(--aa-spacing-half);left:0;pointer-events:none;position:absolute;right:0;z-index:9999;z-index:var(--aa-base-z-index)}.aa-GradientTop{background-image:linear-gradient(#fff,rgba(255,255,255,0));background-image:linear-gradient(rgba(var(--aa-background-color-rgb),1),rgba(var(--aa-background-color-rgb),0));top:0}.aa-GradientBottom{background-image:linear-gradient(rgba(255,255,255,0),#fff);background-image:linear-gradient(rgba(var(--aa-background-color-rgb),0),rgba(var(--aa-background-color-rgb),1));border-bottom-left-radius:4px;border-bottom-left-radius:calc(var(--aa-spacing)/4);border-bottom-right-radius:4px;border-bottom-right-radius:calc(var(--aa-spacing)/4);bottom:0}@media (hover:none) and (pointer:coarse){.aa-DesktopOnly{display:none}}@media (hover:hover){.aa-TouchOnly{display:none}}.aa-Autocomplete,.aa-DetachedContainer,.aa-Panel{--color-mark:#5468ff;--color-background:#fff;--color-selected:#f5f5fa;--color-text:#23263b;--color-input-icon:#777;--color-source-icon:rgba(80,80,80,0.32);--height:auto;--height-icon:16px;--font-size:16px}.aa-Panel{min-width:350px;z-index:1100;margin-top:2px}.aa-Panel .aa-PanelLayout{padding-top:0;padding-bottom:0;background-color:var(--color-background)}.aa-Panel .aa-PanelLayout .aa-PanelLayoutPreview{border-left:solid 1px var(--color-selected)}.aa-Panel .aa-GradientBottom{background-image:none}.aa-Autocomplete .aa-Form,.aa-DetachedFormContainer .aa-Form{height:var(--height);font-size:var(--font-size);padding:0;background-color:var(--color-background)}.aa-Autocomplete .aa-Form:focus-within,.aa-DetachedFormContainer .aa-Form:focus-within{box-shadow:none}.aa-Autocomplete .aa-Form .aa-InputWrapperPrefix,.aa-DetachedFormContainer .aa-Form .aa-InputWrapperPrefix{padding:0}.aa-Autocomplete .aa-Form .aa-InputWrapperPrefix .aa-Label,.aa-DetachedFormContainer .aa-Form .aa-InputWrapperPrefix .aa-Label{padding:0}.aa-Autocomplete .aa-Form .aa-InputWrapperPrefix .aa-Label svg,.aa-DetachedFormContainer .aa-Form .aa-InputWrapperPrefix .aa-Label svg{left:0;vertical-align:middle;color:var(--color-input-icon);width:var(--height-icon)}.aa-Autocomplete .aa-Form .aa-InputWrapper .aa-Input,.aa-DetachedFormContainer .aa-Form .aa-InputWrapper .aa-Input{height:var(--height);color:var(--color-text)}.aa-Autocomplete .aa-Form .aa-InputWrapperSuffix,.aa-DetachedFormContainer .aa-Form .aa-InputWrapperSuffix{height:var(--height)}.aa-Autocomplete .aa-Form .aa-InputWrapperSuffix .aa-ClearButton,.aa-DetachedFormContainer .aa-Form .aa-InputWrapperSuffix .aa-ClearButton{padding:0}.aa-Autocomplete .aa-Form .aa-InputWrapperSuffix .aa-ClearButton:focus,.aa-Autocomplete .aa-Form .aa-InputWrapperSuffix .aa-ClearButton:hover,.aa-DetachedFormContainer .aa-Form .aa-InputWrapperSuffix .aa-ClearButton:focus,.aa-DetachedFormContainer .aa-Form .aa-InputWrapperSuffix .aa-ClearButton:hover{color:var(--color-text)}.aa-Item{color:var(--color-text);padding:2px 0}.aa-Item a{color:inherit;text-decoration:none}.aa-Item[aria-selected=true]{background-color:var(--color-selected)}.aa-Item .aa-ItemContent{display:flex;color:var(--color-text)}.aa-Item .aa-ItemContent mark{color:var(--color-mark);background-color:transparent}.aa-Item .aa-ItemIcon{align-items:baseline;color:var(--color-source-icon);background:0 0;box-shadow:none;margin:0 var(--aa-spacing-half) 0 2px}.aa-Item .aa-ItemTitle{font-size:14px;font-weight:700;line-height:18px}.aa-Item .aa-ItemHierarchy{font-size:12px;font-style:italic;line-height:18px;opacity:.8;padding:1px 0}.aa-Item .aa-ItemDescription{font-size:12px;line-height:16px;color:#797979}.aa-DetachedContainer{background:var(--color-background)}.aa-DetachedContainer .aa-DetachedFormContainer .aa-DetachedCancelButton{color:var(--color-text)}.aa-DetachedOverlay{z-index:10}.aa-DetachedSearchButton{background-color:var(--color-background)}.aa-DetachedSearchButton .aa-DetachedSearchButtonIcon{color:var(--color-input-icon)}.aa-powered-by-link{display:inline-block;width:64px;height:18px;margin-left:4px;text-indent:101%;overflow:hidden;white-space:nowrap;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0ODUgMTIwIj48ZyBmaWxsPSJub25lIj48cGF0aCBmaWxsPSIjNTQ2OEZGIiBkPSJNMTYuOC0xLjAwMWg4OC40YzguNyAwIDE1LjggNy4wNjUgMTUuOCAxNS44djg4LjQwNWMwIDguNy03LjA2NSAxNS43OTUtMTUuOCAxNS43OTVIMTYuOGMtOC43IDAtMTUuOC03LjA2LTE1LjgtMTUuNzk1VjE0Ljc1OWMwLTguNjk1IDcuMDYtMTUuNzYgMTUuOC0xNS43NiIvPjxwYXRoIGZpbGw9IiNGRkYiIGQ9Ik03My41MDUgMjUuNzg4di00LjExNWE1LjIwOSA1LjIwOSAwIDAwLTUuMjEtNS4yMDVINTYuMTVhNS4yMDkgNS4yMDkgMCAwMC01LjIxIDUuMjA1djQuMjI1YzAgLjQ3LjQzNS44LjkxLjY5YTM3Ljk2NiAzNy45NjYgMCAwMTEwLjU3LTEuNDljMy40NjUgMCA2Ljg5NS40NyAxMC4yMSAxLjM4LjQ0LjExLjg3NS0uMjE1Ljg3NS0uNjlNNDAuMjIgMzEuMTczbC0yLjA3NS0yLjA3NWE1LjIwNiA1LjIwNiAwIDAwLTcuMzY1IDBsLTIuNDggMi40NzVhNS4xODUgNS4xODUgMCAwMDAgNy4zNTVsMi4wNCAyLjA0Yy4zMy4zMjUuODA1LjI1IDEuMDk1LS4wNzVhMzkuODc2IDM5Ljg3NiAwIDAxMy45NzUtNC42NiAzNy42OCAzNy42OCAwIDAxNC43LTRjLjM2NC0uMjIuNC0uNzMuMTEtMS4wNm0yMi4xNjQgMTMuMDY1djE3LjhjMCAuNTEuNTUuODc1IDEuMDIuNjJsMTUuODI1LTguMTljLjM2LS4xOC40Ny0uNjIuMjktLjk4LTMuMjgtNS43NTUtOS4zNy05LjY4NS0xNi40MDUtOS45NC0uMzY1IDAtLjczLjI5LS43My42OW0wIDQyLjg4Yy0xMy4xOTUgMC0yMy45MTUtMTAuNzA1LTIzLjkxNS0yMy44OCAwLTEzLjE3NSAxMC43Mi0yMy44NzUgMjMuOTE1LTIzLjg3NSAxMy4yIDAgMjMuOTE2IDEwLjcgMjMuOTE2IDIzLjg3NXMtMTAuNjggMjMuODgtMjMuOTE2IDIzLjg4bTAtNTcuOGMtMTguNzQgMC0zMy45NCAxNS4xOC0zMy45NCAzMy45MiAwIDE4Ljc0NSAxNS4yIDMzLjg5IDMzLjk0IDMzLjg5czMzLjk0LTE1LjE4IDMzLjk0LTMzLjkyNWMwLTE4Ljc0NS0xNS4xNjUtMzMuODg1LTMzLjk0LTMzLjg4NSIvPjxwYXRoIGZpbGw9IiM1NDY4RkYiIGQ9Ik0yNDAuMjE0IDk0LjE3N2MtMjMuMzY1LjExLTIzLjM2NS0xOC44NTUtMjMuMzY1LTIxLjg3NWwtLjA0LTcxLjA0NSAxNC4yNTQtMi4yNnY3MC42MWMwIDEuNzE1IDAgMTIuNTYgOS4xNSAxMi41OTV2MTEuOTc1aC4wMDF6bS01Ny43OC0xMS42MWM0LjM3NCAwIDcuNjItLjI1NSA5Ljg4LS42OVY2Ny4zOTJhMjkuMTk2IDI5LjE5NiAwIDAwLTMuNDMtLjY5NSAzMy43NDIgMzMuNzQyIDAgMDAtNC45NTYtLjM2NWMtMS41NyAwLTMuMTc1LjExLTQuNzc1LjM2NS0xLjYwNS4yMi0zLjA2NS42NTUtNC4zNCAxLjI3NS0xLjI3NS42Mi0yLjMzNSAxLjQ5NS0zLjEgMi42Mi0uOCAxLjEzLTEuMTY1IDEuNzg1LTEuMTY1IDMuNDk1IDAgMy4zNDUgMS4xNjUgNS4yOCAzLjI4IDYuNTUgMi4xMTUgMS4yNzUgNC45OTUgMS45MyA4LjYwNiAxLjkzem0tMS4yNC01MS42ODVjNC43IDAgOC42NzQuNTg1IDExLjg4NCAxLjc1IDMuMjA2IDEuMTY1IDUuNzk2IDIuOCA3LjY5IDQuODc1IDEuOTM1IDIuMTEgMy4yNDUgNC45MTUgNC4wNDYgNy45Ljg0IDIuOTg1IDEuMjQgNi4yNiAxLjI0IDkuODZ2MzYuNjJjLTIuMTg1LjQ3LTUuNTA2IDEuMDE1LTkuOTUgMS42Ny00LjQ0Ni42NTUtOS40NC45ODUtMTQuOTg2Ljk4NS0zLjY4IDAtNy4wNy0uMzY1LTEwLjA5NS0xLjA1NS0zLjA2NS0uNjktNS42NS0xLjgyLTcuODQtMy4zODUtMi4xNS0xLjU2NS0zLjgyNS0zLjU3LTUuMDY1LTYuMDQtMS4yMDUtMi40OC0xLjgyNS01Ljk3LTEuODI1LTkuNjEgMC0zLjQ5NS42OS01LjcxNSAyLjA0NS04LjEyIDEuMzgtMi40IDMuMjQtNC4zNjUgNS41NzUtNS44OTUgMi4zNy0xLjUzIDUuMDY1LTIuNjIgOC4xNjUtMy4yNzUgMy4xLS42NTUgNi4zNDUtLjk4NSA5LjY5NS0uOTg1IDEuNTcgMCAzLjIxLjExIDQuOTYuMjkgMS43MTUuMTg1IDMuNTc1LjUxNSA1LjU0NS45ODV2LTIuMzNjMC0xLjYzNS0uMTg1LTMuMi0uNTg1LTQuNjU1YTEwLjAxMiAxMC4wMTIgMCAwMC0yLjA0NS0zLjg5NWMtLjk4NS0xLjEzLTIuMjU1LTIuMDA1LTMuODYtMi42Mi0xLjYwNS0uNjItMy42NS0xLjA5NS02LjA5LTEuMDk1LTMuMjggMC02LjI3LjQtOS4wMDUuODc1LTIuNzM1LjQ3LTQuOTk1IDEuMDItNi43MSAxLjYzNWwtMS43MS0xMS42OGMxLjc4NS0uNjIgNC40NDUtMS4yNCA3Ljg3NS0xLjg1NSAzLjQyNS0uNjYgNy4xMS0uOTUgMTEuMDQ1LS45NWguMDAxem0yODEuNTEgNTEuMjg1YzQuMzc1IDAgNy42MTUtLjI1NSA5Ljg3NS0uNjk1di0xNC40OGMtLjgtLjIyLTEuOTMtLjQ3NS0zLjQyNS0uNjk1YTMzLjgxMyAzMy44MTMgMCAwMC00Ljk2LS4zNjVjLTEuNTY1IDAtMy4xNy4xMS00Ljc3NS4zNjUtMS42LjIyLTMuMDYuNjU1LTQuMzM1IDEuMjc1LTEuMjguNjItMi4zMzUgMS40OTUtMy4xIDIuNjItLjgwNSAxLjEzLTEuMTY1IDEuNzg1LTEuMTY1IDMuNDk1IDAgMy4zNDUgMS4xNjUgNS4yOCAzLjI4IDYuNTUgMi4xNSAxLjMxIDQuOTk1IDEuOTMgOC42MDUgMS45M3ptLTEuMjA1LTUxLjY0NWM0LjcgMCA4LjY3NC41OCAxMS44ODQgMS43NDUgMy4yMDUgMS4xNjUgNS43OTUgMi44IDcuNjkgNC44NzUgMS44OTUgMi4wNzUgMy4yNDUgNC45MTUgNC4wNDUgNy45Ljg0IDIuOTg1IDEuMjQgNi4yNiAxLjI0IDkuODY1djM2LjYxNWMtMi4xODUuNDctNS41MDUgMS4wMTUtOS45NSAxLjY3NS00LjQ0NS42NTUtOS40NC45OC0xNC45ODUuOTgtMy42OCAwLTcuMDctLjM2NS0xMC4wOTQtMS4wNTUtMy4wNjUtLjY5LTUuNjUtMS44Mi03Ljg0LTMuMzg1LTIuMTUtMS41NjUtMy44MjUtMy41Ny01LjA2NS02LjA0LTEuMjA1LTIuNDc1LTEuODI1LTUuOTctMS44MjUtOS42MSAwLTMuNDk1LjY5NS01LjcxNSAyLjA0NS04LjEyIDEuMzgtMi40IDMuMjQtNC4zNjUgNS41NzUtNS44OTUgMi4zNy0xLjUyNSA1LjA2NS0yLjYyIDguMTY1LTMuMjc1IDMuMS0uNjU1IDYuMzQ1LS45OCA5LjctLjk4IDEuNTY1IDAgMy4yMDUuMTEgNC45NTUuMjlzMy41NzUuNTEgNS41NC45ODV2LTIuMzNjMC0xLjY0LS4xOC0zLjIwNS0uNTgtNC42NmE5Ljk3NyA5Ljk3NyAwIDAwLTIuMDQ1LTMuODk1Yy0uOTg1LTEuMTMtMi4yNTUtMi4wMDUtMy44Ni0yLjYyLTEuNjA2LS42Mi0zLjY1LTEuMDktNi4wOS0xLjA5LTMuMjggMC02LjI3LjQtOS4wMDUuODctMi43MzUuNDc1LTQuOTk1IDEuMDItNi43MSAxLjY0bC0xLjcxLTExLjY4NWMxLjc4NS0uNjIgNC40NDUtMS4yMzUgNy44NzUtMS44NTUgMy40MjUtLjYyIDcuMTA1LS45NDUgMTEuMDQ1LS45NDV6bS00Mi44LTYuNzdjNC43NzQgMCA4LjY4LTMuODYgOC42OC04LjYzIDAtNC43NjUtMy44NjYtOC42MjUtOC42OC04LjYyNS00LjgxIDAtOC42NzUgMy44Ni04LjY3NSA4LjYyNSAwIDQuNzcgMy45IDguNjMgOC42NzUgOC42M3ptNy4xOCA3MC40MjVoLTE0LjMyNnYtNjEuNDRsMTQuMzI1LTIuMjU1djYzLjY5NWguMDAxem0tMjUuMTE2IDBjLTIzLjM2NS4xMS0yMy4zNjUtMTguODU1LTIzLjM2NS0yMS44NzVsLS4wNC03MS4wNDUgMTQuMjU1LTIuMjZ2NzAuNjFjMCAxLjcxNSAwIDEyLjU2IDkuMTUgMTIuNTk1djExLjk3NXptLTQ2LjMzNS0zMS40NDVjMC02LjE1NS0xLjM1LTExLjI4NS0zLjk3NC0xNC44NS0yLjYyNS0zLjYwNS02LjMwNS01LjM4NS0xMS4wMS01LjM4NS00LjcgMC04LjM4NiAxLjc4LTExLjAwNiA1LjM4NS0yLjYyNSAzLjYtMy45MDQgOC42OTUtMy45MDQgMTQuODUgMCA2LjIyNSAxLjMxNSAxMC40MDUgMy45NCAxNC4wMSAyLjYyNSAzLjY0IDYuMzA1IDUuNDI1IDExLjAxIDUuNDI1IDQuNyAwIDguMzg1LTEuODIgMTEuMDEtNS40MjUgMi42MjQtMy42NCAzLjkzNC03Ljc4NSAzLjkzNC0xNC4wMXptMTQuNTgtLjAzNWMwIDQuODA1LS42OSA4LjQ0LTIuMTE0IDEyLjQxLTEuNDIgMy45NjUtMy40MjUgNy4zNS02LjAxIDEwLjE1NS0yLjU5IDIuOC01LjY5IDQuOTg1LTkuMzM2IDYuNTE1LTMuNjQ0IDEuNTI1LTkuMjYgMi40LTEyLjA2NSAyLjQtMi44MS0uMDM1LTguMzg1LS44MzUtMTEuOTk1LTIuNC0zLjYxLTEuNTY1LTYuNzEtMy43MTUtOS4yOTUtNi41MTUtMi41OS0yLjgwNS00LjU5NC02LjE5LTYuMDU0LTEwLjE1NS0xLjQ1Ni0zLjk3LTIuMTg1LTcuNjA1LTIuMTg1LTEyLjQxcy42NTQtOS40MyAyLjExNC0xMy4zNmMxLjQ2LTMuOTMgMy41LTcuMjggNi4xMjUtMTAuMDggMi42MjUtMi44MDUgNS43Ni00Ljk1NSA5LjMzLTYuNDggMy42MS0xLjUzIDcuNTg1LTIuMjU1IDExLjg4NS0yLjI1NSA0LjMwNSAwIDguMjc1Ljc2IDExLjkyIDIuMjU1IDMuNjUgMS41MjUgNi43ODYgMy42NzUgOS4zMzYgNi40OCAyLjU4NCAyLjggNC41OSA2LjE1IDYuMDUgMTAuMDggMS41MyAzLjkzIDIuMjk1IDguNTU1IDIuMjk1IDEzLjM2aC0uMDAxem0tMTA3LjI4NCAwYzAgNS45NjUgMS4zMSAxMi41OSAzLjkzNSAxNS4zNTUgMi42MjUgMi43NyA2LjAxNCA0LjE1IDEwLjE3NSA0LjE1IDIuMjYgMCA0LjQxLS4zMjUgNi40MTQtLjk0NSAyLjAwNS0uNjIgMy42MDYtMS4zNSA0Ljg4Ni0yLjIydi0zNS4zNGMtMS4wMi0uMjItNS4yODYtMS4wOTUtOS40MS0xLjItNS4xNzUtLjE1LTkuMTEgMS45NjUtMTEuODggNS4zNDUtMi43MzYgMy4zOS00LjEyIDkuMzItNC4xMiAxNC44NTV6bTM5LjYyNSAyOC4wOTVjMCA5LjcyLTIuNDggMTYuODE1LTcuNDc2IDIxLjMzLTQuOTkgNC41MS0xMi42MSA2Ljc3LTIyLjg5IDYuNzctMy43NTUgMC0xMS41NTUtLjczLTE3Ljc5LTIuMTFsMi4yOTUtMTEuMjg1YzUuMjE1IDEuMDkgMTIuMTA1IDEuMzg1IDE1LjcxNSAxLjM4NSA1LjcyIDAgOS44MDUtMS4xNjUgMTIuMjQ1LTMuNDk1IDIuNDQ1LTIuMzMgMy42NDUtNS43ODUgMy42NDUtMTAuMzc1di0yLjMzYy0xLjQyLjY5LTMuMjggMS4zODUtNS41NzUgMi4xMTUtMi4yOTUuNjktNC45NTUgMS4wNTUtNy45NSAxLjA1NS0zLjkzNSAwLTcuNTEtLjYyLTEwLjc1LTEuODYtMy4yNDUtMS4yMzUtNi4wNTUtMy4wNTUtOC4zNS01LjQ2LTIuMjk1LTIuNC00LjEyLTUuNDItNS4zOTUtOS4wMjUtMS4yNzUtMy42MDUtMS45MzUtMTAuMDQ1LTEuOTM1LTE0Ljc3NSAwLTQuNDQuNjk1LTEwLjAxIDIuMDQ2LTEzLjcyNSAxLjM4NC0zLjcxIDMuMzUtNi45MTUgNi4wMTQtOS41NyAyLjYyNi0yLjY1NSA1LjgzNS00LjY5NSA5LjU5LTYuMTkgMy43NTUtMS40OSA4LjE2LTIuNDM1IDEyLjkzNS0yLjQzNSA0LjYzNSAwIDguOS41OCAxMy4wNTUgMS4yNzUgNC4xNTUuNjkgNy42OSAxLjQxNSAxMC41NyAyLjIxNXY1Ni40OWguMDAxeiIvPjwvZz48L3N2Zz4=);background-repeat:no-repeat;background-size:contain;vertical-align:middle}.aa-powered-by{text-align:right;font-size:12px;color:#969faf;padding:8px 8px 4px 0;font-weight:400}
+    </style>
+    <meta name="robots" content="noimageindex, nofollow, nosnippet">
+</head>
+
+<body>
+    <header>
+        <div class="logo-wrap">
+            <a href="/">
+                <span class="vis-hidden">Homepage</span>
+                <img src="https://wpt.niteco.com/assets/images/niteco-logo.svg" alt="Niteco" width="160" height="40">
+            </a>
+            <a href="">Documentation</a>
+        </div>
+    </header>
+    <aside class="pageNav">
+        <nav class="toc">
+            <ol>
+                
+                <li><a href="#recommended-commands">Recommended Commands</a>
+        
+            <ol>
+                
+                <li><a href="#navigate">navigate</a>
+                </li>
+
+                <li><a href="#exec">exec</a>
+                </li>
+
+                <li><a href="#execandwait">execAndWait</a>
+                </li>
+            </ol>
+                </li>
+
+                <li><a href="#full-reference">Full Reference</a>
+        
+            <ol>
+                
+                <li><a href="#comments">Comments</a>
+                </li>
+
+                <li><a href="#selectors">Selectors</a>
+                </li>
+
+                <li><a href="#variable-substitutions">Variable substitutions</a>
+        
+            <ol>
+                
+                <li><a href="#%25url%25">%URL%</a>
+                </li>
+
+                <li><a href="#%25host%25">%HOST%</a>
+                </li>
+
+                <li><a href="#%25origin%25">%ORIGIN%</a>
+                </li>
+
+                <li><a href="#%25hostr%25">%HOSTR%</a>
+                </li>
+            </ol>
+                </li>
+
+                <li><a href="#navigation%2Fdom-interaction">Navigation/DOM Interaction</a>
+        
+            <ol>
+                
+                <li><a href="#navigate-1">navigate</a>
+                </li>
+
+                <li><a href="#click">click</a>
+                </li>
+
+                <li><a href="#clickandwait">clickAndWait</a>
+                </li>
+
+                <li><a href="#selectvalue">selectValue</a>
+                </li>
+
+                <li><a href="#sendclick-%2F-sendclickandwait">sendClick / sendClickAndWait</a>
+                </li>
+
+                <li><a href="#type-%2F-typeandwait">type / typeAndWait</a>
+                </li>
+
+                <li><a href="#keypress-%2F-keypressandwait">keypress / keypressAndWait</a>
+                </li>
+
+                <li><a href="#setinnerhtml">setInnerHTML</a>
+                </li>
+
+                <li><a href="#setinnertext">setInnerText</a>
+                </li>
+
+                <li><a href="#setvalue">setValue</a>
+                </li>
+
+                <li><a href="#submitform">submitForm</a>
+                </li>
+
+                <li><a href="#exec-1">exec</a>
+                </li>
+
+                <li><a href="#execandwait-1">execAndWait</a>
+                </li>
+            </ol>
+                </li>
+
+                <li><a href="#end-conditions">End Conditions</a>
+        
+            <ol>
+                
+                <li><a href="#setabm">setABM</a>
+                </li>
+
+                <li><a href="#setactivitytimeout">setActivityTimeout</a>
+                </li>
+
+                <li><a href="#settimeout">setTimeout</a>
+                </li>
+
+                <li><a href="#waitfor">waitFor</a>
+                </li>
+
+                <li><a href="#waitinterval">waitInterval</a>
+                </li>
+            </ol>
+                </li>
+
+                <li><a href="#request-manipulation">Request Manipulation</a>
+        
+            <ol>
+                
+                <li><a href="#block">block</a>
+                </li>
+
+                <li><a href="#blockdomains">blockDomains</a>
+                </li>
+
+                <li><a href="#blockdomainsexcept">blockDomainsExcept</a>
+                </li>
+
+                <li><a href="#setcookie">setCookie</a>
+                </li>
+
+                <li><a href="#setdns">setDns</a>
+                </li>
+
+                <li><a href="#setdnsname">setDNSName</a>
+                </li>
+
+                <li><a href="#setuseragent">setUserAgent</a>
+                </li>
+
+                <li><a href="#overridehost">overrideHost</a>
+                </li>
+
+                <li><a href="#addheader">addHeader</a>
+                </li>
+
+                <li><a href="#setheader">setHeader</a>
+                </li>
+
+                <li><a href="#resetheaders">resetHeaders</a>
+                </li>
+            </ol>
+                </li>
+
+                <li><a href="#misc">Misc</a>
+        
+            <ol>
+                
+                <li><a href="#combinesteps">combineSteps</a>
+                </li>
+
+                <li><a href="#clearcache">clearCache</a>
+                </li>
+
+                <li><a href="#firefoxpref">firefoxPref</a>
+                </li>
+
+                <li><a href="#seteventname">setEventName</a>
+                </li>
+
+                <li><a href="#setlocation">setLocation</a>
+                </li>
+
+                <li><a href="#setviewportsize">setViewportSize</a>
+                </li>
+
+                <li><a href="#sleep">sleep</a>
+                </li>
+            </ol>
+                </li>
+            </ol>
+                </li>
+
+                <li><a href="#debugging">Debugging</a>
+                </li>
+
+                <li><a href="#sample-scripts">Sample scripts</a>
+        
+            <ol>
+                
+                <li><a href="#dns-override">DNS Override</a>
+                </li>
+
+                <li><a href="#iphone-spoofing">iPhone Spoofing</a>
+                </li>
+            </ol>
+                </li>
+            </ol>
+        </nav>
+</aside>
+    <main>
+        <h1 id="scripting">Scripting</h1>
+        <p>If you need to log into a site or run arbitrary JavaScript while a test is running, use Test scripts.
+        </p>
+        <p>A script lets you automate a test. Here’s how it looks:</p>
+        <pre
+            class="language-markup"><code class="language-markup">// EXAMPLE: log into a site before measuring a page<br><br>// Disable logging: we don’t want the login page to appear in test results<br>logData 0<br><br>// Visit the login page, enter the username and the password into the fields, and press “Submit”<br>navigate https://my-site.com/login<br>setValue name=email darth@vader.com<br>setValue name=password foooooooooooooooorce<br>click innerText=Sign in<br><br>// Now, as we’ve signed in, enable logging again<br>logData 1<br><br>// And go the page we’re measuring<br>navigate https://my-site.com/dashboard</code></pre>
+        <p>Here’s another example:</p>
+        <pre
+            class="language-markup"><code class="language-markup">// EXAMPLE: measure what happens when we interact with the page<br><br>// Go the page we’re measuring<br>navigate https://my-site.com/dashboard<br><br>// Give it a bit of time to initialize after loading<br>sleep 5<br><br>// Open the support dialog and wait for the page to become idle<br>execAndWait document.querySelector('.chat-dialog &gt; button').click()</code></pre>
+        <p>See more <a href="/docs/scripting/#recommended-commands">commands</a> and <a
+                href="/docs/scripting/#sample-scripts">examples</a> below.</p>
+        <h2 id="recommended-commands">Recommended Commands</h2>
+        <p>For historical reasons, if a script step fails, it does so silently. If something doesn’t work,
+            unfortunately, you won’t get any feedback why. If you’re new to scripting, we recommend using the following
+            commands only. It’s easier to debug them as you can run them manually in the browser.</p>
+        <h4 id="navigate"><code>navigate</code></h4>
+        <p>Navigates the browser to the provided URL and waits for it to complete.<br>
+            Browser Support: IE, Chrome, Firefox, Safari</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   navigate <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">&gt;</span></span><br>example: navigate http://webmail.aol.com<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">&gt;</span></span> - URL to provide the browser for navigation (same as you would enter into the address bar)</code></pre>
+        <h4 id="exec"><code>exec</code></h4>
+        <p>Executes JavaScript.<br>
+            Browser Support: IE, Chrome, Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   exec <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>JavaScript</span> <span class="token attr-name">code</span><span class="token punctuation">&gt;</span></span><br>example: exec window.setInterval('window.scrollBy(0,600)', 1000);</code></pre>
+        <h4 id="execandwait"><code>execAndWait</code></h4>
+        <p>Executes JavaScript and waits for the browser to complete any activity generated from the action.<br>
+            Browser Support: IE, Chrome, Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   execAndWait <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>JavaScript</span> <span class="token attr-name">code</span><span class="token punctuation">&gt;</span></span><br>example: execAndWait window.setInterval('window.scrollBy(0,600)', 1000);</code></pre>
+        <h2 id="full-reference">Full Reference</h2>
+        <h3 id="comments">Comments</h3>
+        <p>A line that starts with <code>// </code> is ignored. Use this for comments.</p>
+        <pre
+            class="language-markup"><code class="language-markup">// Example comment<br>navigate not-a-comment.com</code></pre>
+        <h3 id="selectors">Selectors</h3>
+        <p>Commands like <a href="/docs/scripting/#click"><code>click</code></a>, <a
+                href="/docs/scripting/#setvalue"><code>setValue</code></a>, and others operate on
+            DOM elements. To select a DOM element, use the <code>&lt;attribute&gt;=&lt;value&gt;</code> selector.</p>
+        <p>This selector selects elements based on their HTML attributes. For the following input:</p>
+        <pre
+            class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>email<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>emailField<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>input input-email<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span></code></pre>
+        <p>the following selectors will work:</p>
+        <ul>
+            <li>✅ <code>type=email</code></li>
+            <li>✅ <code>id=emailField</code></li>
+        </ul>
+        <p>and the following selectors will not:</p>
+        <ul>
+            <li>❌ <code>class=input input-email</code> (spaces inside attribute values are not supported)</li>
+            <li>❌ <code>class="input input-email"</code> (not even if quoted)</li>
+        </ul>
+        <p>Example:</p>
+        <pre
+            class="language-markup"><code class="language-markup">// Set the email to darth@vader.com<br>setValue type=email darth@vader.com</code></pre>
+        <h3 id="variable-substitutions">Variable substitutions</h3>
+        <p>Some variables are replaced based on the URL provided for the test.</p>
+        <h4 id="%25url%25"><code>%URL%</code></h4>
+        <p>URL provided for the test.</p>
+        <pre
+            class="language-markup"><code class="language-markup">URL: https://wpt.example<br>input: navigate %URL%<br>output: navigate  https://wpt.example</code></pre>
+        <h4 id="%25host%25"><code>%HOST%</code></h4>
+        <p>This will be the Host of the URL provided for the test. This does not include the protocol.</p>
+        <pre
+            class="language-markup"><code class="language-markup">URL: https://wpt.example<br>input: setDnsName %HOST% dns.example<br>output: setDnsName  wpt.example dns.example</code></pre>
+        <h4 id="%25origin%25"><code>%ORIGIN%</code></h4>
+        <p>The Origin of the URL. This includes the protocol, the host and the port (if it is defined).</p>
+        <pre
+            class="language-markup"><code class="language-markup">URL: https://wpt.example/hello<br>input: setCookie  %ORIGIN% foo=bar<br>output: setCookie https://wpt.example foo=bar<br><br>URL: https://wpt.example:8080/hello<br>input: setCookie  %ORIGIN% foo=bar<br>output: setCookie https://wpt.example:8080 foo=bar</code></pre>
+        <h4 id="%25hostr%25"><code>%HOSTR%</code></h4>
+        <p>Same as <a href="/docs/scripting/#host"><code>%HOST%</code></a> but uses the final
+            host name of the test URL after following any redirects.</p>
+        <pre
+            class="language-markup"><code class="language-markup">URL: https://redirect.wpt.example<br>input: setDnsName %HOSTR% dns.example<br>output: setDnsName  wpt.example dns.example</code></pre>
+        <h3 id="navigation%2Fdom-interaction">Navigation/DOM Interaction</h3>
+        <h4 id="navigate-1"><code>navigate</code></h4>
+        <p>Navigates the browser to the provided URL and waits for it to complete.<br>
+            Browser Support: IE, Chrome, Firefox, Safari</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   navigate <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">&gt;</span></span><br>example: navigate http://webmail.aol.com<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">&gt;</span></span> - URL to provide the browser for navigation (same as you would enter into the address bar)</code></pre>
+        <h4 id="click"><code>click</code></h4>
+        <p>Triggers a click event for the identified DOM element. This version does not have an implied wait and the
+            script will continue running after the event is submitted (see <a
+                href="/docs/scripting/#clickandwait"><code>clickAndWait</code></a> for the wait
+            version).<br>
+            Browser Support: IE, Chrome, Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   click <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span><br>example: click title=Delete<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to click on</code></pre>
+        <p>For the list of supported selectors, see <a
+                href="/docs/scripting/#selectors">Selectors</a>.</p>
+        <h4 id="clickandwait"><code>clickAndWait</code></h4>
+        <p>Triggers a click event for the identified DOM element and subsequently waits for browser activity to
+            complete.<br>
+            Browser Support: IE, Chrome, Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   clickAndWait <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span><br>example: clickAndWait innerText=Send<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to click on</code></pre>
+        <p>For the list of supported selectors, see <a
+                href="/docs/scripting/#selectors">Selectors</a>.</p>
+        <h4 id="selectvalue"><code>selectValue</code></h4>
+        <p>Selects a value from a dropdown list of the given DOM element.<br>
+            Browser Support: IE</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   selectValue <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span><br>example: selectValue id=country usa<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to select the value of<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span> - value to use</code></pre>
+        <p>For the list of supported selectors, see <a
+                href="/docs/scripting/#selectors">Selectors</a>.</p>
+        <h4 id="sendclick-%2F-sendclickandwait"><code>sendClick</code> / <code>sendClickAndWait</code></h4>
+        <p>Creates a JavaScript <code>onclick</code> event and sends it to the indicated element.<br>
+            Browser Support: IE</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   sendClickAndWait <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span><br>example: sendClickAndWait innerText=Send<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to send the click event to</code></pre>
+        <p>For the list of supported selectors, see <a
+                href="/docs/scripting/#selectors">Selectors</a>.</p>
+        <p>For the difference between <code>sendClick</code> and <code>sendClickAndWait</code>, see <a
+                href="/docs/scripting/#click"><code>click</code></a> and <a
+                href="/docs/scripting/#clickandwait"><code>clickAndWait</code></a>.</p>
+        <h4 id="type-%2F-typeandwait"><code>type</code> / <code>typeAndWait</code></h4>
+        <p>Simulate keyboard keypresses for each character in the given string.<br>
+            Browser Support: Chrome</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   type <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>string</span><span class="token punctuation">&gt;</span></span><br>example: type Hello World<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>string</span><span class="token punctuation">&gt;</span></span> - String of characters to type into the keyboard.</code></pre>
+        <p>For the difference between <code>type</code> and <code>typeAndWait</code>, see <a
+                href="/docs/scripting/#click"><code>click</code></a> and <a
+                href="/docs/scripting/#clickandwait"><code>clickAndWait</code></a>.</p>
+        <h4 id="keypress-%2F-keypressandwait"><code>keypress</code> / <code>keypressAndWait</code></h4>
+        <p>Simulate a keyboard keypress for the given key.<br>
+            Browser Support: Chrome</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   keypress <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>key</span><span class="token punctuation">&gt;</span></span><br>example: keypress Enter<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>key</span><span class="token punctuation">&gt;</span></span> - Keyboard key to simulate pressing. Full list of supported keys is [here](https://github.com/WPO-Foundation/wptagent/blob/master/internal/support/keys.json).</code></pre>
+        <p>For the difference between <code>keypress</code> and <code>keypressAndWait</code>, see <a
+                href="/docs/scripting/#click"><code>click</code></a> and <a
+                href="/docs/scripting/#clickandwait"><code>clickAndWait</code></a>.</p>
+        <h4 id="setinnerhtml"><code>setInnerHTML</code></h4>
+        <p>Sets the innerHTML of the given DOM element to the provided value. This is usually used for filling in
+            something like an editable HTML panel (like the message body in webmail). Use this if you want to include
+            HTML formatting.<br>
+            Browser Support: IE, Chrome, Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setInnerHTML <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span><br>example: setInnerHTML contentEditable'true %MSG%<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to set the innerText of<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span> - value to use</code></pre>
+        <p>For the list of supported selectors, see <a
+                href="/docs/scripting/#selectors">Selectors</a>.</p>
+        <h4 id="setinnertext"><code>setInnerText</code></h4>
+        <p>Sets the innerText of the given DOM element to the provided value. This is usually used for filling in
+            something like an editable HTML panel (like the message body in webmail). Use this if you don't want to
+            include any HTML formatting.<br>
+            Browser Support: IE, Chrome, Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setInnerText <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span><br>example: setInnerText contentEditable'true %MSG%<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to set the innerText of<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span> - value to use</code></pre>
+        <p>For the list of supported selectors, see <a
+                href="/docs/scripting/#selectors">Selectors</a>.</p>
+        <h4 id="setvalue"><code>setValue</code></h4>
+        <p>Sets the value attribute of the given DOM element to the provided value. This is usually used for filling in
+            text elements on a page (forms or otherwise). Currently only <code>input</code> and <code>textArea</code>
+            element types are supported.<br>
+            Browser Support: IE, Chrome, Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setValue <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span><br>example: setValue name=loginId userName<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to set the value of<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span> - value to use</code></pre>
+        <p>For the list of supported selectors, see <a
+                href="/docs/scripting/#selectors">Selectors</a>.</p>
+        <h4 id="submitform"><code>submitForm</code></h4>
+        <p>Triggers a <code>submit</code> event for the identified form.<br>
+            Browser Support: IE, Chrome, Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   submitForm <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span><br>example: submitForm name=AOLLoginForm<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - Form element to submit</code></pre>
+        <p>For the list of supported selectors, see <a
+                href="/docs/scripting/#selectors">Selectors</a>.</p>
+        <h4 id="exec-1"><code>exec</code></h4>
+        <p>Executes JavaScript.<br>
+            Browser Support: IE, Chrome, Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   exec <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>JavaScript</span> <span class="token attr-name">code</span><span class="token punctuation">&gt;</span></span><br>example: exec window.setInterval('window.scrollBy(0,600)', 1000);</code></pre>
+        <h4 id="execandwait-1"><code>execAndWait</code></h4>
+        <p>Executes JavaScript and waits for the browser to complete any activity generated from the action.<br>
+            Browser Support: IE, Chrome, Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   execAndWait <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>JavaScript</span> <span class="token attr-name">code</span><span class="token punctuation">&gt;</span></span><br>example: execAndWait window.setInterval('window.scrollBy(0,600)', 1000);</code></pre>
+        <h3 id="end-conditions">End Conditions</h3>
+        <h4 id="setabm"><code>setABM</code></h4>
+        <p>Sets the "Activity Based Measurement" mode. The valid values are:</p>
+        <ul>
+            <li>0 - Disabled (Web 1.0 - Measure based off of document complete)</li>
+            <li>1 - Enabled (Web 2.0 - Measure until activity stops)</li>
+        </ul>
+        <p>The default if not specified in the script is 1 (Enabled).<br>
+            Browser Support: IE, Chrome, Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setABM <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mode</span><span class="token punctuation">&gt;</span></span><br>example: setABM 0<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mode</span><span class="token punctuation">&gt;</span></span> - ABM mode to use</code></pre>
+        <h4 id="setactivitytimeout"><code>setActivityTimeout</code></h4>
+        <p>Overrides the timeout value for the time after the last network activity before a test is considered complete
+            (defaults to 2000 which is 2 seconds).<br>
+            Browser Support: IE, Chrome, Firefox, Safari</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setActivityTimeout <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>timeout</span> <span class="token attr-name">in</span> <span class="token attr-name">milliseconds</span><span class="token punctuation">&gt;</span></span><br>example: setActivityTimeout 5000<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>timeout</span> <span class="token attr-name">in</span> <span class="token attr-name">milliseconds</span><span class="token punctuation">&gt;</span></span> - Number of milliseconds after the last network activity (after onload) before calling a test done.</code></pre>
+        <h4 id="settimeout"><code>setTimeout</code></h4>
+        <p>Overrides the timeout value for the individual script steps.<br>
+            Browser Support: IE, Chrome, Firefox, Safari</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setTimeout <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>timeout</span> <span class="token attr-name">in</span> <span class="token attr-name">seconds</span><span class="token punctuation">&gt;</span></span><br>example: setTimeout 240<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>timeout</span> <span class="token attr-name">in</span> <span class="token attr-name">seconds</span><span class="token punctuation">&gt;</span></span> - Number of seconds to allow for the navigation/step to complete.</code></pre>
+        <h4 id="waitfor"><code>waitFor</code></h4>
+        <p>Poll the page waiting for the supplied script to evaluate to true. Must be set before the navigation step
+            that is to be measured and persists until cleared (by providing an empty script).</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   waitFor <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>JavaScript</span> <span class="token attr-name">snippet</span><span class="token punctuation">&gt;</span></span><br>example: waitFor document.getElementById('results-with-statistics') &amp;&amp; document.getElementById('results-with-statistics').innerText.length &gt; 0<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>JavaScript</span> <span class="token attr-name">snippet</span><span class="token punctuation">&gt;</span></span> - Code to evaluate periodically to test for complete. Should evaluate to true when the step is to stop.</code></pre>
+        <h4 id="waitinterval"><code>waitInterval</code></h4>
+        <p>Set the polling interval (in seconds) for the <a
+                href="/docs/scripting/#waitfor"><code>waitFor</code></a> command. Defaults to a
+            5-second polling interval to minimize overhead.</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   waitInterval <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>interval</span> <span class="token attr-name">in</span> <span class="token attr-name">seconds</span><span class="token punctuation">&gt;</span></span><br>example: waitInterval 1.5<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>interval</span> <span class="token attr-name">in</span> <span class="token attr-name">seconds</span><span class="token punctuation">&gt;</span></span> - Polling interval (in seconds). Supports sub-second values as a float.</code></pre>
+        <h3 id="request-manipulation">Request Manipulation</h3>
+        <h4 id="block"><code>block</code></h4>
+        <p>Blocks individual requests from loading (useful for blocking content like ads). The command matches the list
+            of things to block against the full url of each request (including host name).<br>
+            Browser Support: IE, Chrome, Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   block <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>block</span> <span class="token attr-name">strings</span><span class="token punctuation">&gt;</span></span><br>example: block adswrapper.js addthis.com<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>block</span> <span class="token attr-name">strings</span><span class="token punctuation">&gt;</span></span> - space-delimited list of substrings to block</code></pre>
+        <h4 id="blockdomains"><code>blockDomains</code></h4>
+        <p>Blocks all requests from the given domains from loading (useful for blocking content like ads). Takes a
+            space-delimited list of full domains to block.<br>
+            Browser Support: Desktop (wptdriver 300+)</p>
+        <pre><code>usage:   blockDomains &lt;block domains&gt;
+example: blockDomains adswrapper.js addthis.com
+
+&lt;block domains&gt; - space-delimited list of domains to block
+</code></pre>
+        <h4 id="blockdomainsexcept"><code>blockDomainsExcept</code></h4>
+        <p>Blocks all requests not from one of the given domains from loading (useful for blocking content like ads).
+            Takes a space-delimited list of full domains to allow.<br>
+            Browser Support: Desktop (wptdriver 300+)</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   blockDomainsExcept <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>allow</span> <span class="token attr-name">domains</span><span class="token punctuation">&gt;</span></span><br>example: blockDomainsExcept www.example.com cdn.example.com<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>allow</span> <span class="token attr-name">domains</span><span class="token punctuation">&gt;</span></span> - space-delimited list of domains to allow</code></pre>
+        <h4 id="setcookie"><code>setCookie</code></h4>
+        <p>Stores a browser cookie to be used while navigating.<br>
+            Browser Support: IE, Chrome, Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setCookie <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>path</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span><br>example: setCookie http://www.aol.com zip=20166<br>example: setCookie http://www.aol.com TestData = Test; expires = Sat,01-Jan-2000 00:00:00 GMT<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>path</span><span class="token punctuation">&gt;</span></span> - Path where the cookie should be used/stored<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span> - Cookie value (if expiration information isn't included it will be stored as a session cookie)</code></pre>
+        <h4 id="setdns"><code>setDns</code></h4>
+        <p>Allows for overriding the IP address to be used for a host name. The override is effectively the same as
+            populating an entry in the hosts file and will eliminate the DNS lookup times.<br>
+            Browser Support: IE, Chrome, Firefox, Safari</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setDns <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>host</span> <span class="token attr-name">name</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>IP</span> <span class="token attr-name">Address</span><span class="token punctuation">&gt;</span></span><br>example: setDns www.aol.com 127.0.0.1<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>host</span> <span class="token attr-name">name</span><span class="token punctuation">&gt;</span></span> - Host name for the DNS entry to override<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>IP</span> <span class="token attr-name">Address</span><span class="token punctuation">&gt;</span></span> - IP Address for the host name to resolve to</code></pre>
+        <h4 id="setdnsname"><code>setDNSName</code></h4>
+        <p>Allows for overriding a host name (creating a fake CNAME).<br>
+            Browser Support: IE, Chrome, Firefox, Safari</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setDnsName <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span> <span class="token attr-name">to</span> <span class="token attr-name">override</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>real</span> <span class="token attr-name">name</span><span class="token punctuation">&gt;</span></span><br>example: setDnsName pat.aol.com www.aol.com<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span> <span class="token attr-name">to</span> <span class="token attr-name">override</span><span class="token punctuation">&gt;</span></span> - Host name to replace<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>real</span> <span class="token attr-name">name</span><span class="token punctuation">&gt;</span></span> - Real name to lookup instead</code></pre>
+        <h4 id="setuseragent"><code>setUserAgent</code></h4>
+        <p>Overrides the User Agent string sent by the browser<br>
+            Browser Support: IE, Chrome, Firefox, Safari</p>
+        <p>CAUTION : You will still be using the same browser engine so you are still limited by the capabilities and
+            behavior of that browser even if you are spoofing another browser</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setUserAgent <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>user</span> <span class="token attr-name">agent</span> <span class="token attr-name">string</span><span class="token punctuation">&gt;</span></span><br>example: setUserAgent Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>user</span> <span class="token attr-name">agent</span> <span class="token attr-name">string</span><span class="token punctuation">&gt;</span></span> - User agent string to use.</code></pre>
+        <h4 id="overridehost"><code>overrideHost</code></h4>
+        <p>Replaces the value of the Host: HTTP header for the given host with the provided replacement. It also adds a
+            new header (<code>X-Host:</code>) with the original value.<br>
+            Browser Support: IE, Chrome, Firefox, Safari (no SSL)</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   overrideHost <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>host</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>new</span> <span class="token attr-name">host</span><span class="token punctuation">&gt;</span></span><br>example: overrideHost www.aol.com www.notaol.com<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>host</span><span class="token punctuation">&gt;</span></span> - host for which you want to override the Host: HTTP header<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>new</span> <span class="token attr-name">host</span><span class="token punctuation">&gt;</span></span> - value to set for the Host header</code></pre>
+        <h4 id="addheader"><code>addHeader</code></h4>
+        <p>Adds the specified header to every http request (in addition to the headers that exist, does not overwrite an
+            existing header).<br>
+            Browser Support: IE, Chrome, Firefox, Safari (no SSL)</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   addHeader <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>header</span><span class="token punctuation">&gt;</span></span><br>example: addHeader Pragma: akamai-x-cache-on<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>header</span><span class="token punctuation">&gt;</span></span> - Full header entry to add (including label)</code></pre>
+        <h4 id="setheader"><code>setHeader</code></h4>
+        <p>Adds the specified header to every http request, overriding the header if it already exists.<br>
+            Browser Support: IE, Chrome, Firefox, Safari (no SSL)</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setHeader <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>header</span><span class="token punctuation">&gt;</span></span><br>example: setHeader UA-CPU: none-ya<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>header</span><span class="token punctuation">&gt;</span></span> - Full header entry to set (including label)</code></pre>
+        <h4 id="resetheaders"><code>resetHeaders</code></h4>
+        <p>Clears any headers that were specified through addHeaders or setHeaders (in case you want to only override
+            headers for part of a script).<br>
+            Browser Support: IE, Chrome, Firefox, Safari</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   resetHeaders<br>example: resetHeaders</code></pre>
+        <h3 id="misc">Misc</h3>
+        <h4 id="combinesteps"><code>combineSteps</code></h4>
+        <p>Causes multiple script steps to be combined into a single "step" in the results<br>
+            Browser Support: IE, Chrome, Firefox, Safari</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   combineSteps [count]<br>example: combineSteps<br><br>[count] - Number of script steps to merge (optional, defaults to 0 which is ALL)<br>Sample Script:<br><br>combineSteps<br>navigate www.google.com<br>navigate www.yahoo.com<br>navigate www.aol.com</code></pre>
+        <h4 id="clearcache"><code>clearCache</code></h4>
+        <p>Clears all cache and cookies.<br>
+            Browser Support: Chrome, Safari on iOS</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   clearCache<br>example: clearCache</code></pre>
+        <h4 id="firefoxpref"><code>firefoxPref</code></h4>
+        <p>Allows you to specify arbitrary preferences that will be configured before launching the browser.<br>
+            Browser Support: Firefox</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   firefoxPref <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pref</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span><br>examples:<br>firefoxPref network.http.pipelining false<br>firefoxPref network.http.pipelining.maxrequests 5<br>firefoxPref general.useragent.override "Some User Agent String"<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pref</span><span class="token punctuation">&gt;</span></span> - The preference that is to be modified<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span> - The value to use.  String values should be enclosed in quotes like the example.</code></pre>
+        <h4 id="seteventname"><code>setEventName</code></h4>
+        <p>Sets the name of the event for the next measurable operation. It is important to only set this right before
+            the action that will generate the activity you want to measure so that you don't inadvertently measure other
+            page activity. Without explicit event names each step will be automatically named Step_1, Step_2, etc.<br>
+            Browser Support: IE</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setEventName <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>event</span> <span class="token attr-name">name</span><span class="token punctuation">&gt;</span></span><br>example: setEventName loadWebmail<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>event</span> <span class="token attr-name">name</span><span class="token punctuation">&gt;</span></span> - Name to use for the event about to occur (in resulting log files)</code></pre>
+        <h4 id="setlocation"><code>setLocation</code></h4>
+        <p>Specifies a geolocation override position.<br>
+            Browser Support: Chrome</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setLocation <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>lat</span><span class="token punctuation">&gt;</span></span>,<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>lng</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>accuracy</span><span class="token punctuation">&gt;</span></span><br>example: setLocation 38.954980,-77.447956 10<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>lat</span><span class="token punctuation">&gt;</span></span> - Latitude<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>lng</span><span class="token punctuation">&gt;</span></span> - Longitude<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>accuracy</span><span class="token punctuation">&gt;</span></span> - Accuracy (in meters)</code></pre>
+        <h4 id="setviewportsize"><code>setViewportSize</code></h4>
+        <p>Changes the size of the visible browser window so that the page viewport matches the given dimensions. If you
+            get black areas on your screen shots then the viewport is larger than the desktop.<br>
+            Browser Support: IE, Chrome, Firefox, Safari</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   setViewportSize <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>width</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>height</span><span class="token punctuation">&gt;</span></span><br>example: setViewportSize 320 365<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>width</span><span class="token punctuation">&gt;</span></span> - Viewport Width<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>height</span><span class="token punctuation">&gt;</span></span> - Viewport Height</code></pre>
+        <h4 id="sleep"><code>sleep</code></h4>
+        <p>Pauses the script operation for a given number of seconds.<br>
+            Browser Support: IE, Chrome, Firefox, Safari</p>
+        <pre
+            class="language-markup"><code class="language-markup">usage:   sleep <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>seconds</span> <span class="token attr-name">to</span> <span class="token attr-name">sleep</span><span class="token punctuation">&gt;</span></span><br>example: sleep 5<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>seconds</span> <span class="token attr-name">to</span> <span class="token attr-name">sleep</span><span class="token punctuation">&gt;</span></span> - An integer indicating how long to sleep.  The allowable range is 1-30.</code></pre>
+        <h2 id="debugging">Debugging</h2>
+        <p>There is currently no way to debug failing Test scripts. If a script command fails, it will fail
+            silently.</p>
+        <p>To simplify script development, consider limiting yourself to <a
+                href="/docs/scripting/#recommended-commands">Recommended commands</a> only.</p>
+        <h2 id="sample-scripts">Sample scripts</h2>
+        <h3 id="dns-override">DNS Override</h3>
+        <p>This script will:</p>
+        <ul>
+            <li>Create a fake DNS entry for <a href="http://www1.aol.com/">www1.aol.com</a> and have it lookup <a
+                    href="http://www.aol.com/">www.aol.com</a> instead</li>
+            <li>Force <a href="http://www.aol.com/">www.aol.com</a> to resolve to 127.0.0.1</li>
+            <li>Set a "zip" cookie on the <a href="http://www.aol.com/">www.aol.com</a> domain</li>
+            <li>Navigate and measure the time to load <a href="http://www.aol.com/">www.aol.com</a></li>
+        </ul>
+        <pre
+            class="language-markup"><code class="language-markup">setDnsName www1.aol.com www.aol.com<br>setDns www.aol.com 127.0.0.1<br>setCookie http://www.aol.com zip=20166<br>navigate http://www.aol.com</code></pre>
+        <h3 id="iphone-spoofing">iPhone Spoofing</h3>
+        <p>This script will:</p>
+        <ul>
+            <li>Use the iPhone user agent string</li>
+            <li>Change the browser dimensions to match the iPhone</li>
+            <li>Navigate to <a href="http://www.aol.com/">www.aol.com</a></li>
+        </ul>
+        <pre
+            class="language-markup"><code class="language-markup">setUserAgent Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25<br>setViewportSize 320 356<br>navigate http://www.aol.com</code></pre>
+
+
+
+    </main>
+    <footer>
+        <a href="https://niteco.com">© Niteco.com</a>. All rights reserved.
+
+
+    </footer>
+    <script>
+
+        if ("querySelector" in document) { var details = document.querySelector(".primaryNav > details"); if (details) { var forceOpen = window.getComputedStyle(details).getPropertyValue("--details-force-closed"); function forceState(e) { e ? details.setAttribute("open", "open") : details.removeAttribute("open") } if (forceOpen && "matchMedia" in window) { var mm1 = window.matchMedia(forceOpen); forceState(mm1.matches), mm1.addEventListener("change", (e => { forceState(e.matches) })) } } } const observer = new IntersectionObserver((e => { const t = e.filter((e => e.isIntersecting)); for (const e of t) { const t = document.querySelector(".pageNav a.is-active"); t && t.classList.remove("is-active"); const s = e.target.getAttribute("id"), c = document.querySelector(`.pageNav a[href="#${s}"]`); console.log(s, c);c.classList.add("is-active"), c.closest(".toc").scrollTo(0, c.offsetTop) } }), { rootMargin: "0% 0% -90% 0%" }); if (document.querySelector(".pageNav")) for (const e of document.querySelectorAll(":is(h2,h3,h4)[id]")) observer.observe(e); if ("querySelector" in document) { let e = document.querySelectorAll(".primaryNav .is-active"); if (e[0]) { let t = e[0].closest("li.is-closed"); t && (t.classList.remove("is-closed"), t.classList.add("is-open")) } } if ("querySelector" in document) { let e = document.querySelectorAll(".code-tabs"); if (e) { let t = 1; e.forEach((e => { let s = document.createElement("ul"); s.className = "code-tabs-nav"; let c = e.querySelectorAll("pre"), a = !0; c.forEach((e => { let c = e.className.substring(9); e.setAttribute("id", "code-tab-panel-" + c + "-" + t); let i = document.createElement("li"), r = document.createElement("a"); r.setAttribute("href", "#code-tab-panel-" + c + "-" + t), r.innerText = c, a && (e.classList.add("is-active"), i.classList.add("is-active"), a = !1), i.appendChild(r), s.appendChild(i) })), e.parentNode.insertBefore(s, e), e.classList.add("code-tabs-ready"), t++ })), document.querySelectorAll(".code-tabs-nav").forEach((e => { e.addEventListener("click", (e => { let t = e.target; if ("A" == t.nodeName && !t.closest("li.is-active")) { t.closest(".code-tabs-nav").querySelector("li.is-active").classList.remove("is-active"), t.closest("li").classList.add("is-active"); let s = document.querySelector(t.getAttribute("href")); s.parentNode.querySelector("pre.is-active").classList.remove("is-active"), s.classList.add("is-active"), e.preventDefault() } })) })) } }
+    </script>
+</body>
+
+</html>

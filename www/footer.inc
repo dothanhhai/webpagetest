@@ -12,7 +12,7 @@
 
 
     <footer>
-        <a href="/"><img src="/images/niteco-logo.svg" alt="Niteco"></a>
+        <a href="/"><img src="/assets/images/niteco-logo.svg" alt="Niteco"></a>
 
         <ul>
         <?php
