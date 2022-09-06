@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0048)/docs/scripting/#setvalue -->
+<!-- saved from url=(0048)#setvalue -->
 <html lang="en" class="has-js">
 
 <head>
@@ -235,8 +235,8 @@
         <p>Here’s another example:</p>
         <pre
             class="language-markup"><code class="language-markup">// EXAMPLE: measure what happens when we interact with the page<br><br>// Go the page we’re measuring<br>navigate https://my-site.com/dashboard<br><br>// Give it a bit of time to initialize after loading<br>sleep 5<br><br>// Open the support dialog and wait for the page to become idle<br>execAndWait document.querySelector('.chat-dialog &gt; button').click()</code></pre>
-        <p>See more <a href="/docs/scripting/#recommended-commands">commands</a> and <a
-                href="/docs/scripting/#sample-scripts">examples</a> below.</p>
+        <p>See more <a href="#recommended-commands">commands</a> and <a
+                href="#sample-scripts">examples</a> below.</p>
         <h2 id="recommended-commands">Recommended Commands</h2>
         <p>For historical reasons, if a script step fails, it does so silently. If something doesn’t work,
             unfortunately, you won’t get any feedback why. If you’re new to scripting, we recommend using the following
@@ -262,8 +262,8 @@
         <pre
             class="language-markup"><code class="language-markup">// Example comment<br>navigate not-a-comment.com</code></pre>
         <h3 id="selectors">Selectors</h3>
-        <p>Commands like <a href="/docs/scripting/#click"><code>click</code></a>, <a
-                href="/docs/scripting/#setvalue"><code>setValue</code></a>, and others operate on
+        <p>Commands like <a href="#click"><code>click</code></a>, <a
+                href="#setvalue"><code>setValue</code></a>, and others operate on
             DOM elements. To select a DOM element, use the <code>&lt;attribute&gt;=&lt;value&gt;</code> selector.</p>
         <p>This selector selects elements based on their HTML attributes. For the following input:</p>
         <pre
@@ -296,7 +296,7 @@
         <pre
             class="language-markup"><code class="language-markup">URL: https://wpt.example/hello<br>input: setCookie  %ORIGIN% foo=bar<br>output: setCookie https://wpt.example foo=bar<br><br>URL: https://wpt.example:8080/hello<br>input: setCookie  %ORIGIN% foo=bar<br>output: setCookie https://wpt.example:8080 foo=bar</code></pre>
         <h4 id="%25hostr%25"><code>%HOSTR%</code></h4>
-        <p>Same as <a href="/docs/scripting/#host"><code>%HOST%</code></a> but uses the final
+        <p>Same as <a href="#host"><code>%HOST%</code></a> but uses the final
             host name of the test URL after following any redirects.</p>
         <pre
             class="language-markup"><code class="language-markup">URL: https://redirect.wpt.example<br>input: setDnsName %HOSTR% dns.example<br>output: setDnsName  wpt.example dns.example</code></pre>
@@ -309,13 +309,13 @@
         <h4 id="click"><code>click</code></h4>
         <p>Triggers a click event for the identified DOM element. This version does not have an implied wait and the
             script will continue running after the event is submitted (see <a
-                href="/docs/scripting/#clickandwait"><code>clickAndWait</code></a> for the wait
+                href="#clickandwait"><code>clickAndWait</code></a> for the wait
             version).<br>
             Browser Support: IE, Chrome, Firefox</p>
         <pre
             class="language-markup"><code class="language-markup">usage:   click <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span><br>example: click title=Delete<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to click on</code></pre>
         <p>For the list of supported selectors, see <a
-                href="/docs/scripting/#selectors">Selectors</a>.</p>
+                href="#selectors">Selectors</a>.</p>
         <h4 id="clickandwait"><code>clickAndWait</code></h4>
         <p>Triggers a click event for the identified DOM element and subsequently waits for browser activity to
             complete.<br>
@@ -323,40 +323,40 @@
         <pre
             class="language-markup"><code class="language-markup">usage:   clickAndWait <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span><br>example: clickAndWait innerText=Send<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to click on</code></pre>
         <p>For the list of supported selectors, see <a
-                href="/docs/scripting/#selectors">Selectors</a>.</p>
+                href="#selectors">Selectors</a>.</p>
         <h4 id="selectvalue"><code>selectValue</code></h4>
         <p>Selects a value from a dropdown list of the given DOM element.<br>
             Browser Support: IE</p>
         <pre
             class="language-markup"><code class="language-markup">usage:   selectValue <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span><br>example: selectValue id=country usa<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to select the value of<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span> - value to use</code></pre>
         <p>For the list of supported selectors, see <a
-                href="/docs/scripting/#selectors">Selectors</a>.</p>
+                href="#selectors">Selectors</a>.</p>
         <h4 id="sendclick-%2F-sendclickandwait"><code>sendClick</code> / <code>sendClickAndWait</code></h4>
         <p>Creates a JavaScript <code>onclick</code> event and sends it to the indicated element.<br>
             Browser Support: IE</p>
         <pre
             class="language-markup"><code class="language-markup">usage:   sendClickAndWait <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span><br>example: sendClickAndWait innerText=Send<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to send the click event to</code></pre>
         <p>For the list of supported selectors, see <a
-                href="/docs/scripting/#selectors">Selectors</a>.</p>
+                href="#selectors">Selectors</a>.</p>
         <p>For the difference between <code>sendClick</code> and <code>sendClickAndWait</code>, see <a
-                href="/docs/scripting/#click"><code>click</code></a> and <a
-                href="/docs/scripting/#clickandwait"><code>clickAndWait</code></a>.</p>
+                href="#click"><code>click</code></a> and <a
+                href="#clickandwait"><code>clickAndWait</code></a>.</p>
         <h4 id="type-%2F-typeandwait"><code>type</code> / <code>typeAndWait</code></h4>
         <p>Simulate keyboard keypresses for each character in the given string.<br>
             Browser Support: Chrome</p>
         <pre
             class="language-markup"><code class="language-markup">usage:   type <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>string</span><span class="token punctuation">&gt;</span></span><br>example: type Hello World<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>string</span><span class="token punctuation">&gt;</span></span> - String of characters to type into the keyboard.</code></pre>
         <p>For the difference between <code>type</code> and <code>typeAndWait</code>, see <a
-                href="/docs/scripting/#click"><code>click</code></a> and <a
-                href="/docs/scripting/#clickandwait"><code>clickAndWait</code></a>.</p>
+                href="#click"><code>click</code></a> and <a
+                href="#clickandwait"><code>clickAndWait</code></a>.</p>
         <h4 id="keypress-%2F-keypressandwait"><code>keypress</code> / <code>keypressAndWait</code></h4>
         <p>Simulate a keyboard keypress for the given key.<br>
             Browser Support: Chrome</p>
         <pre
             class="language-markup"><code class="language-markup">usage:   keypress <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>key</span><span class="token punctuation">&gt;</span></span><br>example: keypress Enter<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>key</span><span class="token punctuation">&gt;</span></span> - Keyboard key to simulate pressing. Full list of supported keys is [here](https://github.com/WPO-Foundation/wptagent/blob/master/internal/support/keys.json).</code></pre>
         <p>For the difference between <code>keypress</code> and <code>keypressAndWait</code>, see <a
-                href="/docs/scripting/#click"><code>click</code></a> and <a
-                href="/docs/scripting/#clickandwait"><code>clickAndWait</code></a>.</p>
+                href="#click"><code>click</code></a> and <a
+                href="#clickandwait"><code>clickAndWait</code></a>.</p>
         <h4 id="setinnerhtml"><code>setInnerHTML</code></h4>
         <p>Sets the innerHTML of the given DOM element to the provided value. This is usually used for filling in
             something like an editable HTML panel (like the message body in webmail). Use this if you want to include
@@ -365,7 +365,7 @@
         <pre
             class="language-markup"><code class="language-markup">usage:   setInnerHTML <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span><br>example: setInnerHTML contentEditable'true %MSG%<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to set the innerText of<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span> - value to use</code></pre>
         <p>For the list of supported selectors, see <a
-                href="/docs/scripting/#selectors">Selectors</a>.</p>
+                href="#selectors">Selectors</a>.</p>
         <h4 id="setinnertext"><code>setInnerText</code></h4>
         <p>Sets the innerText of the given DOM element to the provided value. This is usually used for filling in
             something like an editable HTML panel (like the message body in webmail). Use this if you don't want to
@@ -374,7 +374,7 @@
         <pre
             class="language-markup"><code class="language-markup">usage:   setInnerText <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span><br>example: setInnerText contentEditable'true %MSG%<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to set the innerText of<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span> - value to use</code></pre>
         <p>For the list of supported selectors, see <a
-                href="/docs/scripting/#selectors">Selectors</a>.</p>
+                href="#selectors">Selectors</a>.</p>
         <h4 id="setvalue"><code>setValue</code></h4>
         <p>Sets the value attribute of the given DOM element to the provided value. This is usually used for filling in
             text elements on a page (forms or otherwise). Currently only <code>input</code> and <code>textArea</code>
@@ -383,14 +383,14 @@
         <pre
             class="language-markup"><code class="language-markup">usage:   setValue <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span><br>example: setValue name=loginId userName<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - DOM element to set the value of<br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span> - value to use</code></pre>
         <p>For the list of supported selectors, see <a
-                href="/docs/scripting/#selectors">Selectors</a>.</p>
+                href="#selectors">Selectors</a>.</p>
         <h4 id="submitform"><code>submitForm</code></h4>
         <p>Triggers a <code>submit</code> event for the identified form.<br>
             Browser Support: IE, Chrome, Firefox</p>
         <pre
             class="language-markup"><code class="language-markup">usage:   submitForm <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span><br>example: submitForm name=AOLLoginForm<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wpt-selector</span><span class="token punctuation">&gt;</span></span> - Form element to submit</code></pre>
         <p>For the list of supported selectors, see <a
-                href="/docs/scripting/#selectors">Selectors</a>.</p>
+                href="#selectors">Selectors</a>.</p>
         <h4 id="exec-1"><code>exec</code></h4>
         <p>Executes JavaScript.<br>
             Browser Support: IE, Chrome, Firefox</p>
@@ -430,7 +430,7 @@
             class="language-markup"><code class="language-markup">usage:   waitFor <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>JavaScript</span> <span class="token attr-name">snippet</span><span class="token punctuation">&gt;</span></span><br>example: waitFor document.getElementById('results-with-statistics') &amp;&amp; document.getElementById('results-with-statistics').innerText.length &gt; 0<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>JavaScript</span> <span class="token attr-name">snippet</span><span class="token punctuation">&gt;</span></span> - Code to evaluate periodically to test for complete. Should evaluate to true when the step is to stop.</code></pre>
         <h4 id="waitinterval"><code>waitInterval</code></h4>
         <p>Set the polling interval (in seconds) for the <a
-                href="/docs/scripting/#waitfor"><code>waitFor</code></a> command. Defaults to a
+                href="#waitfor"><code>waitFor</code></a> command. Defaults to a
             5-second polling interval to minimize overhead.</p>
         <pre
             class="language-markup"><code class="language-markup">usage:   waitInterval <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>interval</span> <span class="token attr-name">in</span> <span class="token attr-name">seconds</span><span class="token punctuation">&gt;</span></span><br>example: waitInterval 1.5<br><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>interval</span> <span class="token attr-name">in</span> <span class="token attr-name">seconds</span><span class="token punctuation">&gt;</span></span> - Polling interval (in seconds). Supports sub-second values as a float.</code></pre>
@@ -545,7 +545,7 @@ example: blockDomains adswrapper.js addthis.com
         <p>There is currently no way to debug failing Test scripts. If a script command fails, it will fail
             silently.</p>
         <p>To simplify script development, consider limiting yourself to <a
-                href="/docs/scripting/#recommended-commands">Recommended commands</a> only.</p>
+                href="#recommended-commands">Recommended commands</a> only.</p>
         <h2 id="sample-scripts">Sample scripts</h2>
         <h3 id="dns-override">DNS Override</h3>
         <p>This script will:</p>
