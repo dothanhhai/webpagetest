@@ -30,6 +30,9 @@ if (empty($_REQUEST['k']) || empty($api_keys) || !isset($api_keys[$_REQUEST['k']
 $ok = false;
 foreach($ids as $id) {
     $testPath = './' . GetTestPath($id);
+    if(empty($id) || $testPath == './' || $testPath == './results/') {
+        continue;
+    }
     if (
         strpos($testPath, 'results') !== false
         && strpos($testPath, '..') === false
