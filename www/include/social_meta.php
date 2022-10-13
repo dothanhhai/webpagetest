@@ -9,12 +9,12 @@
     $screenshotURI = CreateUrlVariation($pageURI, "screenshot=1");
 
     $d = new DateTime();
-    $socialImage = isset($useScreenshot) ? "https://wpt-screenshot.netlify.app/" . urlencode($screenshotURI) . "/opengraph/" . $d->format('Ymdd') : "/images/social-logo.jpg";
+    $socialImage = isset($useScreenshot) ? "https://wpt-screenshot.netlify.app/" . urlencode($screenshotURI) . "/opengraph/" . $d->format('Ymdd') : "/assets/images/social-logo.jpg";
     $socialTitle = isset($socialTitle) ? $socialTitle : "WebPageTest";
     $socialDesc = isset($socialDesc) ? $socialDesc : "View this on WebPageTest.org...";
     $emailSubject = "View this on WebPageTest!";
     $tweetURI =  'https://twitter.com/intent/tweet?text=' . urlencode($socialDesc) . '&url=' . urlencode($pageURI) . '&via=realwebpagetest';
-    $emailURI = 'mailto:?subject=' . urlencode($emailSubject) . '&body=' . urlencode($socialDesc) . '  %0D%0A ' . urlencode($pageURI);
+    $emailURI = 'mailto:?subject=' . rawurlencode(htmlspecialchars_decode($emailSubject)) . '&body=' . rawurlencode(htmlspecialchars_decode($socialDesc)) . '  %0D%0A ' . urlencode($pageURI);
 ?>
 
 <meta property="og:title" content="<?php echo $socialTitle; ?>">

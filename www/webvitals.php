@@ -33,16 +33,15 @@ $profiles = parse_ini_file($profile_file, true);
 <html lang="en-us">
     <head>
         <title>WebPageTest - Website Performance and Optimization Test</title>
-        <?php $gaTemplate = 'Main';
-        include('head.inc');?>
+        <?php include('head.inc');?>
         <style>
 
 
         </style>
     </head>
-    <body class="home">
+    <body class="home feature-pro">
             <?php
-            $tab = 'Home';
+            $tab = 'Start Test';
             include 'header.inc';
             if (!$headless) {
                 ?>
@@ -134,7 +133,7 @@ $profiles = parse_ini_file($profile_file, true);
         </div><!--home_content-->
 
         <div class="home_content_contain">
-          <iframe id="vitals-content" frameBorder="0" scrolling="no" height="3250" src="https://www.product.webpagetest.org/second"></iframe>
+          <iframe id="vitals-content" frameBorder="0" scrolling="no" height="3370" src="https://www.product.webpagetest.org/second"></iframe>
             </div><!--home_content_contain-->
 
             <div class="home_content_contain">
@@ -146,14 +145,6 @@ $profiles = parse_ini_file($profile_file, true);
           </div><!--home_content_contain-->
         </div><!--home_content-->
         </div>
-        <?php
-        if (!isset($site_js_loaded) || !$site_js_loaded) {
-            echo "<script src=\"{$GLOBALS['cdnPath']}/assets/js/jquery.js\"></script>\n";
-            echo "<script src=\"{$GLOBALS['cdnPath']}/assets/js/site.js?v=" . VER_JS . "\"></script>\n";
-            $hasJquery = true;
-        }
-        ?>
-
         <script>
         <?php
           echo "var profiles = " . json_encode($profiles) . ";\n";
@@ -161,7 +152,7 @@ $profiles = parse_ini_file($profile_file, true);
         var wptStorage = window.localStorage || {};
 
         var profileChanged = function() {
-          var sel = document.getElementById("profile");
+          var sel = document.getElementById("webvital_profile");
           var txt = document.getElementById("description");
           var profile = sel.options[sel.selectedIndex].value;
           var description = "";

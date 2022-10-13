@@ -31,14 +31,13 @@ $page_description = "Test network path from multiple locations around the world 
 <html lang="en-us">
     <head>
         <title>WebPageTest - Traceroute diagnostic</title>
-        <?php $gaTemplate = 'Traceroute';
-        include('head.inc'); ?>
+        <?php include('head.inc'); ?>
     </head>
-    <body class="home">
-            <?php
-            $tab = 'Home';
+    <body class="home feature-pro">
+       <?php
+            $tab = 'Start Test';
             include 'header.inc';
-            ?>
+        ?>
 
 <?php include("home_header.php"); ?>
 

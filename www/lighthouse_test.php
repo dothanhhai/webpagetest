@@ -32,20 +32,20 @@ if (file_exists('./settings/server/lighthouse.ini')) {
 <html lang="en-us">
     <head>
         <title>WebPageTest - Lighthouse Test</title>
-        <?php $gaTemplate = 'Main';
-        include('head.inc'); ?>
+        <?php include('head.inc'); ?>
         <style>
         #description { min-height: 2em; padding-left: 170px; width:380px;}
         </style>
     </head>
-    <body class="home">
-            <?php
+    <body class="home feature-pro">
+       <?php
+            $tab = 'Start Test';
             include 'header.inc';
-            if (!$headless) {
-                ?>
+        if (!$headless) {
+            ?>
 
 
-                <?php include("home_header.php"); ?>
+            <?php include("home_header.php"); ?>
 
 <div class="home_content_contain">
              <div class="home_content">
@@ -96,20 +96,20 @@ if (file_exists('./settings/server/lighthouse.ini')) {
                                 <div class="fieldrow">
                                 <label for="location">Test Location:</label>
                                   <select name="location" id="location" onchange="profileChanged()">
-                                      <?php
-                                        if (isset($lighthouse) && is_array($lighthouse) && isset($lighthouse['locations']) && count($lighthouse['locations'])) {
-                                            foreach ($lighthouse['locations'] as $id => $label) {
-                                                $selected = '';
-                                                if ($id === $_COOKIE['lhloc']) {
-                                                    $selected = 'selected';
-                                                }
-                                                echo "<option value=\"$id\" $selected>{$label}</option>";
+                                  <?php
+                                    if (isset($lighthouse) && is_array($lighthouse) && isset($lighthouse['locations']) && count($lighthouse['locations'])) {
+                                        foreach ($lighthouse['locations'] as $id => $label) {
+                                            $selected = '';
+                                            if ($id === $_COOKIE['lhloc']) {
+                                                $selected = 'selected';
                                             }
-                                            if (isset($lastGroup)) {
-                                                echo "</optgroup>";
-                                            }
+                                            echo "<option value=\"$id\" $selected>{$label}</option>";
                                         }
-                                        ?>
+                                        if (isset($lastGroup)) {
+                                            echo "</optgroup>";
+                                        }
+                                    }
+                                    ?>
                                   </select>
                               </div>
                             </div>
@@ -127,8 +127,8 @@ if (file_exists('./settings/server/lighthouse.ini')) {
             </form>
 
                 <?php
-            } // $headless
-            ?>
+        } // $headless
+        ?>
 
             <?php include('footer.inc'); ?>
             </div><!--home_content_contain-->

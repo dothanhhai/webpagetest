@@ -10,8 +10,6 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 require_once(__DIR__ . '/archive.inc');
 require_once(__DIR__ . '/util.inc');
 
-define('VIDEO_CODE_VERSION', 20);
-
 require_once(__DIR__ . '/logging.inc');
 use WebPageTest\Util;
 use WebPageTest\Util\Cache;
@@ -45,17 +43,6 @@ function GetServerSecret()
 function GetTestPath($id)
 {
     $base = 'results';
-    // see if it is a relay test (which includes the key)
-    $separator = strrpos($id, '.');
-    if ($separator !== false) {
-        $key = trim(substr($id, 0, $separator));
-        $real_id = trim(substr($id, $separator + 1));
-        if (strlen($key) && strlen($real_id)) {
-            $id = $real_id;
-            $base .= "/relay/$key";
-        }
-    }
-
     $testPath = "$base/$id";
     if (strpos($id, '_') == 6) {
         $parts = explode('_', $id);
@@ -818,8 +805,7 @@ function FilterLocations(
                     unset($locations[$name]);
                 }
             } else {
-              // TODO: Fix this so it only hides local locations, not relay and API
-                if (!isset($_REQUEST['hidden']) && !array_key_exists('relayServer', $locRef) && !isset($locRef['scheduler_node'])) {
+                if (!isset($_REQUEST['hidden']) && !isset($locRef['scheduler_node'])) {
                     unset($locations[$name]);
                 }
             }
@@ -1201,6 +1187,9 @@ function GetTestInfoHtml($includeScript = true)
     }
     if (isset($test['testinfo']['addCmdLine']) && strlen($test['testinfo']['addCmdLine'])) {
         $html .= '<li>Command Line: ' . htmlspecialchars($test['testinfo']['addCmdLine']) . '</li>';
+    }
+    if (isset($test['testinfo']['extensionName']) && strlen($test['testinfo']['extensionName'])) {
+        $html .= '<li>Enable extension: ' . htmlspecialchars($test['testinfo']['extensionName']) . '</li>';
     }
 
     if (isset($test['testinfo']['connectivity']) && strcasecmp($test['testinfo']['connectivity'], 'custom') != 0) {
@@ -2691,15 +2680,8 @@ function ValidateTestId(&$id)
 {
     $valid = false;
     $testId = $id;
-  // see if it is a relay test (includes the key)
-    if (strpos($id, '.') !== false) {
-        $parts = explode('.', $id);
-        if (count($parts) == 2) {
-            $testId = trim($parts[1]);
-        }
-    }
 
-    if (preg_match('/^(?:[a-zA-Z0-9_]+\.?)+$/', @$testId)) {
+    if (preg_match('/^(?:[a-zA-Z0-9_]+)+$/', @$testId)) {
         $testYear = intval(substr($testId, 0, 2));
         $currentYear = intval(date("y"));
         if ($testYear >= 8 && $testYear <= $currentYear) {
@@ -3318,11 +3300,39 @@ function PopulateTestInfo(&$test)
             $ret[$key] = $test[$key];
         }
     };
-    $keys = array('url', 'runs', 'fvonly', 'web10', 'ignoreSSL', 'video', 'label',
-      'priority', 'block', 'location', 'browser', 'connectivity', 'bwIn', 'bwOut',
-      'latency', 'plr', 'tcpdump', 'timeline', 'trace', 'bodies', 'netlog',
-      'standards', 'noscript', 'pngss', 'iq', 'bodies', 'keepua', 'benchmark',
-      'mobile', 'tsview_id', 'addCmdLine');
+    $keys = array(
+        'addCmdLine',
+        'benchmark',
+        'block',
+        'bodies',
+        'browser',
+        'bwIn',
+        'bwOut',
+        'connectivity',
+        'extensions',
+        'extensionName',
+        'fvonly',
+        'ignoreSSL',
+        'iq',
+        'keepua',
+        'label',
+        'latency',
+        'location',
+        'mobile',
+        'netlog',
+        'noscript',
+        'plr',
+        'pngss',
+        'priority',
+        'runs',
+        'standards',
+        'tcpdump',
+        'timeline',
+        'trace',
+        'url',
+        'video',
+        'web10',
+    );
     foreach ($keys as $key) {
         $copy($key);
     }
@@ -3877,9 +3887,6 @@ function CheckCron()
   // send the cron requests
     if ($should_run) {
         SendAsyncRequest('/cron/5min.php');
-        if (is_file('./jpeginfo/cleanup.php')) {
-            SendAsyncRequest('/jpeginfo/cleanup.php');
-        }
         if ($minutes15) {
             SendAsyncRequest('/cron/15min.php');
         }

@@ -75,32 +75,15 @@ function wptLogout(redirectUrl) {
     // jQuery UI Tabs
     $("#test_subbox-container").tabs();
     $("#test_subbox-container").on("tabsshow", async function (event, ui) {
-      if (
-        ui.tab.id === "tab-advanced" &&
-        !document.getElementById("injectscript-container")
-      ) {
-        // load Flask
-        const { default: CodeFlask } = await import(
-          "/assets/js/codeflask.module.js"
-        );
-        var injectScript = document.getElementById("injectScript");
-        // editor container
-        var codeEl = document.createElement("div");
-        codeEl.id = "injectscript-container";
-        injectScript.parentNode.insertBefore(codeEl, injectScript);
-        // switch textarea to a hidden input
-        var hidden = document.createElement("input");
-        hidden.type = "hidden";
-        hidden.id = "injectScript";
-        hidden.name = "injectScript";
-        injectScript.parentNode.replaceChild(hidden, injectScript);
-        // go!
-        var codeArea = new CodeFlask(codeEl, {
-          language: "js",
-        });
-        codeArea.onUpdate(function (code) {
-          hidden.value = code;
-        });
+      if (ui.tab.id === "ui-tab-advanced") {
+        initCodeField("injectScript");
+        initCodeField("customHeaders");
+      }
+      if (ui.tab.id === "ui-tab-custom-metrics") {
+        initCodeField("custom");
+      }
+      if (ui.tab.id === "ui-tab-script") {
+        initCodeField("enter_script");
       }
     });
 
@@ -248,25 +231,72 @@ function wptLogout(redirectUrl) {
   }
 })();
 
-// handle script file uploads
-const uploadInput = document.getElementById("script_file");
-if (uploadInput) {
-  uploadInput.addEventListener(
-    "change",
-    () => {
-      const file = uploadInput.files[0];
-      const reader = new FileReader();
-      reader.addEventListener(
-        "load",
-        () => {
-          document.getElementById("enter_script").value = reader.result;
-        },
-        false
-      );
-      if (file) {
-        reader.readAsText(file);
-      }
-    },
-    false
-  );
+window.codeFlasks = {};
+/**
+ * Handle file picks.
+ * Relies on the global `window.codeFlasks` for interoperability with the
+ * code highlighting.
+ *
+ * @param {string} source Element ID of the file picker
+ * @param {string} dest Element ID of the input where file content goes
+ */
+function initFileReader(source, dest) {
+  const uploadInput = document.getElementById(source);
+  if (uploadInput) {
+    uploadInput.addEventListener(
+      "change",
+      () => {
+        const file = uploadInput.files[0];
+        const reader = new FileReader();
+        reader.addEventListener(
+          "load",
+          () => {
+            if (dest in window.codeFlasks) {
+              // the textarea was replaced by a codeflask input
+              window.codeFlasks[dest].updateCode(reader.result);
+            } else {
+              document.getElementById(dest).value = reader.result;
+            }
+          },
+          false
+        );
+        if (file) {
+          reader.readAsText(file);
+        }
+      },
+      false
+    );
+  }
+}
+
+/**
+ * Initialize fields for code highlighting (using codeflask)
+ * Relies on the global `window.codeFlasks` for interoperability with the
+ * file pickers.
+ *
+ * @param {string} source Element ID of the textarea
+ */
+async function initCodeField(source, language = "js") {
+  if (window.codeFlasks[source]) {
+    return; // already initialized
+  }
+  // load Flask
+  const { default: CodeFlask } = await import("/assets/js/codeflask.module.js");
+  const originalTextarea = document.getElementById(source);
+  // editor container
+  const codeEl = document.createElement("div");
+  codeEl.classList.add("codeflask-container");
+  originalTextarea.parentNode.insertBefore(codeEl, originalTextarea);
+  // switch textarea to a hidden input
+  const hidden = document.createElement("input");
+  hidden.type = "hidden";
+  hidden.id = source;
+  hidden.name = originalTextarea.name;
+  originalTextarea.parentNode.replaceChild(hidden, originalTextarea);
+  // go!
+  const codeArea = new CodeFlask(codeEl, {
+    language,
+  });
+  codeArea.onUpdate((code) => (hidden.value = code));
+  window.codeFlasks[source] = codeArea;
 }
