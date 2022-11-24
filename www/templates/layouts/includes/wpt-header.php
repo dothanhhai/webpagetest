@@ -149,7 +149,7 @@ if ($id) {
                             <?php if ($is_logged_in) : ?>
                                 <li><a href='/account'>
                                         <?php
-                                        if ($experiments_paid) {
+                                        if (!is_null($request_context->getUser()) && $request_context->getUser()->isPaid()) {
                                             echo '<em class="pro-flag">Pro</em> ';
                                         }
                                         ?>

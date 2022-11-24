@@ -113,8 +113,7 @@ $isMultistep = $testRunResults->countSteps() > 1;
             } else {
                 echo '<div id="result" class="results_body">';
                 // singlestep
-                echo '<h3 class="hed_sub">Optimization Summary</h3><p>Quickly jump to the sections below:</p>
-                ';
+                echo '<h3 class="hed_sub">Optimization Summary</h3><p>Quickly jump to the sections below:</p>';
 
                 include("grades.inc");
 
@@ -123,9 +122,10 @@ $isMultistep = $testRunResults->countSteps() > 1;
             }
             ?>
 
+            <h3 class="hed_sub">Glossary</h3>
             <?php
-                echo '<h3 class="hed_sub">Optimization Details</h3>';
-                dumpOptimizationGlossary();
+                require_once __DIR__ . '/resources/view.php';
+                echo view('snippets.glossary', []);
             ?>
 
         </div>
