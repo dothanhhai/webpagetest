@@ -1136,7 +1136,6 @@ function LoadLocations()
 // Determine if bulk testing should be shown
 function ShowBulk()
 {
-    return true;
     global $admin;
     global $USER_EMAIL;
     global $request_context;
