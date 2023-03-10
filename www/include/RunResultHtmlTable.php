@@ -4,6 +4,9 @@
 // Use of this source code is governed by the Polyform Shield 1.0.0 license that can be
 // found in the LICENSE.md file.
 
+use WebPageTest\TestResults\CustomMetrics;
+use WebPageTest\TestResults\Timings;
+
 require_once INCLUDES_PATH . '/common_lib.inc';
 
 class RunResultHtmlTable
@@ -138,30 +141,6 @@ class RunResultHtmlTable
     private function _createHead()
     {
         $out = '';
-      //$colspan = 1 + $this->_countLeftEnabledColumns() - GetSetting('strict_video', 0); // if strict_video = 1, render is optional
-      // $out = "<tr class=\"metric_groups\">\n";
-      // $out .= $this->_headCell("", "empty pin");
-      // $out .= $this->_headCell("", "empty", $colspan);
-
-      // // Count the web vitals metrics that we have
-
-      // $vitals_count = 0;
-      // if ($this->isColumnEnabled(self::COL_LARGEST_CONTENTFUL_PAINT)) {
-      //   $vitals_count++;
-      // }
-      // if ($this->isColumnEnabled(self::COL_CUMULATIVE_LAYOUT_SHIFT)) {
-      //   $vitals_count++;
-      // }
-      // if ($this->isColumnEnabled(self::COL_TOTAL_BLOCKING_TIME)) {
-      //   $vitals_count++;
-      // }
-      // if ($vitals_count > 0) {
-      //   $out .= $this->_headCell("<span><a href='$vitals_url'>Web Vitals</a></span>", "border", $vitals_count);
-      //}
-  //    $out .= $this->_headCell("<span>Document Complete</span>", "border", 3);
-      // $out .= $this->_headCell("<span>Fully Loaded</span>", "border", 3 + $this->_countRightEnabledColumns());
-      // $out .= "</tr>\n";
-
 
         $out .= "<tr class=\"metric_labels\">";
         if ($this->isColumnEnabled(self::COL_LABEL)) {
@@ -267,7 +246,7 @@ class RunResultHtmlTable
     {
         $out = '';
 
-        $out .= "<tr class=\"metric_descs\">";
+        $out .= '<tr class="metric_descs">';
         if ($this->isColumnEnabled(self::COL_LABEL)) {
             if ($this->isMultistep) {
                 // TODO test multistep
@@ -283,7 +262,7 @@ class RunResultHtmlTable
         }
         if ($this->isColumnEnabled(self::COL_FIRST_CONTENTFUL_PAINT)) {
             //$out .= $this->_headCell('First Contentful Paint');
-            $out .= $this->_bodyCell(null, "How soon did text and images start to load?");
+            $out .= $this->_bodyCell(null, "How soon did text and images start to appear?");
         }
         if ($this->isColumnEnabled(self::COL_SPEED_INDEX)) {
             //$out .= $this->_headCell('<a href="' . self::SPEED_INDEX_URL . '" target="_blank">Speed Index</a>');
@@ -546,6 +525,16 @@ class RunResultHtmlTable
                 $out .= '<h4>Visual Page Loading Process <span>(<a href=' . $filmstripUrl . '>Explore</a>)</span></h4>';
                 $out .= '<a href=' . $filmstripUrl . '><img src="' . $filmstripImage . '-l:+&bg=2a3c64&text=ffffff&thumbSize=56&ival=100"></a></div>';
             }
+            // custom metrics and timings
+            $customMetrics = (new CustomMetrics($this->runResults))
+                ->getBySource(CustomMetrics::FROM_TEST_SETTINGS)[$stepNum - 1];
+            $timingsAndMetrics = array_merge(
+                ['custom' => $customMetrics],
+                (new Timings($this->runResults))->getAllForStep($stepNum),
+            );
+            $out .= view('partials.timings', [
+                'data' => $timingsAndMetrics,
+            ]);
         }
         return $out;
     }
