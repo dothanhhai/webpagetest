@@ -10,7 +10,7 @@ require_once INCLUDES_PATH . '/page_data.inc';
 require_once INCLUDES_PATH . '/include/TestInfo.php';
 require_once INCLUDES_PATH . '/include/TestResults.php';
 require_once INCLUDES_PATH . '/include/TestRunResults.php';
-
+require_once INCLUDES_PATH . '/include/social_meta_vars.inc';
 if (!isset($noanalytics)) {
     require_once WWW_PATH . '/templates/layouts/google-tag-manager-noscript.inc';
 }
@@ -96,21 +96,30 @@ if (!strcasecmp('Test Result', $tab) && (!isset($nosubheader) || !@$nosubheader)
 
 
 
+        $header_data_class = !empty($data_class) ? $data_class : '';
 
-
-        echo "<div id=\"header_data\"$data_class>";
+        echo "<div id=\"header_data\"$header_data_class>";
         // for multistep, link the first URL and show additional text. Otherwise take the test URL
         $numSteps = $gradeRunResults->countSteps();
         $showUrl = $numSteps > 1 || !$url ? $gradeRunResults->getStepResult(1)->getUrl() : $url;
-        $shortUrl = str_replace('http://', '', FitText($showUrl, 180));
-        $shortUrl = $numSteps > 1 ? ($shortUrl . " ($numSteps steps)") : $shortUrl;
         echo "<ul class=\"header_data_urltime\">";
 
-        echo "<li><strong>URL: </strong>";
+        if ($test['testinfo']['type'] === "traceroute") {
+            $showUrl = "http://" . $showUrl;
+            echo "<li><strong>HOST/IP: </strong>";
+        } else {
+            echo "<li><strong>URL: </strong>";
+        }
+
+        $shortUrl = str_replace('http://', '', FitText($showUrl, 180));
+        $shortUrl = $numSteps > 1 ? ($shortUrl . " ($numSteps steps)") : $shortUrl;
+
+
+
         if (GetSetting('nolinks')) {
             echo "<span class=\"page-tested\">$shortUrl</span>";
         } else {
-            echo "<a class=\"url\"  rel=\"nofollow\" title=\"$showUrl\" href=\"$showUrl\">$shortUrl</a>";
+            echo "<a class=\"url\"  rel=\"nofollow\" title=\"$showUrl\" href=\"$showUrl\" target=\"_blank\">$shortUrl</a>";
         }
         echo "</li>";
         echo "<li><strong>Date: </strong>";
@@ -205,7 +214,7 @@ if (!strcasecmp('Test Result', $tab) && (!isset($nosubheader) || !@$nosubheader)
 
                 echo '<li>';
 
-                if ($test['testinfo'] && $test['testinfo']['label']) {
+                if (!empty($test['testinfo']['label'])) {
                     $labelClass = "test_presets_tag-label";
                     if ($experiment) {
                         $labelClass .= " test_presets_tag-experiment";
@@ -247,30 +256,29 @@ if (!strcasecmp('Test Result', $tab) && (!isset($nosubheader) || !@$nosubheader)
 
 
 
-                    // TODO what is show sensitive?
-                    //$show_sensitive = false;
-                    echo '<details class="test_presets_more"><summary><span class="test_presets_tag">More</span></summary><div class="details_contain">';
-                    echo GetTestInfoHtml();
-                    // if ($experiment) {
-                    //     $experimentData = $metaInfo['experiment'];
-                    //     echo "<p class=\"meta_exp_applied_hed\">Experiment Info:</p>";
-                    //     echo '<ul class="meta_exp_applied_list">';
-                    //     include __DIR__ . '/experiments/list_applied.inc';
-                    //     echo '</ul>';
-                    //     echo "<p>Related Links: <a href=\"" . $controlTestHref . "\">Original (Control Run)</a>, <a href=\"" . $experimentOriginalTestHref . "\">Original Test</a></p><ul>";
-                    // }
-                    // echo '</div></details>';
-
-                    // if (isset($socialImage)) {
-                    //     echo "<details class=\"test_presets_more test_presets_more-share\"><summary><span class=\"test_presets_tag\">Share</span></summary>
-                    //     <div class=\"details_contain\">
-                    //         <ul>
-                    //         <li><a href=\"" . $emailURI . "\">Share via Email</a></li>"
-                    //         . (isset($tweetURI) ? "<li><a href=\"" . $tweetURI . "\">Share on Twitter</a></li>" : "")
-                    //         . "<li><a href=\"" . $socialImage . "\" download=\"WebPageTest Pro Experiment Results\">View Formatted Screenshot Image</a></li>"
-                    //         . "</ul>
-                    //     </div></details>";
-                    // }
+                // TODO what is show sensitive?
+                //$show_sensitive = false;
+                echo '<details class="test_presets_more"><summary><span class="test_presets_tag">More</span></summary><div class="details_contain">';
+                echo GetTestInfoHtml();
+                /*if ($experiment) {
+                    $experimentData = $metaInfo['experiment'];
+                    echo "<p class=\"meta_exp_applied_hed\">Experiment Info:</p>";
+                    echo '<ul class="meta_exp_applied_list">';
+                    include INCLUDES_PATH . '/experiments/list_applied.inc';
+                    echo '</ul>';
+                    echo "<p>Related Links: <a href=\"" . $controlTestHref . "\">Original (Control Run)</a>, <a href=\"" . $experimentOriginalTestHref . "\">Original Test</a></p><ul>";
+                }
+                echo '</div></details>';
+                if (isset($socialImage) && isset($useScreenshot) && $useScreenshot === true) {
+                    echo "<details class=\"test_presets_more test_presets_more-share\"><summary><span class=\"test_presets_tag\">Share</span></summary>
+                        <div class=\"details_contain\">
+                            <ul>
+                            <li><a href=\"" . $emailURI . "\">Share via Email</a></li>"
+                        . (isset($tweetURI) ? "<li><a href=\"" . $tweetURI . "\">Share on Twitter</a></li>" : "")
+                        . "<li><a href=\"" . $socialImage . "\" download=\"WebPageTest Pro Experiment Results\">View Formatted Screenshot Image</a></li>"
+                        . "</ul>
+                        </div></details>";
+                }*/
 
                 ?>
                     </li>
@@ -369,45 +377,56 @@ if (!strcasecmp('Test Result', $tab) && (!isset($nosubheader) || !@$nosubheader)
 
 
             $useFriendlyUrls = !isset($_REQUEST['end']) && FRIENDLY_URLS;
-
+            $tabs = array();
             $menuUrlGenerator = UrlGenerator::create($useFriendlyUrls, "", $id, $gradeRun, !empty($cached));
             $endParams = isset($_REQUEST['end']) ? ("end=" . $_REQUEST['end']) : "";
-
-            $tabs = array( 'Performance Summary' => $menuUrlGenerator->resultSummary($endParams));
-
-
-            if ($experiment) {
-                $tabs['Opportunities & Experiments'] = $experimentOriginalExperimentsHref;
-                $tabs['Experiment Results & Filmstrip'] = $experimentResultsHref;
-            } else {
-                //$tabs['Opportunities & Experiments'] = $menuUrlGenerator->resultPage("experiments", $endParams);
-                $tabs['Filmstrip'] = $menuUrlGenerator->filmstripView("filmstrip", $endParams);
-            }
-            $tabs['Details'] = $menuUrlGenerator->resultPage("details", $endParams);
-
             $gradedRunResults = $testResults->getRunResult($gradeRun, !empty($cached));
+            $lhOnly = isset($test['test']['type']) && @$test['test']['type'] == 'lighthouse';
+            $hasLH = isset($testPath) && is_file("$testPath/lighthouse.log.gz");
+
+            if (!$lhOnly) {
+                $tabs['Performance Summary'] = $menuUrlGenerator->resultSummary($endParams);
+
+                if ($experiment) {
+                    $tabs['Opportunities & Experiments'] = $experimentOriginalExperimentsHref;
+                    $tabs['Experiment Results & Filmstrip'] = $experimentResultsHref;
+                } else {
+                    //$tabs['Opportunities & Experiments'] = $menuUrlGenerator->resultPage("experiments", $endParams);
+                    $tabs['Filmstrip'] = $menuUrlGenerator->filmstripView("filmstrip", $endParams);
+                }
+                $tabs['Details'] = $menuUrlGenerator->resultPage("details", $endParams);
+
+                if ($gradedRunResults->hasWebVitals()) {
+                    $tabs['Web Vitals'] = $menuUrlGenerator->resultPagePHP("vitals", $endParams);
+                }
 
 
-            if ($gradedRunResults->hasWebVitals()) {
-                $tabs['Web Vitals'] = $menuUrlGenerator->resultPagePHP("vitals", $endParams);
+                if ($gradedRunResults->isOptimizationChecked()) {
+                    $tabs['Optimization'] = $menuUrlGenerator->resultPage("performance_optimization", $endParams);
+                }
+
+                $tabs['Content'] = $menuUrlGenerator->resultPage("breakdown", $endParams);
+                $tabs['Domains'] = $menuUrlGenerator->resultPage("domains", $endParams);
+                $tabs['Console Log'] = $menuUrlGenerator->resultPage("consolelog", $endParams);
+                if ($firstRunResults && $firstRunResults->getStepResult(1)->getMetric('generated-html')) {
+                    $tabs['HTML Diff'] = $menuUrlGenerator->resultPage("htmldiff", $endParams);
+                }
+                $tabs['Detected Technologies'] = $menuUrlGenerator->resultPage("technologies", $endParams);
+
+                if ($gradedRunResults->hasBreakdownTimeline()) {
+                // currently only supported by standard urls
+                    $menuStandardUrlGenerator = UrlGenerator::create(false, "", $id, $run, !empty($cached));
+                    $tabs['Processing'] = $menuStandardUrlGenerator->resultPage("breakdownTimeline");
+                }
             }
 
-
-            if ($gradedRunResults->isOptimizationChecked()) {
-                $tabs['Optimization'] = $menuUrlGenerator->resultPage("performance_optimization", $endParams);
+            if (isset($firstRunResults) && $hasLH) {
+                $urlGeneratorFirstRun = UrlGenerator::create(false, "", $id, 1, false);
+                $lhURL = $urlGeneratorFirstRun->resultPage("lighthouse");
+                if (isset($lhURL)) {
+                    $tabs['Lighthouse Report'] = $lhURL;
+                }
             }
-
-            $tabs['Content'] = $menuUrlGenerator->resultPage("breakdown", $endParams);
-            $tabs['Domains'] = $menuUrlGenerator->resultPage("domains", $endParams);
-            $tabs['Console Log'] = $menuUrlGenerator->resultPage("consolelog", $endParams);
-            if ($gradedRunResults->hasBreakdownTimeline()) {
-            // currently only supported by standard urls
-                $menuStandardUrlGenerator = UrlGenerator::create(false, "", $id, $run, !empty($cached));
-                $tabs['Processing'] = $menuStandardUrlGenerator->resultPage("breakdownTimeline");
-            }
-
-
-
 
             foreach ($tabs as $tabName => $tabUrl) {
                 // make sure we have a test result to navigate to
@@ -421,25 +440,8 @@ if (!strcasecmp('Test Result', $tab) && (!isset($nosubheader) || !@$nosubheader)
                 }
             }
 
-            if (isset($firstRunResults)) {
-                $lighthouse = $firstRunResults->getLighthouseScore();
-                $urlGeneratorFirstRun = UrlGenerator::create(false, "", $id, 1, false);
-
-                if (isset($lighthouse)) {
-                    $lighthouseURL = $urlGeneratorFirstRun->resultPage("lighthouse");
-                    $lhClass = 'poor';
-                    if ($lighthouse >= 90) {
-                        $lhClass = 'good';
-                    } elseif ($lighthouse >= 50) {
-                        $lhClass = 'ok';
-                    }
-
-                    echo "<li><a href=\"" . $lighthouseURL . "\" title=\"Lighthouse Report (external) - Opens in a new window.\" target=\"_blank\" rel=\"noopener\" >Lighthouse Report: <span class=\"lh-flag " . $lhClass . "\">" . $lighthouse . "</span><img src=\"/assets/images/icon-external.svg\" alt=\"\"></a></li>";
-                }
-            }
-
             // Add the "Image Analysis" link
-            if (isset($id) && strlen($id)) {
+            if (!$lhOnly && isset($id) && strlen($id)) {
                 $tabUrl = GetSetting('image_analysis');
                 if ($tabUrl) {
                     $tabUrl = str_replace('{test id}', $id, $tabUrl);
@@ -448,7 +450,7 @@ if (!strcasecmp('Test Result', $tab) && (!isset($nosubheader) || !@$nosubheader)
             }
 
             // Add the "Request Map" link
-            if (isset($id) && strlen($id)) {
+            if (!$lhOnly && isset($id) && strlen($id)) {
                 $tabUrl = GetSetting('request_map');
                 if ($tabUrl) {
                     $tabUrl = str_replace('{test id}', $id, $tabUrl);
@@ -457,39 +459,41 @@ if (!strcasecmp('Test Result', $tab) && (!isset($nosubheader) || !@$nosubheader)
             }
 
             // one dollar sign for every 500KB
-            /*$dollars = "";
-            $dollarcount = max(1, min(5, ceil($gradeRunResults->getStepResult(1)->getMetric("bytesIn") / (500 * 1024))));
-            for ($i = 1; $i <= 5; $i++) {
-                $dollars .= $i <= $dollarcount ? '$' : '-';
-            }
-            if (!$id) {
-                $id = $testInfo->getId();
-            }
-            echo "<li><a title=\"Find out how much it costs for someone to use your site on mobile networks around the world. (external) - Opens in a new window.\" target=\"_blank\" rel=\"noopener\" " .
-            "href=\"http://whatdoesmysitecost.com/index.php?testID=$id\">Data Cost: $dollars <img src=\"/assets/images/icon-external.svg\" alt=\"\"></a></li>";
+            /*if (!$lhOnly) {
+                $dollars = "";
+                $dollarcount = max(1, min(5, ceil($gradeRunResults->getStepResult(1)->getMetric("bytesIn") / (500 * 1024))));
+                for ($i = 1; $i <= 5; $i++) {
+                    $dollars .= $i <= $dollarcount ? '$' : '-';
+                }
+                if (!$id) {
+                    $id = $testInfo->getId();
+                }
+                echo "<li><a title=\"Find out how much it costs for someone to use your site on mobile networks around the world. (external) - Opens in a new window.\" target=\"_blank\" rel=\"noopener\" " .
+                "href=\"http://whatdoesmysitecost.com/index.php?testID=$id\">Data Cost: $dollars <img src=\"/assets/images/icon-external.svg\" alt=\"\"></a></li>";
 
-            if (GetSetting('securityInsights') || isset($_REQUEST['securityInsights'])) {
-                // Disable the security check for WordPress sites because it has a false-positive for JQuery issues.
-                $securityScoreIncludesVulnerabilities = true;
-                if ($gradeRunResults) {
-                    $detected = $gradeRunResults->getStepResult(1)->getRawResults()['detected'];
-                    if (isset($detected) && isset($detected['CMS'])) {
-                        if (stripos($detected['CMS'], "WordPress") >= 0) {
-                            $securityScoreIncludesVulnerabilities = false;
+
+                if (GetSetting('securityInsights') || isset($_REQUEST['securityInsights'])) {
+                    // Disable the security check for WordPress sites because it has a false-positive for JQuery issues.
+                    $securityScoreIncludesVulnerabilities = true;
+                    if ($gradeRunResults) {
+                        $detected = $gradeRunResults->getStepResult(1)->getRawResults()['detected'];
+                        if (isset($detected) && isset($detected['CMS'])) {
+                            if (stripos($detected['CMS'], "WordPress") >= 0) {
+                                $securityScoreIncludesVulnerabilities = false;
+                            }
                         }
                     }
-                }
-                require_once('security_checks.php');
-                $securityGrade = getSecurityGrade($testInfo, $gradeRunResults, $securityScoreIncludesVulnerabilities);
+                    require_once('security_checks.php');
+                    $securityGrade = getSecurityGrade($testInfo, $gradeRunResults, $securityScoreIncludesVulnerabilities);
 
-                $snykUrl = "https://snyk.io/test/website-scanner/?test={$id}&utm_medium=referral&utm_source=webpagetest&utm_campaign=website-scanner";
-                echo "<li><a href=\"$snykUrl\" title=\"(external) - Opens Snyk in a new window.\">Security Score: <span class=\"lh-flag\">" . $securityGrade['grade'] . "</span><img src=\"/assets/images/icon-external.svg\" alt=\"\"></a></li>";
+                    $snykUrl = "https://snyk.io/test/website-scanner/?test={$id}&utm_medium=referral&utm_source=webpagetest&utm_campaign=website-scanner";
+                    echo "<li><a href=\"$snykUrl\" title=\"(external) - Opens Snyk in a new window.\">Security Score: <span class=\"lh-flag\">" . $securityGrade['grade'] . "</span><img src=\"/assets/images/icon-external.svg\" alt=\"\"></a></li>";
+                }
             }
             */
 
 
             echo '</ul></nav></div>';
-
 
             include("testinfo_command-bar.inc");
 

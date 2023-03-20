@@ -16,12 +16,11 @@
 <?php if (isset($page_description) && strlen($page_description)) : ?>
     <meta name="description" content="<?= $page_description ?>" />
 <?php endif; ?>
-<meta name="author" content="Patrick Meenan">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<link rel="apple-touch-icon" sizes="192x192" href="/assets/images/icons-192.png">
+<link rel="apple-touch-icon" sizes="96x96" href="/assets/images/favicon-96x96.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/assets/images/favicon-96x96.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
@@ -58,19 +57,19 @@
 </style>
 <?php
 
-if (file_exists(__DIR__ . '/../../settings/server/customhead.inc.php')) {
-    include(__DIR__ . '/../../settings/server/customhead.inc.php');
-} elseif (file_exists(__DIR__ . '/../../settings/common/customhead.inc.php')) {
-    include(__DIR__ . '/../../settings/common/customhead.inc.php');
-} elseif (file_exists(__DIR__ . '/../../settings/customhead.inc.php')) {
-    include(__DIR__ . '/../../settings/customhead.inc.php');
+if (file_exists(SETTINGS_PATH . '/server/customhead.inc.php')) {
+    include(SETTINGS_PATH . '/server/customhead.inc.php');
+} elseif (file_exists(SETTINGS_PATH . '/common/customhead.inc.php')) {
+    include(SETTINGS_PATH . '/common/customhead.inc.php');
+} elseif (file_exists(SETTINGS_PATH . '/customhead.inc.php')) {
+    include(SETTINGS_PATH . '/customhead.inc.php');
 }
 ?>
 
-<link rel="stylesheet" href="<?= "{$GLOBALS['cdnPath']}/assets/css/typography.css?v=" . constant('VER_TYPOGRAPHY_CSS') ?>" />
-<link rel="stylesheet" href="<?= "{$GLOBALS['cdnPath']}/assets/css/layout.css?v=" . constant('VER_LAYOUT_CSS') ?>" />
-<link rel="stylesheet" href="<?= "{$GLOBALS['cdnPath']}/assets/css/pagestyle2.css?v=" . constant('VER_CSS') ?>" />
-<link rel="stylesheet" href="<?= "{$GLOBALS['cdnPath']}/assets/css/wpt-header.css?v=" . constant('VER_HEADER_CSS') ?>" />
+<link rel="stylesheet" href="<?= "{$GLOBALS['cdnPath']}/assets/css/typography.css?v=" . constant('VER_TYPOGRAPHY_CSS') ?>">
+<link rel="stylesheet" href="<?= "{$GLOBALS['cdnPath']}/assets/css/layout.css?v=" . constant('VER_LAYOUT_CSS') ?>">
+<link rel="stylesheet" href="<?= "{$GLOBALS['cdnPath']}/assets/css/pagestyle2.css?v=" . constant('VER_CSS') ?>">
+<link rel="stylesheet" href="<?= "{$GLOBALS['cdnPath']}/assets/css/wpt-header.css?v=" . constant('VER_HEADER_CSS') ?>">
 <script src="<?= "{$GLOBALS['cdnPath']}/assets/js/wpt-header.js?v=" . constant('VER_JS') ?>" defer></script>
 
 
@@ -108,8 +107,8 @@ if ($privateInstall) {
 }
 
 // include a custom style if one exists
-if (is_file(__DIR__ . '/../../settings/custom.css')) {
-    include(__DIR__ . '/../../settings/custom.css');
+if (is_file(SETTINGS_PATH . '/custom.css')) {
+    include(SETTINGS_PATH . '/custom.css');
 }
 
 echo "\n</style>\n";
@@ -117,12 +116,12 @@ echo "\n</style>\n";
 // include the analytics code if it is appropriate
 if (!isset($noanalytics)) {
     echo '<script>';
-    require_once __DIR__ . '/../../assets/js/vendor/catchpoint-rum.js';
+    require_once ASSETS_PATH . '/js/vendor/catchpoint-rum.js';
     echo '</script>';
 }
 
 if (isset($test_is_private) && !$test_is_private) {
-    include __DIR__ . '/../../include/social_meta.php';
+    include INCLUDES_PATH . '/include/social_meta.php';
 }
 
 ?>

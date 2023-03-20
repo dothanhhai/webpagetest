@@ -10,7 +10,7 @@ use WebPageTest\Exception\ClientException;
 use WebPageTest\Handlers\Signup as SignupHandler;
 
 (function (RequestContext $request_context) {
-    if (!Util::getSetting('cp_auth')) {
+    if (!Util::getSetting('cp_auth') || Util::getSetting('login_off') || Util::getSetting('signup_off')) {
         $protocol = $request_context->getUrlProtocol();
         $host = $request_context->getHost();
         $route = '/';
@@ -103,13 +103,6 @@ use WebPageTest\Handlers\Signup as SignupHandler;
     $plan = $_COOKIE['signup-plan'] ?? 'free';
     $is_plan_free = $plan == 'free';
 
-    $auth_token = $_SESSION['signup-auth-token'] ?? null;
-    if (is_null($auth_token)) {
-        $auth_token = $request_context->getSignupClient()->getAuthToken()->access_token;
-        $_SESSION['signup-auth-token'] = $auth_token;
-    }
-    $request_context->getSignupClient()->authenticate($auth_token);
-    $vars['auth_token'] = $auth_token;
     $vars['plan'] = $plan;
     $vars['is_plan_free'] = $is_plan_free;
     $vars['step'] = $signup_step;
@@ -134,7 +127,8 @@ use WebPageTest\Handlers\Signup as SignupHandler;
             echo SignupHandler::getStepThree($request_context, $vars);
             break;
         default: // step 1 or whatever somebody tries to send
-            echo SignupHandler::getStepOne($request_context, $vars);
+            $resp = SignupHandler::getStepOne($request_context, $vars);
+            $resp->send();
             break;
     }
     exit();

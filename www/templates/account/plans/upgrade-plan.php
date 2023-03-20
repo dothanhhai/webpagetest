@@ -8,7 +8,7 @@
         <h1>Update Plan</h1>
         <?php if ($is_paid) : ?>
             <div class="contact-support-button">
-                <a href="https://support.webpagetest.org"><span>Contact Support</span></a>
+              <a href="<?= $support_link ?>"><span>Contact Support</span></a>
             </div>
         <?php endif; ?>
     </div>
@@ -35,7 +35,7 @@
                     $isCurrentPlan = (isset($wptCustomer) && !is_null($wptCustomer)) ? strtolower($wptCustomer->getWptPlanId()) == strtolower($plan->getId()) : false;
                     $isUpgrade = $is_paid ? $plan->isUpgrade($oldPlan) : true;
                     $activePlan = $isCurrentPlan ? 'wpt-plan__active' : '';
-                    $disabled =  $isCurrentPlan ? 'disabled' : '';
+                    $disabled =  !$is_canceled && $isCurrentPlan ? 'disabled' : '';
                     $upgrade = $isUpgrade ? 'upgrade' : 'downgrade';
                     $buttonCopy = $isCurrentPlan ? 'Current Plan' : $upgrade;
                     $plan_block = <<<HTML
@@ -59,7 +59,7 @@
                     $isCurrentPlan = isset($wptCustomer) ? strtolower($wptCustomer->getWptPlanId()) == strtolower($plan->getId()) : false;
                     $isUpgrade = $is_paid ? $plan->isUpgrade($oldPlan) : true;
                     $activePlan = $isCurrentPlan ? 'wpt-plan__active' : '';
-                    $disabled =  $isCurrentPlan ? 'disabled' : '';
+                    $disabled =  !$is_canceled && $isCurrentPlan ? 'disabled' : '';
                     $upgrade = $isUpgrade ? 'upgrade' : 'downgrade';
                     $buttonCopy = $isCurrentPlan ? 'Current Plan' : $upgrade;
                     $plan_block = <<<HTML

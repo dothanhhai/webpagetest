@@ -244,14 +244,14 @@ $page_description = "Website performance test result$testLabel.";
                                 }
 
                                 // experiments are enabled for the following criteria
-                                $experimentEnabled = $experiments_paid || ( in_array($expNum, $allowedFreeExperimentIds) && $experiments_logged_in);
+                                $experimentEnabled = $experiments_paid || ( in_array($expNum, $allowedFreeExperimentIds));
                                 // exception allowed for tests on the metric times
-                                if (strpos($test['testinfo']['url'], 'webpagetest.org/themetrictimes') && $experiments_logged_in) {
+                                if (strpos($test['testinfo']['url'], 'webpagetest.org/themetrictimes')) {
                                     $experimentEnabled = true;
                                 }
 
                                 $out .= <<<EOT
-                                    <li class="experiment_description">
+                                    <li class="experiment_description" id="experiment-{$exp->id}">
                                     <div class="experiment_description_text">
                                     <h5>{$exp->title}</h5>
                                     {$exp->desc}
@@ -325,7 +325,7 @@ $page_description = "Website performance test result$testLabel.";
                                         $out .= <<<EOT
                                         </div>
                                         <div class="experiment_description_go experiment_description_go-multi">
-                                        <label class="experiment_pair_check"><input type="checkbox" name="recipes[]" value="{$expNum}-{$exp->expvar}">Run this Experiment with:</label>
+                                        <label class="experiment_pair_check"><input type="checkbox" name="recipes[]" value="{$expNum}-{$exp->expvar}">Run this Experiment with...</label>
                                         EOT;
                                         $addmore = $exp->addmore ? ' experiment_pair_value-add' : '';
 
@@ -349,12 +349,13 @@ $page_description = "Website performance test result$testLabel.";
                                 } elseif ($exp->expvar && !$exp->expval && $textinput) {
                                     if ($experimentEnabled) {
                                         $placeholderEncodedVal = htmlentities('<script src="https://example.com/test.js"></script>');
+                                        $textinputvalue = $exp->textinputvalue ? $exp->textinputvalue : "";
+                                        $fullscreenfocus = $exp->fullscreenfocus ? "true" : "false";
                                         $out .= <<<EOT
                                         </div>
                                         <div class="experiment_description_go experiment_description_go-multi">
-                                        <label class="experiment_pair_check"><input type="checkbox" name="recipes[]" value="{$expNum}-{$exp->expvar}">Run this Experiment with:</label>
-                                        <label class="experiment_pair_value"><span>Value: </span><textarea name="{$expNum}-{$exp->expvar}[]" placeholder="{$placeholderEncodedVal}"></textarea></label>
-
+                                            <label class="experiment_pair_check"><input type="checkbox" name="recipes[]" value="{$expNum}-{$exp->expvar}">Run this Experiment with...</label>
+                                            <label class="experiment_pair_value"><span>Value: </span><textarea id="experiment-{$exp->id}-textarea" data-fullscreenfocus="{$fullscreenfocus}" name="{$expNum}-{$exp->expvar}[]">{$textinputvalue}</textarea></label>
                                         </div>
                                         EOT;
                                     } else {
@@ -547,6 +548,35 @@ $page_description = "Website performance test result$testLabel.";
 
 
 <script>
+    // dependency fields
+    function toggleDepChecks(check){
+        let parent = check.closest(".experiment_description_go");
+        let inputsToDisable = 'textarea,input:not([name="recipes[]"])';
+        if(check.checked){
+            parent.classList.add('experiment_description_go-checked');
+            parent.querySelectorAll(inputsToDisable).forEach(textarea => {
+                textarea.disabled = false;
+            });
+        } else {
+            parent.classList.remove('experiment_description_go-checked');
+            parent.querySelectorAll(inputsToDisable).forEach(textarea => {
+                textarea.disabled = true;
+            });
+        }
+    }
+    let depChecks = document.querySelectorAll('.experiment_pair_check input');
+    depChecks.forEach(check => {
+        check.addEventListener('change', () => {
+            toggleDepChecks(check);
+        });
+    });
+    function updateCheckDeps(){
+        depChecks.forEach(check => {
+            toggleDepChecks(check);
+        });
+    }
+    updateCheckDeps();
+
     // refresh the form state from saved localstorage values
     function refreshExperimentFormState(){
         var priorState = localStorage.getItem("experimentForm");
@@ -582,14 +612,14 @@ $page_description = "Website performance test result$testLabel.";
                                 }
                             }
                         }
-                        if( input && !(keyval[1] === 'on' && form.querySelectorAll("[type=checkbox][name='" + keyval[0] + "']")) ){
+                        if( input && !(keyval[1] === 'on' && form.querySelectorAll("[type=checkbox][name='" + keyval[0] + "']")) && keyval[1] !== "" ){
                             input.value = keyval[1];
                             input.setAttribute('data-hydrated', 'true');
                         }
                         
                     }
                 });
-
+            updateCheckDeps();
         }
     }
 
@@ -607,11 +637,71 @@ $page_description = "Website performance test result$testLabel.";
         
         localStorage.setItem("experimentForm", formString);
     }
-
+    
     form.addEventListener("change", saveExperimentFormState );
+    form.addEventListener("submit", sortExperimentOrder );
     form.addEventListener("submit", saveExperimentFormState );
+    window.addEventListener("beforeunload", unSortExperimentOrder );
 
+    // append inputs to end of form on submit to impact post order
+    function sortExperimentOrder(e){
+        let appliedOrder = document.querySelectorAll('.exps-active li');
+        let sortedElemsContainer = document.createElement('div');
+        sortedElemsContainer.className = "temp-sorted-inputs";
+        form.append(sortedElemsContainer);
+        appliedOrder.forEach(li => {
+            let associatedInput = form.querySelector( "[name=\"" + li.getAttribute('data-input-name') + "\"][value=\"" + li.getAttribute('data-input-value') + "\"]" );
+            if(associatedInput){
+                // append an identical input to the end of the form in the order these list items arrive
+                sortedElemsContainer.append(associatedInput.cloneNode(true));
+                // disable the actual input for submission
+                associatedInput.disabled = true;
+            }
+        });
+    }
+    // before the submit goes out, we undo the sorted inputs
+    function unSortExperimentOrder(){
+        document.querySelector(".temp-sorted-inputs")
+        let sortedInputs = document.querySelectorAll("input[type=checkbox][name='recipes[]'][disabled]");
+        sortedInputs.forEach(input => {
+            input.disabled = false;
+        });
+    }
 
+    // this attempts to sort the order if it's saved, onload
+    function refreshExperimentOrder(){
+        let priorState = localStorage.getItem("experimentOrder");
+        if(priorState){
+            priorState = JSON.parse(priorState);
+        }
+        let currentTestID = '<?php if (isset($id)) {
+            echo "$id";
+                             } ?>';
+        if(currentTestID && priorState && priorState && priorState[0] === currentTestID){
+            priorState.reverse();
+            for(var i = 0; i < priorState.length-1; i++){
+                let sortableLi = document.querySelector(".exps-active ol li[data-input-name='"+ priorState[i][0] +"'][data-input-value='"+ priorState[i][1] +"']");
+                if(sortableLi){
+                    sortableLi.parentElement.prepend(sortableLi);
+                }
+            }
+        }
+    }
+
+    function saveExperimentOrder(){
+        let appliedOrder = document.querySelectorAll('.exps-active li');
+        let currentTestID = '<?php if (isset($id)) {
+            echo "$id";
+                             } ?>';
+        if( currentTestID ){
+            let orderObj = [currentTestID];
+            appliedOrder.forEach(li => {
+                orderObj.push( [ li.getAttribute('data-input-name'), li.getAttribute('data-input-value') ]);
+            });
+            localStorage.setItem("experimentOrder", JSON.stringify(orderObj));
+        }
+    }
+    
 
     var expsActive;
     function updateCount(){
@@ -635,18 +725,26 @@ $page_description = "Website performance test result$testLabel.";
             expsActiveInfo.innerHTML = '<summary><strong>' + expsActive.length + '</strong> experiment'+ (expsActive.length>1?'s':'') +' selected.</summary>';
 
             let expsActiveLinksContain = document.createElement('div');
-            expsActiveLinksContain.innerHTML = '<p class="experiments_jump">Scroll to:</p>';
+            expsActiveLinksContain.innerHTML = '<p class="experiments_jump">Experiments apply in this order: <i>(Order matters! Some experiments will override others.)</i></p>';
             let expsActiveLinks = document.createElement('ol');
             
             expsActive.forEach(exp => {
                 let newLi = document.createElement('li');
+                newLi.setAttribute("data-input-name", exp.getAttribute('name'));
+                newLi.setAttribute("data-input-value", exp.getAttribute('value'));
                 let expDesc = exp.closest(".experiment_description");
-                newLi.innerHTML = '<button type="button">'+ expDesc.querySelector('h5').innerText +'</button>';
+                newLi.innerHTML = '<button type="button" class="experiment_scroll">'+ expDesc.querySelector('h5').innerText +'</button><button type="button" class="experiment_sort">Sort</button>';
                 expsActiveLinks.append(newLi);
-                newLi.addEventListener("click", () => {
+                newLi.querySelector('button.experiment_scroll').addEventListener("click", () => {
                     expDesc.scrollIntoView({behavior: 'smooth'});
                 });
-                
+                newLi.querySelector('button.experiment_sort').addEventListener("click", () => {
+                    var prevLi = newLi.previousElementSibling;
+                    if(prevLi){
+                        prevLi.before(newLi);
+                    }
+                    saveExperimentOrder();
+                });
             });
 
             expsActiveLinksContain.append(expsActiveLinks);
@@ -685,8 +783,9 @@ $page_description = "Website performance test result$testLabel.";
     // try and restore state at load
     refreshExperimentFormState();
     updateCount();
+    refreshExperimentOrder();
     form.addEventListener("input", updateCount );
-    form.addEventListener("submit", updateCount );
+    form.addEventListener("input", refreshExperimentOrder );
 
     // add add buttons
     document.querySelectorAll(".experiment_pair_value-add:last-child").forEach(pair => {
@@ -708,7 +807,7 @@ $page_description = "Website performance test result$testLabel.";
         btn.innerText = "Expand All"; 
         section.append(btn);
         btn.addEventListener("click", () => { 
-            this.closest(".util_overflow_more").className.add("util_overflow_more-expanded");
+            btn.closest(".util_overflow_more").classList.add("util_overflow_more-expanded");
         });
     });
 
@@ -723,6 +822,8 @@ $page_description = "Website performance test result$testLabel.";
             }
         });
     });
+
+    
 
 </script>
     </body>

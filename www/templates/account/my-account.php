@@ -1,3 +1,6 @@
+<?php
+global $support_link;
+?>
 <!-- VERIFIED EMAIL NOTICE ---->
 <?php if (!$is_verified) : ?>
     <div class="resend-email-verification-container">
@@ -22,7 +25,7 @@
         <h1>My Account</h1>
         <?php if ($is_paid) : ?>
             <div class="contact-support-button">
-                <a href="https://support.webpagetest.org"><span>Contact Support</span></a>
+              <a href="<?= $support_link ?>"><span>Contact Support</span></a>
             </div>
         <?php endif; ?>
     </div>
@@ -32,10 +35,10 @@
         <!-- radio buttons control the JS-less tabs-->
         <input type="radio" name="account-tabs" id="account-settings" value="account settings" checked />
         <!-- these sections only exist for paid users-->
+        <?php if (($is_paid || $is_canceled) && !$is_wpt_enterprise) : ?>
+            <input type="radio" name="account-tabs" id="payments-invoices" value="payments and invoices" />
+        <?php endif; ?>
         <?php if ($is_paid) : ?>
-            <?php if (!$is_wpt_enterprise) : ?>
-                <input type="radio" name="account-tabs" id="payments-invoices" value="payments and invoices" />
-            <?php endif; ?>
             <input type="radio" name="account-tabs" id="api-consumers" value="api consumers" />
         <?php endif; ?>
 
@@ -43,10 +46,10 @@
         <div class="tab-labels" data-id="tab-labels">
             <label for="account-settings">Account Settings</label>
             <!-- these sections only exist for paid users-->
+            <?php if (($is_paid || $is_canceled) && !$is_wpt_enterprise) : ?>
+                <label for="payments-invoices">Payments and Invoices</label>
+            <?php endif; ?>
             <?php if ($is_paid) : ?>
-                <?php if (!$is_wpt_enterprise) : ?>
-                    <label for="payments-invoices">Payments and Invoices</label>
-                <?php endif; ?>
                 <label for="api-consumers">Api Consumers</label>
             <?php endif; ?>
         </div>
@@ -66,7 +69,7 @@
                 </div>
                 <div class="card-section">
                     <div class="edit-button">
-                        <button><span>Edit</span></button>
+                        <button><span>Edit Contact Info</span></button>
                     </div>
                 </div>
             </div>
@@ -80,17 +83,19 @@
                 </div>
                 <div class="card-section">
                     <div class="edit-button">
-                        <button><span>Edit</span></button>
+                        <button><span>Edit Password</span></button>
                     </div>
                 </div>
             </div>
 
-            <?php require_once __DIR__ . '/includes/subscription-plan.php'; ?>
+            <div class="box card subscription-plan">
+              <?php require_once __DIR__ . '/includes/subscription-plan.php'; ?>
+            </div>
         </div>
 
 
         <!-- PAYING ONLY: Billing Invoice tab -->
-        <?php if ($is_paid && !$is_wpt_enterprise) : ?>
+        <?php if (($is_paid || $is_canceled) && !$is_wpt_enterprise) : ?>
             <div class="tab-content" id="billing-settings-content">
             <?php include_once __DIR__ . '/billing/invoice-history.php'; ?>
             </div>
@@ -103,7 +108,7 @@
                 <?php include_once __DIR__ . '/includes/api-keys.php'; ?>
             </div>
         <?php endif; ?>
-    </div>
+     </div>
 </div>
 
 

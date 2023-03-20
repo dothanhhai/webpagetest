@@ -9,6 +9,7 @@ use WebPageTest\CPClient;
 use WebPageTest\CPSignupClient;
 use WebPageTest\Util;
 use WebPageTest\BannerMessageManager;
+use WebPageTest\Environment;
 
 class RequestContext
 {
@@ -22,6 +23,11 @@ class RequestContext
     private string $request_uri;
     private string $host;
     private ?BannerMessageManager $banner_message_manager;
+    // Should use an enum, TODO
+    private string $environment;
+    private string $api_key_in_use;
+
+    private string $user_api_key_header = 'X-WPT-API-KEY';
 
     public function __construct(array $global_request, array $server = [], array $options = [])
     {
@@ -41,6 +47,9 @@ class RequestContext
         $this->request_uri = $server['REQUEST_URI'] ?? '/';
 
         $this->host = $options['host'] ?? Util::getSetting('host', "");
+
+        $this->environment = Environment::$Production;
+        $this->api_key_in_use = "";
     }
 
     public function getRaw(): array
@@ -52,7 +61,6 @@ class RequestContext
     {
         return $this->user;
     }
-
     public function setUser(?User $user): void
     {
         if (isset($user)) {
@@ -119,5 +127,55 @@ class RequestContext
     public function getHost(): string
     {
         return $this->host;
+    }
+
+    public function setEnvironment(?string $env = ''): void
+    {
+      // This should really be a match, but we're on 7.4
+        switch ($env) {
+            case 'development':
+                $this->environment = Environment::$Development;
+                break;
+            case 'qa':
+                $this->environment = Environment::$QA;
+                break;
+            case 'production':
+                $this->environment = Environment::$Production;
+                break;
+            default:
+                $this->environment = Environment::$Production;
+                break;
+        }
+    }
+
+    public function getEnvironment(): string
+    {
+        return $this->environment;
+    }
+
+    /**
+     * This returns an API key if one is in use, if not, it returns an empty string
+     *
+     * @return string the api key
+     * */
+    public function getApiKeyInUse(): string
+    {
+        if (empty($this->api_key_in_use)) {
+            $user_api_key = $this->getRaw()['k'] ?? "";
+            if (empty($user_api_key)) {
+                $user_api_key_header = $this->user_api_key_header;
+                $request_headers = getallheaders();
+                $matching_headers = array_filter($request_headers, function ($k) use ($user_api_key_header) {
+                    return strtolower($k) == strtolower($user_api_key_header);
+                }, ARRAY_FILTER_USE_KEY);
+                if (!empty($matching_headers)) {
+                    $user_api_key = array_values($matching_headers)[0];
+                }
+            }
+
+            $this->api_key_in_use = $user_api_key;
+        }
+
+        return $this->api_key_in_use;
     }
 }

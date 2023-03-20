@@ -7,7 +7,7 @@
 include 'common.inc';
 
 use WebPageTest\Util;
-use WebPageTest\Util\IniReader;
+use WebPageTest\Util\SettingsFileReader;
 
 // see if we are overriding the max runs
 $max_runs = GetSetting('maxruns', 9);
@@ -41,25 +41,10 @@ if (isset($req_url)) {
     $url = htmlspecialchars($req_url);
 }
 $placeholder = 'Enter a website URL...';
-$profile_file = SETTINGS_PATH . '/profiles.ini';
-if (file_exists(SETTINGS_PATH . '/common/profiles.ini')) {
-    $profile_file = SETTINGS_PATH . '/common/profiles.ini';
-}
-if (file_exists(SETTINGS_PATH . '/server/profiles.ini')) {
-    $profile_file = SETTINGS_PATH . '/server/profiles.ini';
-}
-$profiles = parse_ini_file($profile_file, true);
-$connectivity_file = SETTINGS_PATH . '/connectivity.ini.sample';
-if (file_exists(SETTINGS_PATH . '/connectivity.ini')) {
-    $connectivity_file = SETTINGS_PATH . '/connectivity.ini';
-}
-if (file_exists(SETTINGS_PATH . '/common/connectivity.ini')) {
-    $connectivity_file = SETTINGS_PATH . '/common/connectivity.ini';
-}
-if (file_exists(SETTINGS_PATH . '/server/connectivity.ini')) {
-    $connectivity_file = SETTINGS_PATH . '/server/connectivity.ini';
-}
-$connectivity = parse_ini_file($connectivity_file, true);
+
+$profiles = SettingsFileReader::ini('profiles.ini', true);
+$connectivity = SettingsFileReader::ini('connectivity.ini', true, true);
+
 $mobile_devices = LoadMobileDevices();
 
 if (isset($_REQUEST['connection']) && isset($connectivity[$_REQUEST['connection']])) {
@@ -123,7 +108,7 @@ $hasNoRunsLeft = $is_logged_in ? (int)$remaining_runs <= 0 : false;
                 ?>
                 <form name="urlEntry" id="urlEntry" action="/runtest.php" method="POST" enctype="multipart/form-data" onsubmit="return ValidateInput(this, <?= $remaining_runs; ?>)">
                     <input type="hidden" name="lighthouseTrace" value="1">
-                    <input type="hidden" name="lighthouseScreenshots" value="0">
+                    <input type="hidden" name="lighthouseScreenshots" value="1">
                     <?php
                     echo '<input type="hidden" name="vo" value="' . htmlspecialchars($owner) . "\">\n";
                     if (strlen($secret)) {
@@ -271,6 +256,24 @@ $hasNoRunsLeft = $is_logged_in ? (int)$remaining_runs <= 0 : false;
                                                     </div>
                                                     <div class="fieldrow">
                                                         <label for="lighthouse-simple"><input type="checkbox" name="lighthouse" id="lighthouse-simple" class="checkbox"> Run Lighthouse Audit <small>(Runs on Chrome, emulated Moto G4 device, over simulated 3G Fast connection)</small></label>
+                                                        <script>
+                                                            // show or hide simple lighthouse field depending on whether chrome test is running
+                                                            let simplePresets = document.querySelector('.test_presets_easy');
+                                                            let lhSimpleFields = document.querySelector('[for=lighthouse-simple]');
+                                                            let lhSimpleCheck = lhSimpleFields.querySelector('input');
+                                                            function enableDisableLHSimple(){
+                                                              let checkedPreset = simplePresets.querySelector('input[type=radio]:checked');
+                                                              if(checkedPreset.parentElement.querySelector('img[alt*="chrome"]')){
+                                                                  lhSimpleFields.style.display = "block";
+                                                                  lhSimpleCheck.disabled = false;
+                                                              } else {
+                                                                  lhSimpleFields.style.display = "none";
+                                                                  lhSimpleCheck.disabled = true;
+                                                              }
+                                                            }
+                                                            enableDisableLHSimple();
+                                                            simplePresets.addEventListener("click", enableDisableLHSimple );
+                                                        </script>
                                                     </div>
                                                     <?php if ($is_paid) : ?>
                                                         <div class="fieldrow">
@@ -522,9 +525,6 @@ $hasNoRunsLeft = $is_logged_in ? (int)$remaining_runs <= 0 : false;
                                                                                                                                 } ?> value="1">First View Only</label>
                                                     </fieldset>
                                                 </li>
-                                                <li>
-                                                    <label for="videoCheck"><input type="checkbox" name="video" id="videoCheck" class="checkbox" checked=checked> Capture Video</label>
-                                                </li>
                                                 <?php if ($is_paid) : ?>
                                                     <li>
                                                         <label for="private-advanced"><input type="checkbox" name="private" id="private-advanced" class="checkbox"> Make Test Private</label>
@@ -666,7 +666,7 @@ $hasNoRunsLeft = $is_logged_in ? (int)$remaining_runs <= 0 : false;
                                             <ul class="input_fields">
                                                 <li>
                                                     <label for="lighthouse-advanced" class="auto_width">
-                                                        <input type="checkbox" name="lighthouse" id="lighthouse-advanced" class="checkbox" style="float: left;width: auto;"> Capture Lighthouse Report <small>(Uses a "3G Fast" connection independent of test settings)</small>
+                                                        <input type="checkbox" name="lighthouse" id="lighthouse-advanced" class="checkbox" style="float: left;width: auto;"> Run Lighthouse Audit <small>(Uses a "3G Fast" connection independent of test settings)</small>
                                                     </label>
                                                 </li>
                                                 <li><label for="mobile">
@@ -802,7 +802,7 @@ $hasNoRunsLeft = $is_logged_in ? (int)$remaining_runs <= 0 : false;
                                                     <input type="text" name="cmdline" id="cmdline" class="text" style="width: 400px;" autocomplete="off">
                                                 </li>
                                                 <?php
-                                                $extensions = IniReader::getExtensions();
+                                                $extensions = SettingsFileReader::getExtensions();
                                                 if ($extensions) {
                                                     ?>
                                                 <li>

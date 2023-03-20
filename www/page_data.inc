@@ -3,9 +3,10 @@
 // Copyright 2020 Catchpoint Systems Inc.
 // Use of this source code is governed by the Polyform Shield 1.0.0 license that can be
 // found in the LICENSE.md file.
-require_once(__DIR__ . '/devtools.inc.php');
-require_once(__DIR__ . '/include/TestPaths.php');
-require_once(__DIR__ . '/video/visualProgress.inc.php');
+require_once(INCLUDES_PATH . '/devtools.inc.php');
+require_once(INCLUDES_PATH . '/include/TestPaths.php');
+require_once(INCLUDES_PATH . '/video/visualProgress.inc.php');
+require_once(INCLUDES_PATH . '/draw.inc');
 
 /**
 * Load the page results directly from the results files
@@ -171,6 +172,12 @@ function loadPageStepData($localPaths, $testInfo = null)
                 if (isset($long_tasks) && is_array($long_tasks)) {
                     $ret['longTasks'] = $long_tasks;
                 }
+            }
+
+          // Load CPU and BW
+            $perfs = LoadPerfData($localPaths->utilizationFile(), true, true);
+            if ($perfs) {
+                $ret['utilization'] = $perfs;
             }
 
           // Load the diagnostic test timing information if available
@@ -1425,7 +1432,7 @@ function CalculateTimeToInteractive($localPaths, $startTime, $interactiveWindows
     $rw = array();
     if (count($iw)) {
       // Find all of the request windows with 5 seconds of no more than 2 concurrent document requests
-        require_once(__DIR__ . '/object_detail.inc');
+        require_once(INCLUDES_PATH . '/object_detail.inc');
         $requests = getRequestsForStep($localPaths, null, $has_secure_requests);
         if (isset($requests) && is_array($requests) && count($requests)) {
           // Build a list of start/end events for document requests

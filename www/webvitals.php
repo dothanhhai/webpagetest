@@ -6,6 +6,9 @@
 //$REDIRECT_HTTPS = true;
 include 'common.inc';
 
+$current_user = $request_context->getUser();
+$is_paid = !is_null($current_user) ? $current_user->isPaid() : false;
+
 $headless = false;
 if (GetSetting('headless')) {
     $headless = true;
@@ -20,12 +23,12 @@ if (isset($req_url)) {
     $url = htmlspecialchars($req_url);
 }
 $placeholder = 'Enter a Website URL';
-$profile_file = __DIR__ . '/settings/profiles_webvitals.ini';
-if (file_exists(__DIR__ . '/settings/common/profiles_webvitals.ini')) {
-    $profile_file = __DIR__ . '/settings/common/profiles_webvitals.ini';
+$profile_file = SETTINGS_PATH . '/profiles_webvitals.ini';
+if (file_exists(SETTINGS_PATH . '/common/profiles_webvitals.ini')) {
+    $profile_file = SETTINGS_PATH . '/common/profiles_webvitals.ini';
 }
-if (file_exists(__DIR__ . '/settings/server/profiles_webvitals.ini')) {
-    $profile_file = __DIR__ . '/settings/server/profiles_webvitals.ini';
+if (file_exists(SETTINGS_PATH . '/server/profiles_webvitals.ini')) {
+    $profile_file = SETTINGS_PATH . '/server/profiles_webvitals.ini';
 }
 $profiles = parse_ini_file($profile_file, true);
 ?>
@@ -110,6 +113,11 @@ $profiles = parse_ini_file($profile_file, true);
                                   </select>
                               </div>
                               <div class="fieldrow" id="description"></div>
+                              <?php if ($is_paid) : ?>
+                                  <div class="fieldrow">
+                                      <label class="full" for="private"><input type="checkbox" name="private" id="private" class="checkbox"> Make Test Private <small>Private tests are only visible to your account</small></label>
+                                  </div>
+                              <?php endif; ?>
                             </div>
                             <div>
                               <input type="submit" name="submit" value="Start Test &#8594;" class="start_test">

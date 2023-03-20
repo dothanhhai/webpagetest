@@ -5,13 +5,15 @@
 // found in the LICENSE.md file.
 require_once(__DIR__ . '/../vendor/autoload.php');
 
+use WebPageTest\Util\CustomMetricFiles;
+
 // see if we are loading the test settings from a profile
-$profile_file = __DIR__ . '/settings/profiles.ini';
-if (file_exists(__DIR__ . '/settings/common/profiles.ini')) {
-    $profile_file = __DIR__ . '/settings/common/profiles.ini';
+$profile_file = SETTINGS_PATH . '/profiles.ini';
+if (file_exists(SETTINGS_PATH . '/common/profiles.ini')) {
+    $profile_file = SETTINGS_PATH . '/common/profiles.ini';
 }
-if (file_exists(__DIR__ . '/settings/server/profiles.ini')) {
-    $profile_file = __DIR__ . '/settings/server/profiles.ini';
+if (file_exists(SETTINGS_PATH . '/server/profiles.ini')) {
+    $profile_file = SETTINGS_PATH . '/server/profiles.ini';
 }
 // Note: here we're looking for a simpleadvanced flag to be marked as simple before using this profile, or if it's not there at all.
 if (isset($_REQUEST['profile']) && (!isset($_REQUEST['simpleadvanced']) || $_REQUEST['simpleadvanced'] === 'simple') && is_file($profile_file)) {
@@ -25,12 +27,12 @@ if (isset($_REQUEST['profile']) && (!isset($_REQUEST['simpleadvanced']) || $_REQ
         }
     }
 }
-$wvprofile_file = __DIR__ . '/settings/profiles_webvitals.ini';
-if (file_exists(__DIR__ . '/settings/common/profiles_webvitals.ini')) {
-    $wvprofile_file = __DIR__ . '/settings/common/profiles_webvitals.ini';
+$wvprofile_file = SETTINGS_PATH . '/profiles_webvitals.ini';
+if (file_exists(SETTINGS_PATH . '/common/profiles_webvitals.ini')) {
+    $wvprofile_file = SETTINGS_PATH . '/common/profiles_webvitals.ini';
 }
-if (file_exists(__DIR__ . '/settings/server/profiles_webvitals.ini')) {
-    $wvprofile_file = __DIR__ . '/settings/server/profiles_webvitals.ini';
+if (file_exists(SETTINGS_PATH . '/server/profiles_webvitals.ini')) {
+    $wvprofile_file = SETTINGS_PATH . '/server/profiles_webvitals.ini';
 }
 if (isset($_REQUEST['webvital_profile']) && is_file($wvprofile_file)) {
     $profiles = parse_ini_file($wvprofile_file, true);
@@ -49,10 +51,10 @@ use WebPageTest\Util;
 use WebPageTest\Util\Cache;
 use WebPageTest\Template;
 use WebPageTest\RateLimiter;
-use WebPageTest\Util\IniReader;
+use WebPageTest\Util\SettingsFileReader;
 
-require_once('./ec2/ec2.inc.php');
-require_once(__DIR__ . '/include/CrUX.php');
+require_once(INCLUDES_PATH . '/ec2/ec2.inc.php');
+require_once(INCLUDES_PATH . '/include/CrUX.php');
 
 $experimentURL = Util::getSetting('experimentURL', null);
 $ui_priority = !is_null($request_context->getUser()) ? $request_context->getUser()->getUserPriority() : 0;
@@ -73,13 +75,15 @@ $includePaid = $isPaid || $admin;
 // load the secret key (if there is one)
 $server_secret = Util::getServerSecret();
 $api_keys = null;
-if (isset($_REQUEST['k']) && strlen($_REQUEST['k'])) {
-    $keys_file = __DIR__ . '/settings/keys.ini';
-    if (file_exists(__DIR__ . '/settings/common/keys.ini')) {
-        $keys_file = __DIR__ . '/settings/common/keys.ini';
+$user_api_key = $request_context->getApiKeyInUse();
+
+if (!empty($user_api_key)) {
+    $keys_file = SETTINGS_PATH . '/keys.ini';
+    if (file_exists(SETTINGS_PATH . '/common/keys.ini')) {
+        $keys_file = SETTINGS_PATH . '/common/keys.ini';
     }
-    if (file_exists(__DIR__ . '/settings/server/keys.ini')) {
-        $keys_file = __DIR__ . '/settings/server/keys.ini';
+    if (file_exists(SETTINGS_PATH . '/server/keys.ini')) {
+        $keys_file = SETTINGS_PATH . '/server/keys.ini';
     }
     $api_keys = parse_ini_file($keys_file, true);
 }
@@ -100,7 +104,7 @@ $is_bulk_test = false;
 // Load the location information
 $locations = LoadLocationsIni();
 // See if we need to load a subset of the locations
-if (!$privateInstall && isset($_REQUEST['k']) && $_REQUEST['k'] != GetServerKey() && isset($api_keys) && !isset($api_keys[$_REQUEST['k']])) {
+if (!$privateInstall && !empty($user_api_key) && $user_api_key != GetServerKey() && isset($api_keys) && !isset($api_keys[$user_api_key])) {
     foreach ($locations as $name => $location) {
         if (isset($location['browser']) && isset($location['noapi'])) {
             unset($locations[$name]);
@@ -210,7 +214,15 @@ if (!isset($test)) {
      * True private tests are a paid feature (we formerly said we had
      * private tests, but they weren't actually private
      */
-    $is_private = ($isPaid && ($_POST['private'] == 'on')) ? 1 : 0;
+    $is_private = 0;
+
+    $is_private_api_call = !empty($user_api_key) && !empty($req_private) &&
+      ((int)$req_private == 1 || $req_private == 'true');
+    $is_private_web_call = $isPaid && ($_POST['private'] == 'on');
+
+    if ($is_private_api_call || $is_private_web_call) {
+        $is_private = 1;
+    }
     $test['private'] = $is_private;
 
     if (isset($req_web10)) {
@@ -291,7 +303,7 @@ if (!isset($test)) {
         $test['lighthouse'] = $req_lighthouse;
     }
     $test['lighthouseTrace'] = isset($_REQUEST['lighthouseTrace']) && $_REQUEST['lighthouseTrace'] ? 1 : 0;
-    $test['lighthouseScreenshots'] = isset($_REQUEST['lighthouseScreenshots']) && $_REQUEST['lighthouseScreenshots'] ? 1 : 0;
+    $test['lighthouseScreenshots'] = isset($_REQUEST['lighthouseScreenshots']) && $_REQUEST['lighthouseScreenshots'] === "0" ? 0 : 1;
     $test['lighthouseThrottle'] = isset($_REQUEST['lighthouseThrottle']) && $_REQUEST['lighthouseThrottle'] ? 1 : GetSetting('lighthouseThrottle', 0);
     if (isset($_REQUEST['lighthouseConfig']) && strlen($_REQUEST['lighthouseConfig'])) {
         $test['lighthouseConfig'] = $_REQUEST['lighthouseConfig'];
@@ -506,7 +518,7 @@ if (!isset($test)) {
     }
 
     if (isset($_REQUEST['extensions']) && is_string($_REQUEST['extensions']) && strlen($_REQUEST['extensions']) == 32) {
-        $extensions = IniReader::getExtensions();
+        $extensions = SettingsFileReader::getExtensions();
         $requested = $_REQUEST['extensions'];
         if (array_key_exists($requested, $extensions)) {
             $test['extensions'] = $_REQUEST['extensions'];
@@ -525,9 +537,9 @@ if (!isset($test)) {
     }
 
     // see if we need to process a template for these requests
-    if (isset($req_k) && strlen($req_k) && isset($api_keys)) {
-        if (count($api_keys) && array_key_exists($req_k, $api_keys) && array_key_exists('template', $api_keys[$req_k])) {
-            $template = $api_keys[$req_k]['template'];
+    if (!empty($user_api_key) && isset($api_keys)) {
+        if (count($api_keys) && array_key_exists($user_api_key, $api_keys) && array_key_exists('template', $api_keys[$user_api_key])) {
+            $template = $api_keys[$user_api_key]['template'];
             if (is_file("./settings/common/templates/$template.php")) {
                 include("./settings/common/templates/$template.php");
             }
@@ -662,31 +674,9 @@ if (!isset($test)) {
         $test['block'] .= ' adsWrapper.js adsWrapperAT.js adsonar.js sponsored_links1.js switcher.dmn.aol.com';
     }
 
-    // see if there are any custom metrics to extract
-    if (is_dir('./settings/custom_metrics')) {
-        $files = glob('./settings/custom_metrics/*.js');
-        if ($files !== false && is_array($files) && count($files)) {
-            $test['customMetrics'] = array();
-            foreach ($files as $file) {
-                $name = basename($file, '.js');
-                $code = file_get_contents($file);
-                $test['customMetrics'][$name] = $code;
-            }
-        }
-    }
-    if (is_dir('./settings/common/custom_metrics')) {
-        $files = glob('./settings/common/custom_metrics/*.js');
-        if ($files !== false && is_array($files) && count($files)) {
-            if (!isset($test['customMetrics'])) {
-                $test['customMetrics'] = array();
-            }
-            foreach ($files as $file) {
-                $name = basename($file, '.js');
-                $code = file_get_contents($file);
-                $test['customMetrics'][$name] = $code;
-            }
-        }
-    }
+    $conditionalMetrics = $test['bodies'] ? ['generated-html'] : [];
+    $test['customMetrics'] = CustomMetricFiles::get($conditionalMetrics);
+
     if (array_key_exists('custom', $_REQUEST)) {
         $metric = null;
         $code = '';
@@ -812,8 +802,22 @@ if ($headless) {
 if (isset($req_vo)) {
     $test['owner'] = $req_vo;
 }
-if (isset($req_k)) {
-    $test['key'] = $req_k;
+if (!empty($user_api_key)) {
+    $test['key'] = $user_api_key;
+    $test['owner'] = $request_context->getUser()->getOwnerId();
+}
+
+$creator_id = 0;
+$user_id = 0;
+if (!is_null($request_context->getUser())) {
+    $creator_id = $request_context->getUser()->getContactId() ?? 0;
+    $user_id = $request_context->getUser()->getUserId() ?? 0;
+}
+if ($creator_id != 0) {
+    $test["creator"] = $creator_id;
+}
+if ($user_id != 0) {
+    $test["user_id"] = $user_id;
 }
 
 if (isset($user) && !array_key_exists('user', $test)) {
@@ -824,7 +828,7 @@ if (isset($uid) && !array_key_exists('uid', $test)) {
     $test['uid'] = $uid;
 }
 
-// create an owner string (for API calls, this should already be set as a cookie for normal visitors)
+// create an owner string (if one is not yet set for some reason. API users and form users should've already been set)
 if (!isset($test['owner']) || !strlen($test['owner']) || !preg_match("/^[\w @\.]+$/", $test['owner'])) {
     $test['owner'] = sha1(uniqid(uniqid('', true), true));
 }
@@ -975,7 +979,6 @@ if (!strlen($error) && CheckIp($test) && CheckUrl($test['url']) && CheckRateLimi
                     ) {
                         $error = "Attempt to use unauthorized experiments feature.";
                     } else {
-                        $recipeScript .= $recipeSansId;
                         $experimentSpof = array();
                         $experimentBlock = array();
                         $experimentOverrideHost = array();
@@ -997,8 +1000,10 @@ if (!strlen($error) && CheckIp($test) && CheckUrl($test['url']) && CheckRateLimi
                                 if ($recipeSansId === "setinitialurl") {
                                     $experimentRunURL = $ingredients;
                                 }
-                                if ($recipeSansId === "swap") {
-                                    $experimentSwap = $ingredients;
+                                if ($recipeSansId === "findreplace") {
+                                    // findreplace is used in the form to submit the pieces for a swap experiment.
+                                    // we don't need that term from here. we'll build the swap.
+                                    $recipeSansId = "swap";
                                     if ($ingredients[0]) {
                                         $ingredients[0] = rawurlencode($ingredients[0]);
                                     }
@@ -1012,6 +1017,10 @@ if (!strlen($error) && CheckIp($test) && CheckUrl($test['url']) && CheckRateLimi
                                 }
                                 $ingredients = implode(",", $ingredients);
                             }
+                            if ($recipeSansId === "editresponsehtml") {
+                                // striking out the ingredients here because it's too much to send in a cookie
+                                $ingredients = "";
+                            }
                             // these recipes need encoded values. they all do afterwards! TODO
                             if (
                                 $recipeSansId === "insertheadstart"
@@ -1020,7 +1029,7 @@ if (!strlen($error) && CheckIp($test) && CheckUrl($test['url']) && CheckRateLimi
                             ) {
                                 $ingredients = rawurlencode($ingredients);
                             }
-                            $recipeScript .= ":=" . $ingredients;
+                            $recipeScript .= "$recipeSansId:=" . $ingredients;
                         }
                         $recipeScript .= ";";
                     }
@@ -1100,7 +1109,7 @@ if (!strlen($error) && CheckIp($test) && CheckUrl($test['url']) && CheckRateLimi
 
 
                         //replace last step with last step plus recipes
-                        $test['script'] = str_replace($scriptNavigate, "setCookie\t" . $originToUse . "\twpt-experiments=" . urlencode($recipeScript) . "\r\n" . $scriptNavigate, $test['script']);
+                        $test['script'] = str_replace($scriptNavigate, "setCookie\t" . $originToUse . "\twpt-experiments=" . urlencode($recipeScript) . "\r\n" . "setCookie\t" . $originToUse . "\twpt-testid=" . urlencode($id) . "\r\n" . $scriptNavigate, $test['script']);
 
 
                         $id = CreateTest($test, $test['url']);
@@ -1581,12 +1590,12 @@ function ValidateKey(&$test, &$error, $key = null)
                 return;
             }
 
-            $keys_file = __DIR__ . '/settings/keys.ini';
-            if (file_exists(__DIR__ . '/settings/common/keys.ini')) {
-                $keys_file = __DIR__ . '/settings/common/keys.ini';
+            $keys_file = SETTINGS_PATH . '/keys.ini';
+            if (file_exists(SETTINGS_PATH . '/common/keys.ini')) {
+                $keys_file = SETTINGS_PATH . '/common/keys.ini';
             }
-            if (file_exists(__DIR__ . '/settings/server/keys.ini')) {
-                $keys_file = __DIR__ . '/settings/server/keys.ini';
+            if (file_exists(SETTINGS_PATH . '/server/keys.ini')) {
+                $keys_file = SETTINGS_PATH . '/server/keys.ini';
             }
             $keys = parse_ini_file($keys_file, true);
 
@@ -2338,7 +2347,10 @@ function LogTest(&$test, $testId, $url)
         server_sync($apiKey, $runcount, null);
         return;
     }
-    $runcount = Util::getRunCount($test['runs'], $test['fvonly'], $test['lighthouse'], $test['type']);
+
+    $host = parse_url($url, PHP_URL_HOST);
+    $exempt_host = parse_url(Util::getExemptHost(), PHP_URL_HOST);
+    $runcount = ($host == $exempt_host) ? 0 : Util::getRunCount($test['runs'], $test['fvonly'], $test['lighthouse'], $test['type']);
 
     if (!is_dir('./logs')) {
         mkdir('./logs', 0777, true);
@@ -2511,14 +2523,8 @@ function CheckIp(&$test)
         $date = gmdate("Ymd");
         $ip2 = @$test['ip'];
         $ip = $_SERVER['REMOTE_ADDR'];
-        if (file_exists('./settings/server/blockip.txt')) {
-            $blockIps = file('./settings/server/blockip.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        } elseif (file_exists('./settings/common/blockip.txt')) {
-            $blockIps = file('./settings/common/blockip.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        } else {
-            $blockIps = file('./settings/blockip.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        }
-        if (isset($blockIps) && is_array($blockIps) && count($blockIps)) {
+        $blockIps = SettingsFileReader::plain('blockip.txt');
+        if (is_array($blockIps) && count($blockIps)) {
             foreach ($blockIps as $block) {
                 $block = trim($block);
                 if (strlen($block)) {
@@ -2560,20 +2566,8 @@ function CheckUrl($url)
         $url = 'https://' . $url;
     }
     if ($forceValidate || (!$usingAPI && !$admin)) {
-        if (file_exists('./settings/server/blockurl.txt')) {
-            $blockUrls = file('./settings/server/blockurl.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        } elseif (file_exists('./settings/common/blockurl.txt')) {
-            $blockUrls = file('./settings/common/blockurl.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        } else {
-            $blockUrls = file('./settings/blockurl.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        }
-        if (file_exists('./settings/server/blockdomains.txt')) {
-            $blockHosts = file('./settings/server/blockdomains.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        } elseif (file_exists('./settings/common/blockdomains.txt')) {
-            $blockHosts = file('./settings/common/blockdomains.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        } else {
-            $blockHosts = file('./settings/blockdomains.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        }
+        $blockUrls = SettingsFileReader::plain('blockurl.txt');
+        $blockHosts = SettingsFileReader::plain('blockdomains.txt');
         if (
             $blockUrls !== false && count($blockUrls) ||
             $blockHosts !== false && count($blockHosts)
@@ -2716,6 +2710,12 @@ function CreateTest(&$test, $url, $batch = 0, $batch_locations = 0)
         }
         if (isset($test['owner']) && strlen($test['owner'])) {
             AddIniLine($testInfo, "owner", $test['owner']);
+        }
+        if (!empty($test["creator"])) {
+            AddIniLine($testInfo, "creator", $test["creator"]);
+        }
+        if (!empty($test["user_id"])) {
+            AddIniLine($testInfo, "user_id", $test["user_id"]);
         }
         if (isset($test['type']) && strlen($test['type'])) {
             AddIniLine($testInfo, "type", $test['type']);
@@ -3384,7 +3384,7 @@ function ValidateCommandLine($cmd, &$error)
         $flags = explode(' ', $cmd);
         if ($flags && is_array($flags) && count($flags)) {
             foreach ($flags as $flag) {
-                if (strlen($flag) && !preg_match('/^--(([a-zA-Z0-9\-\.\+=,_< "]+)|((data-reduction-proxy-http-proxies|data-reduction-proxy-config-url|proxy-server|proxy-pac-url|force-fieldtrials|force-fieldtrial-params|trusted-spdy-proxy|origin-to-force-quic-on|oauth2-refresh-token|unsafely-treat-insecure-origin-as-secure|user-data-dir|ignore-certificate-errors-spki-list)=[a-zA-Z0-9\-\.\+=,_:\/"%]+))$/', $flag)) {
+                if (strlen($flag) && !preg_match('/^--(([a-zA-Z0-9\-\.\+=,_< "]+)|((data-reduction-proxy-http-proxies|data-reduction-proxy-config-url|proxy-server|proxy-pac-url|force-fieldtrials|force-fieldtrial-params|trusted-spdy-proxy|origin-to-force-quic-on|oauth2-refresh-token|unsafely-treat-insecure-origin-as-secure|user-data-dir|ignore-certificate-errors-spki-list|enable-features)=[a-zA-Z0-9\-\.\+=,_:\/"%]+))$/', $flag)) {
                     $error = 'Invalid command-line option: "' . htmlspecialchars($flag) . '"';
                 }
             }
@@ -3490,7 +3490,7 @@ function loggedOutLoginForm()
     $ret = <<<HTML
 <ul class="testerror_login">
     <li><a href="/login">Login</a></li>
-    <li><a class='pill' href='/signup'>Sign-up</a></li>
+    <li><a class="pill" href="/signup">Sign-up</a></li>
 </ul>
 HTML;
 

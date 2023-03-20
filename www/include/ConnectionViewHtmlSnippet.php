@@ -4,7 +4,7 @@
 // Use of this source code is governed by the Polyform Shield 1.0.0 license that can be
 // found in the LICENSE.md file.
 
-require_once __DIR__ . '/../waterfall.inc';
+require_once INCLUDES_PATH . '/waterfall.inc';
 
 class ConnectionViewHtmlSnippet
 {
@@ -12,6 +12,8 @@ class ConnectionViewHtmlSnippet
     private $stepResult;
     private $requests;
     private $mapName;
+    private $imageId;
+
 
   /**
    * ConnectionViewHtmlSnippet constructor.
@@ -57,7 +59,8 @@ class ConnectionViewHtmlSnippet
             'show_labels' => true,
             'width' => 930
             );
-            $map = GetWaterfallMap($connection_rows, $this->stepResult->readableIdentifier(), $options, $this->stepResult->getRawResults());
+            $page_data = $this->stepResult->getRawResults();
+            $map = GetWaterfallMap($connection_rows, $this->stepResult->readableIdentifier(), $options, $page_data);
             $stepNumber = $this->stepResult->getStepNumber();
             foreach ($map as $entry) {
                 if (array_key_exists('request', $entry)) {

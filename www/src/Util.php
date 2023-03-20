@@ -10,13 +10,16 @@ class Util
 {
     private static array $SETTINGS = [];
     private const SETTINGS_KEY = 'settings';
-    private static string $settings_dir = __DIR__ . '/../settings';
+    private static string $settings_dir = SETTINGS_PATH;
 
     public function __construct()
     {
         throw new \Exception("Util should not be instantiated. It only has static methods.");
     }
 
+    /**
+     * @param false|null|string $default
+     */
     public static function getSetting(string $setting, $default = false, string $override_settings_file = "")
     {
         if (empty(self::$SETTINGS)) {
@@ -38,7 +41,7 @@ class Util
     public static function getCookieName(string $name): string
     {
         $salt = self::getServerSecret();
-        $hash = hash('sha1', $name);
+        $hash = hash('sha1', $name . self::getSetting('cookie_secret', 'x'));
         return hash('sha256', $hash . $salt);
     }
 
@@ -741,18 +744,15 @@ class Util
         $runcount = max(1, $runs);
         $multiplier = $fvonly ? 1 : 2;
         $total_runs = $runcount * $multiplier;
-        if (!$testtype == 'lighthouse' && $lighthouse == 1) {
-            $total_runs++;
-        }
         return $total_runs;
     }
 
     /**
      * This is used to determine which hosts don't get counted in test runs
      */
-    public static function getExemptHost(): string
+    public static function getExemptHost(?string $default = ""): string
     {
-        return 'webpagetest.org';
+        return self::getSetting('exempt_from_test_run_count_host', $default);
     }
 
     /**
@@ -760,21 +760,9 @@ class Util
      */
     public static function getCountryJsonBlob(): string
     {
-        $file = file_get_contents(__DIR__ . '/../assets/js/country-list/country-list.json');
+        $file = file_get_contents(ASSETS_PATH . '/js/country-list/country-list.json');
 
         return $file;
-    }
-    /**
-     * gets a plan by it's id if you pass it an array of plans
-     */
-    public static function getPlanFromArray($id, $plans): Plan
-    {
-        foreach ($plans as $plan) {
-            $planId = $plan->getId();
-            if (strtolower($planId) == strtolower($id)) {
-                return $plan;
-            }
-        }
     }
     /**
      * Set a message in session storage to be accessed in the UI
@@ -791,7 +779,9 @@ class Util
      */
     public static function setBannerMessage(string $message_type, array $message): void
     {
-        $_SESSION['messages'][$message_type][] = $message;
+        if (self::getSetting('php_sessions')) {
+            $_SESSION['messages'][$message_type][] = $message;
+        }
     }
 
     /**
@@ -800,19 +790,12 @@ class Util
      */
     public static function getBannerMessage(): array
     {
+        if (!self::getSetting('php_sessions')) {
+            return [];
+        }
+
         $messages_array = isset($_SESSION['messages']) ? $_SESSION['messages'] : [];
         unset($_SESSION['messages']);
         return $messages_array;
-    }
-
-    public static function getAnnualPlanByRuns(int $runs, $annualPlans): Plan
-    {
-        foreach ($annualPlans as $plan) {
-            $planRuns = $plan->getRuns();
-            if ($planRuns == $runs) {
-                return $plan;
-                exit();
-            }
-        }
     }
 }

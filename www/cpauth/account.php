@@ -37,7 +37,7 @@ if ($request_method !== 'POST' && $request_method !== 'GET') {
 }
 
 if ($request_method === 'POST') {
-    $type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
+    $type = filter_input(INPUT_POST, 'type', FILTER_UNSAFE_RAW);
 
     if ($type == 'contact-info') {
         $body = AccountHandler::validateChangeContactInfo($_POST);
@@ -52,9 +52,8 @@ if ($request_method === 'POST') {
         exit();
     } elseif ($type == "account-signup") {
         $body = AccountHandler::validateSubscribeToAccount($_POST);
-        $redirect_uri = AccountHandler::subscribeToAccount($request_context, $body);
-
-        header("Location: {$redirect_uri}");
+        $response = AccountHandler::subscribeToAccount($request_context, $body);
+        $response->send();
         exit();
     } elseif ($type == "account-signup-preview") {
         $response_body = "{}";
@@ -71,13 +70,26 @@ if ($request_method === 'POST') {
         header('Content-type: application/json');
         echo $response_body;
         exit();
+    } elseif ($type == "canceled-account-signup") {
+        $body = AccountHandler::validateCanceledAccountSignup($_POST);
+        $response = AccountHandler::canceledAccountSignup($request_context, $body);
+        $response->send();
+        exit();
     } elseif ($type == "cancel-subscription") {
         $redirect_uri = AccountHandler::cancelSubscription($request_context);
         header("Location: {$redirect_uri}");
         exit();
-    } elseif ($type == "update-payment-method") {
-        throw new ClientException('There was an error.', '/account');
-        // AccountHandler::updatePaymentMethod($request_context);
+    } elseif ($type == 'update-payment-method-confirm-billing') {
+        $body = AccountHandler::validateUpdatePaymentMethodConfirmBilling($_POST);
+        $contents = AccountHandler::updatePaymentMethodConfirmBilling($request_context, $body);
+        echo $contents;
+        exit();
+    } elseif ($type == 'update-payment-method') {
+        $body = AccountHandler::validateUpdatePaymentMethod($_POST);
+        $redirect_uri = AccountHandler::updatePaymentMethod($request_context, $body);
+
+        header("Location: {$redirect_uri}");
+        exit();
     } elseif ($type == "create-api-key") {
         $body = AccountHandler::validateCreateApiKey($_POST);
         $redirect_uri = AccountHandler::createApiKey($request_context, $body);
@@ -90,15 +102,15 @@ if ($request_method === 'POST') {
         exit();
     } elseif ($type == "upgrade-plan-1") {
         $body = AccountHandler::validatePlanUpgrade($_POST);
-        $redirect_uri = AccountHandler::postPlanUpgrade($request_context, $body);
+        $response = AccountHandler::postPlanUpgrade($request_context, $body);
 
-        header("Location: {$redirect_uri}");
+        $response->send();
         exit();
     } elseif ($type == "upgrade-plan-2") {
         $body = AccountHandler::validatePostUpdatePlanSummary($_POST);
-        $redirect_uri = AccountHandler::postUpdatePlanSummary($request_context, $body);
+        $response = AccountHandler::postUpdatePlanSummary($request_context, $body);
 
-        header("Location: {$redirect_uri}");
+        $response->send();
         exit();
     } elseif ($type == "resend-verification-email") {
         try {
@@ -130,7 +142,8 @@ if ($request_method === 'POST') {
     exit();
 }
 
-$page = (string) filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING);
-$contents = AccountHandler::getAccountPage($request_context, $page);
-echo $contents;
+$page = (string) filter_input(INPUT_GET, 'page', FILTER_UNSAFE_RAW);
+$response = AccountHandler::getAccountPage($request_context, $page);
+$response->send();
+
 exit();

@@ -5,14 +5,14 @@
 // found in the LICENSE.md file.
 require_once __DIR__ . '/common.inc';
 
-require_once __DIR__ . '/optimization_detail.inc.php';
-require_once __DIR__ . '/breakdown.inc';
-require_once __DIR__ . '/testStatus.inc';
-require_once __DIR__ . '/common.inc';
-require_once __DIR__ . '/include/TestInfo.php';
-require_once __DIR__ . '/include/TestResults.php';
-require_once __DIR__ . '/include/RunResultHtmlTable.php';
-require_once __DIR__ . '/include/TestResultsHtmlTables.php';
+require_once INCLUDES_PATH . '/optimization_detail.inc.php';
+require_once INCLUDES_PATH . '/breakdown.inc';
+require_once INCLUDES_PATH . '/testStatus.inc';
+require_once INCLUDES_PATH . '/common.inc';
+require_once INCLUDES_PATH . '/include/TestInfo.php';
+require_once INCLUDES_PATH . '/include/TestResults.php';
+require_once INCLUDES_PATH . '/include/RunResultHtmlTable.php';
+require_once INCLUDES_PATH . '/include/TestResultsHtmlTables.php';
 
 $breakdown = array();
 $testComplete = true;
@@ -124,19 +124,21 @@ $page_description = "Website performance test result$testLabel.";
 <?php
 /*                
                 <div class="summary_opps">
-                <p>Opportunities &amp; Experiments <em class="flag">New</em>
-            <?php
-            if ($tabs && $tabs['Opportunities & Experiments']) {
-                echo '<a href="' . $tabs['Opportunities & Experiments'] . '">Explore All</a>';
-            }
-            ?>
 
-                </p>
 
                 <?php
-                include __DIR__ . '/experiments/common.inc';
-                include __DIR__ . '/experiments/summary.inc';
+                include INCLUDES_PATH . '/experiments/common.inc';
+                include INCLUDES_PATH . '/experiments/summary.inc';
+
                 ?>
+                <?php if (!isset($experiments_paid) || !$experiments_paid) { ?>
+                <p><span class="opportunities_summary_exps">You have Free Experiments Available!
+                    <?php
+                    if ($tabs && $tabs['Opportunities & Experiments']) {
+                        echo '<a href="' . $tabs['Opportunities & Experiments'] . '">Try them now!</a>';
+                    }
+                    ?></span></p>
+                <?php } ?>
                 </div>
 <?php
 */
@@ -160,7 +162,7 @@ $page_description = "Website performance test result$testLabel.";
                 $rvRunResults = $rvMedian ? $testResults->getRunResult($rvMedian, true) : null;
 
                 if ($fvMedian) {
-                      echo '<h3 class="hed_sub">Observed Metrics ';
+                      echo '<h3 class="hed_sub">Page Performance Metrics ';
                       $medianMetrics = array(
                         "chromeUserTiming.CumulativeLayoutShift" => "Cumulative Layout Shift",
                         "firstContentfulPaint" => "First Contentful Paint",
@@ -195,19 +197,20 @@ $page_description = "Website performance test result$testLabel.";
                         echo '</h3>';
 
                         echo '<details class="metrics_shown">
-                          <summary><strong>Note:</strong> Metrics offered will vary</summary>
-                          <p><strong>Please note:</strong> Supported metrics will vary based on the browser being tested. Also, the way a site performs in some conditions may not predict how well it will perform in others, so we encourage testing in a variety of browsers, devices, & locations.</p>
+                          <summary><strong>Note:</strong> Metric availability will vary</summary>
+                          <p><strong>Please note:</strong> Availability of metrics will vary based on the browser being tested. Also, the way a site performs in some conditions may not predict how well it will perform in others, so we encourage testing in a variety of browsers, devices, & locations.</p>
                           </details>';
 
-                      $resultTable = new RunResultHtmlTable($testInfo, $fvRunResults, $rvRunResults);
+                      $resultTable = new RunResultHtmlTable($testInfo, $fvRunResults, $rvRunResults, false, true);
                       $resultTable->useLabelLinks(true);
                       $resultTable->disableColumns(array(
-                      RunResultHtmlTable::COL_VISUAL_COMPLETE,
-                      RunResultHtmlTable::COL_COST,
-                      RunResultHtmlTable::COL_FULLYLOADED,
-                      RunResultHtmlTable::COL_REQUESTS,
-                      RunResultHtmlTable::COL_RESULT
+                        RunResultHtmlTable::COL_VISUAL_COMPLETE,
+                        RunResultHtmlTable::COL_COST,
+                        RunResultHtmlTable::COL_FULLYLOADED,
+                        RunResultHtmlTable::COL_REQUESTS,
+                        RunResultHtmlTable::COL_RESULT,
                       ));
+                      $resultTable->disableCustomMetrics();
                     if (GetSetting('show_cost')) {
                         //$resultTable->enableColumns(array(RunResultHtmlTable::COL_COST));
                     }
@@ -273,8 +276,8 @@ $page_description = "Website performance test result$testLabel.";
             <?php
             if (isset($fvRunResults)) {
                 echo '<div class="cruxembed">';
-                require_once(__DIR__ . '/include/CrUX.php');
-                InsertCruxHTML($fvRunResults, $rvRunResults, '');
+                require_once(INCLUDES_PATH . '/include/CrUX.php');
+                InsertCruxHTML($fvRunResults, '');
                 echo '</div>';
             }
             ?>
@@ -294,7 +297,7 @@ $page_description = "Website performance test result$testLabel.";
             ?>
             </div>
             </div>
-  <?php include(__DIR__ . '/cta-banner.inc'); ?>
+  <?php include(INCLUDES_PATH . '/cta-banner.inc'); ?>
               </div>
 
             <?php include('footer.inc'); ?>

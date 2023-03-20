@@ -15,7 +15,6 @@ require_once INCLUDES_PATH . '/include/TestInfo.php';
 require_once INCLUDES_PATH . '/include/TestResults.php';
 require_once INCLUDES_PATH . '/include/TestRunResults.php';
 require_once INCLUDES_PATH . '/include/RunResultHtmlTable.php';
-require_once INCLUDES_PATH . '/include/UserTimingHtmlTable.php';
 require_once INCLUDES_PATH . '/include/WaterfallViewHtmlSnippet.php';
 require_once INCLUDES_PATH . '/include/ConnectionViewHtmlSnippet.php';
 require_once INCLUDES_PATH . '/include/RequestDetailsHtmlSnippet.php';
@@ -92,7 +91,7 @@ function createForm($formName, $btnText, $id, $owner, $secret)
             <div id="result" class="results_body">
 
                 <?php
-                echo '<h3 class="hed_sub">Observed Metrics <em>(Run number ' . $run . ($cached ? ', Repeat View' : '') . ')</em></h3>';
+                echo '<h3 class="hed_sub">Page Performance Metrics <em>(Run ' . $run . ($cached ? ', Repeat View' : '') . ')</em></h3>';
 
                 $hasRepeats = GetMedianRun($pageData, 1, $median_metric);
                 if ($testResults->countRuns() > 1 || $hasRepeats) {
@@ -114,7 +113,6 @@ function createForm($formName, $btnText, $id, $owner, $secret)
                         echo "<a href=\"$link\"" . ($run === $i && !$cached ? ' aria-current="page"' : '') . ">Run $i</a>";
                         if ($linkCACHED) {
                             echo " <a href=\"$linkCACHED\"" . ($run === $i && $cached ? ' aria-current="page"' : '') . ">(Repeat View)</a>";
-                            ;
                         }
 
                         if ($i + 1 < $runs) {
@@ -141,49 +139,20 @@ function createForm($formName, $btnText, $id, $owner, $secret)
                 echo $htmlTable->create(true);
                 ?>
                 <?php
-                $userTimingTable = new UserTimingHtmlTable($testRunResults);
-                echo $userTimingTable->create(true);
-
-
-                // Full custom metrics (formerly in custommetrics.php)
-
-                if (
-                    isset($pageData) &&
-                    is_array($pageData) &&
-                    array_key_exists($run, $pageData) &&
-                    is_array($pageData[$run]) &&
-                    array_key_exists($cached, $pageData[$run]) &&
-                    array_key_exists('custom', $pageData[$run][$cached]) &&
-                    is_array($pageData[$run][$cached]['custom']) &&
-                    count($pageData[$run][$cached]['custom'])
-                ) {
-                    echo '<details class="details_custommetrics"><summary>Custom Metrics Data</summary>';
-                    echo '<div class="scrollableTable"><table class="pretty details">';
-                    foreach ($pageData[$run][$cached]['custom'] as $metric) {
-                        if (array_key_exists($metric, $pageData[$run][$cached])) {
-                            echo '<tr><th>' . htmlspecialchars($metric) . '</th><td>';
-                            $val = $pageData[$run][$cached][$metric];
-                            if (!is_string($val) && !is_numeric($val)) {
-                                $val = json_encode($val);
-                            }
-                            echo htmlspecialchars($val);
-                            echo '</td></tr>';
-                        }
-                    }
-                    echo '</table></details>';
+                // Full custom metrics
+                $customPageData = @$pageData[$run][$cached]['custom'];
+                if (!empty($customPageData) && is_array($customPageData)) {
+                    echo view('partials.custommetrics', [
+                        'data' => $pageData[$run][$cached],
+                    ]);
                 }
 
-
-
-
-                if (isset($testRunResults)) {
+                if (isset($testRunResults) && !$cached) {
                     echo '<div class="cruxembed">';
                     require_once(INCLUDES_PATH . '/include/CrUX.php');
-                    if ($cached) {
-                        InsertCruxHTML(null, $testRunResults);
-                    } else {
-                        InsertCruxHTML($testRunResults, null);
-                    }
+
+                    InsertCruxHTML($testRunResults, null);
+
                     echo '</div>';
                 }
                 ?>
@@ -322,10 +291,23 @@ function createForm($formName, $btnText, $id, $owner, $secret)
         }
 
         function initDetailsTable(targetNode) {
+            $.tablesorter.addParser({
+                id: 'priorities',
+                is: () => false,
+                format: (s) => {
+                    return s.toLowerCase()
+                        .replace(/highest/, 4)
+                        .replace(/high/, 3)
+                        .replace(/medium/, 2)
+                        .replace(/low/, 1)
+                        .replace(/lowest/, 0);
+                },
+                type: 'numeric'
+            });
             $(targetNode).find(".tableDetails").tablesorter({
                 headers: {
                     3: {
-                        sorter: 'currency'
+                        sorter: 'priorities'
                     },
                     4: {
                         sorter: 'currency'
@@ -346,6 +328,9 @@ function createForm($formName, $btnText, $id, $owner, $secret)
                         sorter: 'currency'
                     },
                     10: {
+                        sorter: 'currency'
+                    },
+                    11: {
                         sorter: 'currency'
                     }
                 }
