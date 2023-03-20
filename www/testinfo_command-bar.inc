@@ -26,8 +26,8 @@ use WebPageTest\Util;
                         echo "<li><a href=\"/viewlog.php?test=$id&lighthouse=1\">View Lighthouse Log</a></li>";
                     }
                     if (is_file("$testPath/lighthouse.html.gz")) {
-                        echo "<li><a href=\"/lighthouse.php?test=$id&f=lh-viewer\">View Standard Lighthouse View</a></li>";
-                        echo "<li><a href=\"/lighthouse.php?test=$id&f=json\">View Lighthouse JSON</a></li>";
+                        echo "<li><a href=\"/lighthouse-new.php?test=$id&f=lh-viewer\">View Standard Lighthouse View</a></li>";
+                        echo "<li><a href=\"/lighthouse-new.php?test=$id&f=json\">View Lighthouse JSON</a></li>";
                     }
 
                       $publish = GetSetting('publishTo');

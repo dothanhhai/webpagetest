@@ -31,7 +31,7 @@ if (array_key_exists('f', $_REQUEST) && $_REQUEST['f'] == 'json') {
             if (isset($test['test']['type']) && @$test['test']['type'] == 'traceroute') {
                 include 'resultTraceroute.inc';
             } elseif (isset($test['test']['type']) && @$test['test']['type'] == 'lighthouse') {
-                include 'lighthouse.php';
+                include 'lighthouse-new.php';
             } else {
                 if (isset($_REQUEST['view']) && $_REQUEST['view'] == 'webvitals') {
                     include 'vitals.php';
