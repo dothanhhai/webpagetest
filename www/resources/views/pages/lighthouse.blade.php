@@ -139,7 +139,7 @@ if (navigator.clipboard) {
                                 </table>
                             </div>
 
-                            <div class="opps_note opps_note-links">
+                            <!-- <div class="opps_note opps_note-links">
                                 <p><strong>Aiming to improve?</strong>
                                     @if ($lh_only)
                                     <a href="/?url={{ $test_url }}">Run a full test</a> and then
@@ -152,7 +152,7 @@ if (navigator.clipboard) {
                                     @endif
                                     for suggestions and run No-Code Experiments to see how changes impact this site!
                                 </p>
-                            </div>
+                            </div> -->
 
                             @if (count($thumbnails))
                             <h4>Filmstrip</h4>
