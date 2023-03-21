@@ -66,16 +66,16 @@ function max10Items($array)
     foreach ($chunks as $key => $chunk) {
         $index = $key * 10;
         $max = 0;
-        $maxValue = ["$index" => 0];
+        $maxKey = $index;
         foreach ($chunk as $k => $v) {
             if ($max < $v) {
                 $ml = $index + $k;
                 $max = $v;
-                $maxValue = ["$ml" => $v];
+                $maxKey = $ml;
             }
         }
         if ($max > 0) {
-            $maxValues[] = $maxValue;
+            $maxValues["$maxKey"] =$max;
         }
     }
     return $maxValues;
