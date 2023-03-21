@@ -24,7 +24,7 @@
             echo "<li><a href='$privacy_policy'>Privacy Policy</a></li>";
         }
         ?>
-        <li>&copy; <a href="https://niteco.com/">Niteco.com.</a></li>
+        <li><a href="https://niteco.com/">Niteco.com</a></li>
         </ul>
     </footer>
     <?php
