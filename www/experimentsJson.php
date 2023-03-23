@@ -34,4 +34,5 @@ $requests = $testStepResult->getRequests();
 include INCLUDES_PATH . '/experiments/common.inc';
 
 header('Content-Type: application/json; charset=utf-8');
+unset($assessment['Custom']);
 echo json_encode($assessment);
