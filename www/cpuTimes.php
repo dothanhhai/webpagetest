@@ -34,7 +34,7 @@ $data = [
 
 // Load the long tasks list
 if (gz_is_file($localPaths->longTasksFile())) {
-    $long_tasks = json_decode(gz_file_get_contents($localPaths->longTasksFile()), true);
+    $long_tasks = json_decode(gz_file_get_contents($localPaths->interactiveFile()), true);;
     if (isset($long_tasks) && is_array($long_tasks)) {
         $data['longTasks']['data'] = $long_tasks;
     }
@@ -53,9 +53,11 @@ if ($cpu_slices['slices'][$cpu_slices['main_thread']]) {
 
     foreach ($mainThread as $key => $items) {
         foreach ($items as $k => $v) {
-            $timeBlock = floor($k / 10);
-            if ($v > 0 && (!isset($data['mainThread']['data']["$timeBlock"]) || $data['mainThread']['data']["$timeBlock"]['max'] < $v)) {
-                $data['mainThread']['data']["$timeBlock"] = [$key => $v, 'max' => $v];
+            if ($v > 0) {
+                $timeBlock = floor($k / 10);
+                if (!isset($data['mainThread']['data']["$timeBlock"]) || $data['mainThread']['data']["$timeBlock"]['max'] < $v) {
+                    $data['mainThread']['data']["$timeBlock"] = [$key => $v, 'max' => $v];
+                }
             }
         }
     }
