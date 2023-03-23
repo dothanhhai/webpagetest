@@ -51,7 +51,10 @@ if ($cpu_slices['slices'][$cpu_slices['main_thread']]) {
     $mainThread = $cpu_slices['slices'][$cpu_slices['main_thread']];
     $data['mainThread']['miliseconds'] = round($cpu_slices['total_usecs'] / 1000);
     foreach ($mainThread as $key => $items) {
-        $data['mainThread']['data'][$key] = max10Items($items);
+        $maxGroup10Items = maxGroup10Items($items);
+        if (!empty($maxGroup10Items)) {
+            $data['mainThread']['data'][$key] = $maxGroup10Items;
+        }
     }
 }
 
@@ -59,7 +62,7 @@ header('Content-Type: application/json; charset=utf-8');
 echo json_encode($data);
 
 
-function max10Items($array)
+function maxGroup10Items($array)
 {
     $chunks = array_chunk($array, 10);
     $maxValues = null;
@@ -75,7 +78,7 @@ function max10Items($array)
             }
         }
         if ($max > 0) {
-            $maxValues["$maxKey"] =$max;
+            $maxValues["$maxKey"] = $max;
         }
     }
     return $maxValues;
