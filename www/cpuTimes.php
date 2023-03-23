@@ -24,11 +24,11 @@ require_once(INCLUDES_PATH . '/draw.inc');
 $localPaths = new TestPaths($testPath, $run, $cached);
 
 $data = [
-    'utilization' => [],
-    'longTasks' => [],
+    'utilization' => null,
+    'longTasks' => null,
     'mainThread' => [
         "miliseconds" => 0,
-        "data" => []
+        "data" => null
     ]
 ];
 
@@ -62,7 +62,7 @@ echo json_encode($data);
 function max10Items($array)
 {
     $chunks = array_chunk($array, 10);
-    $maxValues = [];
+    $maxValues = null;
     foreach ($chunks as $key => $chunk) {
         $index = $key * 10;
         $max = 0;
