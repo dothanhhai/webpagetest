@@ -50,36 +50,20 @@ $cpu_slices = DevToolsGetCPUSlicesForStep($localPaths);
 if ($cpu_slices['slices'][$cpu_slices['main_thread']]) {
     $mainThread = $cpu_slices['slices'][$cpu_slices['main_thread']];
     $data['mainThread']['miliseconds'] = round($cpu_slices['total_usecs'] / 1000);
+
     foreach ($mainThread as $key => $items) {
-        $maxGroup10Items = maxGroup10Items($items);
-        if (!empty($maxGroup10Items)) {
-            $data['mainThread']['data'][$key] = $maxGroup10Items;
+        foreach ($items as $k => $v) {
+            $timeBlock = floor($k / 10);
+            if ($v > 0 && (!isset($data['mainThread']['data']["$timeBlock"]) || $data['mainThread']['data']["$timeBlock"]['max'] < $v)) {
+                $data['mainThread']['data']["$timeBlock"] = [$key => $v, 'max' => $v];
+            }
         }
     }
+}
+
+foreach ($data['mainThread']['data'] as $k => $v) {
+    unset($data['mainThread']['data'][$k]['max']);
 }
 
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode($data);
-
-
-function maxGroup10Items($array)
-{
-    $chunks = array_chunk($array, 10);
-    $maxValues = null;
-    foreach ($chunks as $key => $chunk) {
-        $index = $key * 10;
-        $max = 0;
-        $maxKey = $index;
-        foreach ($chunk as $k => $v) {
-            if ($max < $v) {
-                $ml = $index + $k;
-                $max = $v;
-                $maxKey = $ml;
-            }
-        }
-        if ($max > 0) {
-            $maxValues["$maxKey"] = $max;
-        }
-    }
-    return $maxValues;
-}
