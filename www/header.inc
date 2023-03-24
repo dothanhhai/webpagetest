@@ -422,7 +422,7 @@ if (!strcasecmp('Test Result', $tab) && (!isset($nosubheader) || !@$nosubheader)
 
             if (isset($firstRunResults) && $hasLH) {
                 $urlGeneratorFirstRun = UrlGenerator::create(false, "", $id, 1, false);
-                $lhURL = $urlGeneratorFirstRun->resultPage("lighthouse-new");
+                $lhURL = $urlGeneratorFirstRun->resultPage("lighthouse");
                 if (isset($lhURL)) {
                     $tabs['Lighthouse Report'] = $lhURL;
                 }
