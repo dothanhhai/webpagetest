@@ -69,7 +69,7 @@ if ($cpu_slices['slices'][$cpu_slices['main_thread']]) {
     }
     foreach ($data['mainThread']['data'] as $timeBlock => $items) {
         foreach ($items as $k => $v) {
-            $data['mainThread']['data'][$timeBlock][$k] = round($data['mainThread']['data'][$timeBlock][$k] / $reduceBlock);
+            $data['mainThread']['data'][$timeBlock][$k] = round($data['mainThread']['data'][$timeBlock][$k] / ($reduceBlock == 1 ? 10 : $reduceBlock));
         }
     }
 }
