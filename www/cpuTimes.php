@@ -50,11 +50,11 @@ $cpu_slices = DevToolsGetCPUSlicesForStep($localPaths);
 if ($cpu_slices['slices'][$cpu_slices['main_thread']]) {
     $mainThread = $cpu_slices['slices'][$cpu_slices['main_thread']];
     $data['mainThread']['miliseconds'] = round($cpu_slices['total_usecs'] / 1000);
-    $reduceBlock = $cpu_slices['slice_usecs']/10000;
+    $reduceBlock = 10000 / $cpu_slices['slice_usecs'];
     foreach ($mainThread as $key => $items) {
         foreach ($items as $k => $v) {
             if ($v > 0) {
-            $timeBlock = floor($k / $reduceBlock);
+                $timeBlock = floor($k / $reduceBlock);
                 if (!isset($data['mainThread']['data']["$timeBlock"]) || $data['mainThread']['data']["$timeBlock"]['max'] < $v) {
                     $data['mainThread']['data']["$timeBlock"] = [$key => $v, 'max' => $v];
                 }
