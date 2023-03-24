@@ -392,7 +392,7 @@ if (!strcasecmp('Test Result', $tab) && (!isset($nosubheader) || !@$nosubheader)
                     $tabs['Experiment Results & Filmstrip'] = $experimentResultsHref;
                 } else {
                     //$tabs['Opportunities & Experiments'] = $menuUrlGenerator->resultPage("experiments", $endParams);
-                    $tabs['Filmstrip'] = $menuUrlGenerator->filmstripView("filmstrip", $endParams);
+                    $tabs['Filmstrip'] = $menuUrlGenerator->filmstripView($endParams);
                 }
                 $tabs['Details'] = $menuUrlGenerator->resultPage("details", $endParams);
 
