@@ -29,7 +29,7 @@
     <td>
         {{ $item->value }}
     </td>
-@else
+@elseif(is_string($item))
     <td>
         {{ $item }}
     </td>

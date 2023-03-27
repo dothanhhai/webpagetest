@@ -1,9 +1,9 @@
-@if ($audit->details->type === "criticalrequestchain")
+@if (is_array($audit->details->chains) && $audit->details->type === "criticalrequestchain")
 <ol class="lh-chain">
     @each('partials.lighthouse.requestchain', $audit->details->chains, 'chain')
 </ol>
 @endif
-@if (count($audit->details->headings) && ($audit->details->type === "table" || $audit->details->type === "opportunity") )
+@if (is_array($audit->details->headings) && count($audit->details->headings) && ($audit->details->type === "table" || $audit->details->type === "opportunity") )
 <?php
 $itemkeys = [];
 $subkeys = [];
