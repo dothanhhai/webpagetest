@@ -79,6 +79,7 @@ if ($lhResults) {
     $treemap = [
         'lhr' => [
             'requestedUrl' => $url,
+            'finalUrl' => $url,
             'audits' => [
                 'script-treemap-data' => [
                     'details' => $lhResults->audits->{'script-treemap-data'}->details
