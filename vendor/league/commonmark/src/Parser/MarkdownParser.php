@@ -91,7 +91,7 @@ final class MarkdownParser implements MarkdownParserInterface
         $this->activateBlockParser($documentParser);
 
         $preParsedEvent = new DocumentPreParsedEvent($documentParser->getBlock(), new MarkdownInput($input));
-        $this->environment->dispatch($preParsedEvent);
+        $this->environment->dispatch(null, $preParsedEvent);
         $markdownInput = $preParsedEvent->getMarkdown();
 
         foreach ($markdownInput->getLines() as $lineNumber => $line) {
@@ -103,7 +103,7 @@ final class MarkdownParser implements MarkdownParserInterface
         $this->closeBlockParsers(\count($this->activeBlockParsers), $this->lineNumber);
         $this->processInlines();
 
-        $this->environment->dispatch(new DocumentParsedEvent($documentParser->getBlock()));
+        $this->environment->dispatch(null, new DocumentParsedEvent($documentParser->getBlock()));
 
         return $documentParser->getBlock();
     }

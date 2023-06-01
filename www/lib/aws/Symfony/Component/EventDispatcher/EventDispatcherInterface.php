@@ -35,7 +35,7 @@ interface EventDispatcherInterface
      *
      * @api
      */
-    public function dispatch($eventName, Event $event = null);
+    public function dispatch(string $eventName = null, Event $event = null);
 
     /**
      * Adds an event listener that listens on the specified events.

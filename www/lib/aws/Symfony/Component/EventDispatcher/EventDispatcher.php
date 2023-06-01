@@ -37,7 +37,7 @@ class EventDispatcher implements EventDispatcherInterface
      *
      * @api
      */
-    public function dispatch($eventName, Event $event = null)
+    public function dispatch(string $eventName = null, Event $event = null)
     {
         if (null === $event) {
             $event = new Event();
@@ -181,5 +181,10 @@ class EventDispatcher implements EventDispatcherInterface
             krsort($this->listeners[$eventName]);
             $this->sorted[$eventName] = call_user_func_array('array_merge', $this->listeners[$eventName]);
         }
+    }
+
+    public function getListenerPriority(string $eventName, callable $listener) 
+    {
+        return $this->getListenerPriority($eventName, $listener);
     }
 }

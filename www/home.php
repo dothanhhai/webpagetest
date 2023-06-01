@@ -235,7 +235,7 @@ $hasNoRunsLeft = $is_logged_in ? (int)$remaining_runs <= 0 : false;
                                                 <div class="fieldrow fieldrow-profiles">
                                                     <div class="profiles">
                                                         <?php
-                                                        if (isset($profiles) && count($profiles)) {
+                                                        if (!empty($profiles) && count($profiles)) {
                                                             $pIndex = 0;
                                                             foreach ($profiles as $name => $profile) {
                                                                 $selected = '';

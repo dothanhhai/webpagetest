@@ -45,7 +45,7 @@ class EventDispatcher implements EventDispatcherInterface
     /**
      * {@inheritdoc}
      */
-    public function dispatch(object $event, string $eventName = null): object
+    public function dispatch(string $eventName = null, object $event = null): object
     {
         $eventName = $eventName ?? \get_class($event);
 

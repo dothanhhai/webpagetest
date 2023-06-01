@@ -329,14 +329,14 @@ final class Environment implements EnvironmentInterface, EnvironmentBuilderInter
         return $this;
     }
 
-    public function dispatch(object $event): object
+    public function dispatch(?string $eventName = null, object $event = null): object
     {
         if (! $this->extensionsInitialized) {
             $this->initializeExtensions();
         }
 
         if ($this->eventDispatcher !== null) {
-            return $this->eventDispatcher->dispatch($event);
+            return $this->eventDispatcher->dispatch($eventName, $event);
         }
 
         foreach ($this->getListenersForEvent($event) as $listener) {

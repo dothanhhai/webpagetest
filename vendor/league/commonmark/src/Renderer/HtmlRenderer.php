@@ -37,12 +37,12 @@ final class HtmlRenderer implements DocumentRendererInterface, ChildNodeRenderer
 
     public function renderDocument(Document $document): RenderedContentInterface
     {
-        $this->environment->dispatch(new DocumentPreRenderEvent($document, 'html'));
+        $this->environment->dispatch(null, new DocumentPreRenderEvent($document, 'html'));
 
         $output = new RenderedContent($document, (string) $this->renderNode($document));
 
         $event = new DocumentRenderedEvent($output);
-        $this->environment->dispatch($event);
+        $this->environment->dispatch(null, $event);
 
         return $event->getOutput();
     }
